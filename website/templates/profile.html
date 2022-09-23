@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %} {{ profiletext }} {% endblock %} {% block content
+%}
+<br><br><br>
+<div class="container-fluid text-center">
+  <h1>{{ profiletext }}</h1>
+  <br><br><br><br>
+  <h1>{{emailtext}}: {{ user.email }}</h1>
+  <h1>{{nametext}}: {{ user.first_name }}</h1>
+  <br><br>
+  <a href="/auth/change-password" class="btn btn-primary"> {{ changepassword }}</a>
+  <a href="/auth/delete-account" class="btn btn-danger">{{deleteaccount}}</a>
+  <br><br><br><br>
+  {% if user.id == 1 %}
+  <h1>Current user is an Admin! Account protection is advised</h1>
+  <a href="/internal/admin-dashboard" class="btn btn-warning">Admin</a>
+  {% endif %}
+
+
+</div>
+
+{% endblock %}

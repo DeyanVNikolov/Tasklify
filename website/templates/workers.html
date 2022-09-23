@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<br><br>
+
+<div class="container text-center">
+    <div class="row row-cols-1 row-cols-md-2">
+        {% for worker in current_user.workers %}
+        <div id="{{worker.id}}" class="col mb-4">
+            <h4>{{workertext}} #{{ loop.index }}</h4>
+            <h4>{{email}}: {{worker.email}}</h4>
+            <h4>{{name}}: {{worker.first_name}}</h4>
+            <form method="post">
+                <input type="hidden" name="typeform" value="delete"/>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="worker_id" value="{{worker.registrationid}}"/>
+                <button type="submit" class="btn btn-primary">{{delete}}</button>
+            </form>
+            <form method="post" style="padding-top:5px">
+                <input type="hidden" name="typeform" value="workermenu"/>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="worker_id" value="{{worker.id}}"/>
+                <button type="submit" class="btn btn-primary">{{workermenu}}</button>
+            </form>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    <br><br><br>
+    <h1>{{addworker}}</h1>
+    <form method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" id="ID" name="ID" placeholder="ID" />
+          </div>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="typeform" value="add"/>
+    </form>
+    <br><br><br>
+    <h1>{{addtask}}</h1>
+    <form method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" id="task" name="task" placeholder="Task" />
+          </div>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <input type="hidden" name="typeform" value="task"/>
+          <div class="form-check">
+            <input type="button" onclick='selects()' class="btn btn-primary" value="{{selectall}}"/>  
+            <input type="button" onclick='deSelect()' class="btn btn-primary" value="{{deselectall}}"/>  
+        </div>
+        <br>
+          {% for worker in current_user.workers %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="{{worker.id}}" id="worker{{worker.id}}" name="worker">
+                <label class="form-check-label" for="worker{{worker.id}}">
+                {{worker.first_name}}
+                </label>
+            </div>
+            {% endfor %}
+    </form>
+    <br><br><br>
+</div>
+
+
+{% endblock %}

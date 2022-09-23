@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+content %}
+    <br><br><br>
+<form method="POST">
+  <h3 align="center">{{signup}}</h3>
+  <br><br>
+  <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{loginhere}}</a> </h4>
+  <br><br>
+  <div class="form-group">
+    <label for="email">{{emailtext}}</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
+  </div>
+  <div class="form-group">
+    <label for="firstName">{{nametext}}</label>
+    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{firstandlast}}" />
+  </div>
+  <div class="form-group">
+    <label for="password1">{{passwordtext}}</label>
+    <input type="password" class="form-control" id="password1" name="password1" placeholder="{{passwordtext}}" />
+  </div>
+  <div class="form-group">
+    <label for="password2">{{passwordconfirm}}</label>
+    <input type="password" class="form-control" id="password2" name="password2" placeholder="{{passwordconfirm}}" />
+  </div>
+  <br />
+  <img src="{{ captcha_img(captcha) }}">
+  <br>
+  <br>
+  <input type="text" class="form-control" class="simple-captcha-text" name="captcha-text", placeholder="CAPTCHA CODE">
+  <br>
+  <div class="form-group form-check">
+    <div>
+      <input type="radio" id="worker" name="accounttype" value="worker" checked>
+      <label for="huey">Worker</label>
+    </div>
+
+    <div>
+      <input type="radio" id="boss" name="accounttype" value="boss">
+      <label for="dewey">Boss</label>
+    </div>
+
+  </div>
+  <br>
+  <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <button type="submit" class="btn btn-primary">{{submit}}</button>
+</form>
+{% endblock %}

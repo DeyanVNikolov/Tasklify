@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<br><br>
+
+<div class="container text-center">
+<h1>Worker ID: {{ workerid }}</h1>
+<br><br><br>
+<h1>{{tasktextplural}}</h1>
+<br><br>
+{% for task in taskslist %}
+{% set status = task.complete %}
+{% if status == 0 %}
+{% set status = "Not Started" %}
+{% elif status == 1 %}
+{% set status = "Done" %}
+{% endif %}
+
+<div id="{{task.task_id}}" class="col mb-4">
+    <h4>{{tasktext}} #{{ loop.index }}</h4>
+    <h4>{{tasktext}}: {{task.task}}</h4>
+    <h4>{{statustext}}: 
+        {% if status == "Done" %}
+            <span style="color:green">{{completed}}</span>
+        {% else %}
+            <span style="color:red">{{notstarted}}</span>
+        {% endif %}
+    </h4>
+    <h4>{{workertext}}: {{worker.first_name}}</h4>
+    <form method="POST">
+        <input type="hidden" name="typeform" value="done"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+        <button type="submit" class="btn btn-primary">{{done}}</button>
+    </form>
+    <form method="POST" style="padding-top: 5px;">
+        <input type="hidden" name="typeform" value="delete"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+        <button type="submit" class="btn btn-primary">{{delete}}</button>
+    </form>
+    <br>
+</div>
+
+{% endfor %}
+</div>
+
+
+{% endblock %}

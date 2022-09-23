@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block title %}Account deletion{% endblock %} {% block content
+%}
+<form method="POST">
+<br><br><br>
+  <h3 align="center">{{deleteaccount}}</h3>
+  <div class="form-group">
+    <label for="password">{{password}}</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      name="password"
+      placeholder="{{enterpassword}}"
+    />
+  </div>
+  <br />
+      <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="confirm" name="confirm">
+    <label class="form-check-label" for="exampleCheck1">{{confirmtext}}</label>
+  </div>
+    <br />
+    <button type="submit" class="btn btn-primary">{{deleteaccount}}</button>
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+</form>
+{% endblock %}
