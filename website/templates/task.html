@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<br><br>
+
+<div class="container text-center">
+
+    <h1>{{tasktext}} {{ taskid }}</h1>
+    <br><br>
+    {% set status = task1.complete %}
+    {% if status == 0 %}
+    {% set status = "Not Started" %}
+    {% elif status == 1 %}
+    {% set status = "Done" %}
+    {% endif %}
+
+    <h2>{{title}}</h2>
+    <h3>{{task}}</h3>
+    <br><br>
+    <h4>{{statustext}}: 
+        {% if status == "Done" %}
+            <span style="color:green">{{completed}}</span>
+        {% else %}
+            <span style="color:red">{{notstarted}}</span>
+        {% endif %}
+    </h4>
+    <br><br>
+    {% if status == "Not Started" %}
+    <form method="POST">
+        <input type="hidden" name="typeform" value="done"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{taskid}}"/>
+        <input type="text" name="comment" value="" placeholder="Comment"/><br><br>
+        <button type="submit" class="btn btn-primary">{{done}}</button>
+    </form>
+    {% else %}
+    <form method="POST">
+        <input type="hidden" name="typeform" value="notdone"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{taskid}}"/>
+        <h3>{{task1.comment}}</h3>
+        <br>
+        <button type="submit" class="btn btn-primary">{{notdone}}</button>
+    {% endif %}
+
+
+
+
+</div>
+
+
+
+
+
+{% endblock %}

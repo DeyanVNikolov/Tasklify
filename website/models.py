@@ -10,12 +10,14 @@ import sqlalchemy.dialects.postgresql as postgresql
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
     task = db.Column(db.String(100), nullable=False)
     complete = db.Column(db.Boolean, default=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('worker.id'))
     boss_id = db.Column(db.Integer, db.ForeignKey('boss.id'))
     ordernumber = db.Column(db.Integer)
     actual_id = db.Column(db.String(100), nullable=False)
+    comment = db.Column(db.String(100))
 
     def __repr__(self):
         return '<Task %r>' % self.id

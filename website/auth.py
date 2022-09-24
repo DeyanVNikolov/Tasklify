@@ -239,6 +239,7 @@ def change_password():
                            confirmtext=getword("confirm", cookie),
                            enterpassword=getword("enterpassword", cookie))
 
+
 @auth.errorhandler(CSRFError)
 def handle_csrf_error(e):
     return render_template('csrf_error.html', reason=e.description, user=current_user), 400

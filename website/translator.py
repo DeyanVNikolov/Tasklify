@@ -160,6 +160,22 @@ words = {
         "en": "Worker Menu",
         "bg": "Меню на работника",
     },
+    "moreinfo": {
+        "en": "More Info",
+        "bg": "Повече информация",
+    },
+    "tasktitle": {
+        "en": "Task Title",
+        "bg": "Заглавие на задачата",
+    },
+    "notdone": {
+        "en": "Not Done",
+        "bg": "Не е готово",
+    },
+    "selectworkers": {
+        "en": "Select Workers",
+        "bg": "Избери работници",
+    },
 
 
 

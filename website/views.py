@@ -93,17 +93,20 @@ def tasks():
             task = Task.query.get(taskid)
             task.complete = True
             db.session.commit()
+        elif typeform == 'notdone':
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = False
+            db.session.commit()
+            return redirect(url_for('views.tasks'))
 
     taskstodisplay = []
 
     for task in Task.query.filter_by(worker_id=current_user.id).all():
-        taskstodisplay.append({"task": task.task,
-                               "complete": task.complete,
-                               "actual_id": task.actual_id,
-                               "task_id": task.id,
-                               "ordernumber": task.ordernumber})
+        taskstodisplay.append({"task": task.task, "complete": task.complete, "actual_id": task.actual_id,
+                               "task_id": task.id, "title": task.title, "ordernumber": task.ordernumber})
 
-    return render_template("tasks.html", user=current_user, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie))
+    return render_template("tasks.html", notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie), moreinfo=getword("moreinfo", cookie), user=current_user, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie))
 
 
 @views.route('/workers', methods=["GET", "POST"])
@@ -157,7 +160,8 @@ def workers():
                         flash(e, category="error")
         elif request.form.get("typeform") == "task":
             task = request.form.get('task')
-            if task == "" or task is None:
+            title = request.form.get('title')
+            if task == "" or task is None or title == "" or title is None:
                 flash("Missing task", category="error")
             else:
                 try:
@@ -171,7 +175,7 @@ def workers():
                     for workerg in workersl:
                         tasknum += 1
                         print(tasknum)
-                        new_task = Task(task=task, worker_id=workerg.id, boss_id=current_user.id, actual_id=acid, ordernumber=tasknum)
+                        new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id, actual_id=acid, ordernumber=tasknum)
                         print(new_task)
                         db.session.add(new_task)
                         db.session.commit()
@@ -189,16 +193,7 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
-    return render_template("workers.html", user=current_user,
-                           delete=getword("delete", cookie),
-                           taskslist=taskstodisplay,
-                           workertext=getword("workertext", cookie),
-                           addtask=getword("addtask", cookie),
-                           email=getword("email", cookie),
-                           name=getword("name", cookie),
-                           selectall=getword("selectall", cookie),
-                           deselectall=getword("deselectall", cookie),
-                           workermenu=getword("workermenu", cookie))
+    return render_template("workers.html", user=current_user, delete=getword("delete", cookie), taskslist=taskstodisplay, workertext=getword("workertext", cookie), addtask=getword("addtask", cookie), email=getword("email", cookie), name=getword("name", cookie), selectall=getword("selectall", cookie), deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie), submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
@@ -222,7 +217,8 @@ def worker(id):
 
     for task in Task.query.filter_by(worker_id=worker.id).all():
         taskstodisplay.append({"task": task.task, "complete": task.complete, "actual_id": task.actual_id,
-            "task_id": task.id, "ordernumber": task.ordernumber})
+                               "task_id": task.id, "ordernumber": task.ordernumber, "title": task.title,
+                               "comment": task.comment})
     if request.method == "POST":
         typeform = request.form.get('typeform')
         if typeform == 'done':
@@ -237,5 +233,55 @@ def worker(id):
             db.session.delete(task)
             db.session.commit()
             return redirect(url_for('views.worker', id=id))
+        elif typeform == 'notdone':
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = False
+            db.session.commit()
+            return redirect(url_for('views.worker', id=id))
 
-    return render_template("worker.html", workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+    return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie), workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+
+
+@views.route('/task/<int:id>', methods=["GET", "POST"])
+@login_required
+def task(id):
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    taskdata = Task.query.filter_by(id=id).first()
+    if taskdata is None:
+        flash("Task not found", category="error")
+        return redirect(url_for('views.home'))
+
+    if current_user.accounttype == "worker":
+        if taskdata.worker_id != current_user.id:
+            flash("Task not found", category="error")
+            return redirect(url_for('views.home'))
+    elif current_user.accounttype == "boss":
+        if taskdata.boss_id != current_user.id:
+            flash("Task not found", category="error")
+            return redirect(url_for('views.home'))
+
+    if request.method == "POST":
+        typeform = request.form.get('typeform')
+        if typeform == 'done':
+            taskid = request.form.get('task_id')
+            taskcomment = request.form.get('comment')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = True
+            taskpost.comment = taskcomment
+            db.session.commit()
+            return redirect(url_for('views.task', id=id))
+        elif typeform == 'notdone':
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = False
+            db.session.commit()
+            return redirect(url_for('views.task', id=id))
+
+    return render_template("task.html", user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+
+    # return render_template("worker.html", workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))

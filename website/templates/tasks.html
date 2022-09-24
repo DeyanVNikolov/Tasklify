@@ -2,7 +2,7 @@
 
 <br><br>
 
-<div class="container text-center">
+<div class="container-fluid text-center text-truncate" style="max-width:100%">
 
     <h1>{{tasktextplural}}</h1>
     <br><br>
@@ -16,7 +16,9 @@
     
     <div id="{{task.task_id}}" class="col mb-4">
         <h4>{{tasktext}} #{{ loop.index }}</h4>
-        <h4>{{tasktext}}: {{task.task}}</h4>
+        <h4>{{task.title}}</h4>
+        <h4><a href="/task/{{task.task_id}}"><button class="btn btn-primary">{{moreinfo}}</button></a></h4>
+        <br>
         <h4>{{statustext}}: 
             {% if status == "Done" %}
                 <span style="color:green">{{completed}}</span>
@@ -32,6 +34,12 @@
             <input type="hidden" name="task_id" value="{{task.task_id}}"/>
             <button type="submit" class="btn btn-primary">{{done}}</button>
         </form>
+        {% else %}
+        <form method="POST">
+            <input type="hidden" name="typeform" value="notdone"/>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+            <button type="submit" class="btn btn-primary">{{notdone}}</button>
         {% endif %}
         <br>
     </div>
