@@ -193,7 +193,7 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
-    return render_template("workers.html", user=current_user, delete=getword("delete", cookie), taskslist=taskstodisplay, workertext=getword("workertext", cookie), addtask=getword("addtask", cookie), email=getword("email", cookie), name=getword("name", cookie), selectall=getword("selectall", cookie), deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie), submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
+    return render_template("workers.html", user=current_user, idtext=getword("idtext", cookie), addworker=getword("addworker", cookie), delete=getword("delete", cookie), taskslist=taskstodisplay, workertext=getword("workertext", cookie), addtask=getword("addtask", cookie), email=getword("email", cookie), name=getword("name", cookie), selectall=getword("selectall", cookie), deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie), submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
@@ -284,4 +284,18 @@ def task(id):
 
     return render_template("task.html", user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
 
-    # return render_template("worker.html", workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+
+@views.route('/urlout/<path:url>', methods=["GET", "POST"])
+def urlout(url):
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+    return render_template("urlout.html", url=url, user=current_user,
+                           youllberedirectedto=getword("youllberedirectedto", cookie),
+                           here=getword("here", cookie),
+                           ifyourenotredirected=getword("ifyourenotredirected", cookie),
+                           oryoucango=getword("oryoucango", cookie),
+                            home=getword("home", cookie),
+                           thirdpartylink=getword("thirdpartylink", cookie),
+                           infiveseconds=getword("infiveseconds", cookie))

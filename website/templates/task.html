@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content%}
 
 <br><br>
 
@@ -40,15 +40,12 @@
         <h3>{{task1.comment}}</h3>
         <br>
         <button type="submit" class="btn btn-primary">{{notdone}}</button>
+    </form>
     {% endif %}
 
 
 
 
 </div>
-
-
-
-
-
+<br><br><br>
 {% endblock %}

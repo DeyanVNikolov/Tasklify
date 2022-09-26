@@ -176,6 +176,43 @@ words = {
         "en": "Select Workers",
         "bg": "Избери работници",
     },
+    "idtext": {
+        "en": "ID",
+        "bg": "ID",
+    },
+    "addworker": {
+        "en": "Add Worker",
+        "bg": "Добави работник",
+    },
+    "youllberedirectedto": {
+        "en": "You'll be redirected to",
+        "bg": "Ще бъдете пренасочени към",
+    },
+    "infiveseconds": {
+        "en": "in 5 seconds",
+        "bg": "след 5 секунди",
+    },
+    "oryoucango": {
+        "en": "or you can go to",
+        "bg": "или можете да отидете на",
+    },
+    "here": {
+        "en": "click here",
+        "bg": "натиснете тук",
+    },
+    "home": {
+        "en": "home",
+        "bg": "начало",
+    },
+    "thirdpartylink": {
+        "en": "Please note that this is a third party link and we are not responsible for its content.",
+        "bg": "Моля, имайте предвид, че това е връзка на трета страна и не сме отговорни за нейното съдържание.",
+    },
+    "ifyourenotredirected": {
+        "en": "If you are not redirected automatically,",
+        "bg": "Ако не бъдете пренасочени автоматично,",
+    },
+
 
 
 

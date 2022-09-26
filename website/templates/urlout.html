@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content %}
+
+    <br><br><br><br>
+    <div class="container-fluid text-center">
+    <img src="/static/image/default-monochrome-black.svg" style="max-height: 100px; width: auto">
+        <br><br><br>
+        <h3>{{youllberedirectedto}} <a href="{{ url }}">{{ url }}<a> {{infiveseconds}}</h3>
+    <h3>{{ifyourenotredirected}}<a href="{{ url }}"> {{here}}</a></h3>
+    <br>
+    <h3>{{oryoucango}} <a href="/">{{home}}</a></h3>
+    <br>
+    <h3>{{thirdpartylink}}</h3>
+    </div>
+    <script>
+    setTimeout(function(){
+        window.location.href = "{{ url }}";
+    }, 5000);
+    </script>
+    <br><br><br><br><br>
+
+
+
+{% endblock %}

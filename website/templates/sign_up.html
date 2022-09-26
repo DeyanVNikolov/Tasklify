@@ -1,11 +1,15 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
-    <br><br><br>
+<div class="container text-center">
+      <br><br><br>
+      <h3 align="center">{{signup}}</h3>
+      <img src="/static/image/default-monochrome-black.svg" style="max-height:70px; width: auto;">
+      <br>
+      <br><br>
+      <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{loginhere}}</a> </h4>
+      <br><br>
+</div>
 <form method="POST">
-  <h3 align="center">{{signup}}</h3>
-  <br><br>
-  <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{loginhere}}</a> </h4>
-  <br><br>
   <div class="form-group">
     <label for="email">{{emailtext}}</label>
     <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
@@ -45,4 +49,5 @@ content %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <button type="submit" class="btn btn-primary">{{submit}}</button>
 </form>
+<br><br><br>
 {% endblock %}
