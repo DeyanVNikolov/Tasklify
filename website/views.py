@@ -5,8 +5,14 @@ from flask_login import login_required, current_user
 
 from . import db
 from .models import Worker, Boss, Task
-from .translator import getword
+from .translator import getword, loadtime
 import uuid
+import urllib
+import urllib.parse
+import urllib.request
+import urllib.error
+import requests
+
 
 views = Blueprint('views', __name__)
 
@@ -287,15 +293,31 @@ def task(id):
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
 def urlout(url):
+    abort(403)
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("urlout.html", url=url, user=current_user,
-                           youllberedirectedto=getword("youllberedirectedto", cookie),
-                           here=getword("here", cookie),
-                           ifyourenotredirected=getword("ifyourenotredirected", cookie),
-                           oryoucango=getword("oryoucango", cookie),
-                            home=getword("home", cookie),
-                           thirdpartylink=getword("thirdpartylink", cookie),
-                           infiveseconds=getword("infiveseconds", cookie))
+    return render_template("urlout.html", url=url, user=current_user, youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie), ifyourenotredirected=getword("ifyourenotredirected", cookie), oryoucango=getword("oryoucango", cookie), home=getword("home", cookie), thirdpartylink=getword("thirdpartylink", cookie), infiveseconds=getword("infiveseconds", cookie))
+
+
+@views.route('/contact', methods=["GET", "POST"])
+def contact():
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    return render_template("contact.html", user=current_user,
+                           contactus=getword("contactus", cookie),
+                           contactusmessage=getword("contactusmessage", cookie),
+                           contactname=getword("contactname", cookie),
+                           contactemail=getword("contactemail", cookie))
+
+
+
+@views.route('/testpastebin', methods=["GET", "POST"])
+def testpastebin():
+    abort(403)
+    return "false"
+

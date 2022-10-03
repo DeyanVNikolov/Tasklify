@@ -63,8 +63,8 @@ def create_app():
                 if current_user.accounttype == "boss" and current_user.additionalpermissions == "ADMIN":
                     return current_user.is_authenticated
 
-        column_searchable_list = ['id']
-        column_list = ["task", "user_id", "id"]
+        column_searchable_list = ['id', 'worker_id', 'boss_id']
+        column_list = ["id", "title", "task", "worker_id", "boss_id"]
 
     class MyAdminIndexView(AdminIndexView):
         def is_accessible(self):

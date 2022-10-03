@@ -212,11 +212,30 @@ words = {
         "en": "If you are not redirected automatically,",
         "bg": "Ако не бъдете пренасочени автоматично,",
     },
-
-
-
-
-
+    "contact": {
+        "en": "Contact",
+        "bg": "Контакт",
+    },
+    "contactus": {
+        "en": "Contact Us",
+        "bg": "Свържете се с нас",
+    },
+    "contactusmessage": {
+        "en": "If you have any questions, please contact us.",
+        "bg": "Ако имате въпроси, моля, свържете се с нас.",
+    },
+    "contactname": {
+        "en": "Deyan Vladimirov Nikolov",
+        "bg": "Деян Владимиров Николов",
+    },
+    "contactemail": {
+        "en": "deyannikolov25@itpg-varna.bg",
+        "bg": "deyannikolov25@itpg-varna.bg"
+    },
+    "databeingproccessed": {
+        "en": "Your data is being processed. Please wait and do not refresh the page.",
+        "bg": "Вашите данни се обработват. Моля, изчакайте и не актуализирайте страницата.",
+    },
 
 
 }
@@ -224,4 +243,16 @@ words = {
 
 
 def getword(word, target):
-    return words[word][target]
+    if word in words:
+        if target in words[word]:
+            return words[word][target]
+        else:
+            return "No translation for " + target
+    else:
+        return "!!! WORD NOT FOUND !!! " + word
+
+def loadtime():
+    # Load time and date
+    return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
+
+

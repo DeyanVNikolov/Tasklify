@@ -1,9 +1,19 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
+<script>
+  function showModal() {
+    const inpObj = document.getElementById("email");
+    if (!inpObj.checkValidity()) {
+      document.getElementById("demo").innerHTML = inpObj.validationMessage;
+  } else {
+    $('#exampleModalCenter').modal('show');
+  }
+}
+</script>
 <div class="container text-center">
       <br><br><br>
       <h3 align="center">{{signup}}</h3>
-      <img src="/static/image/default-monochrome-black.svg" style="max-height:70px; width: auto;">
+      <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg" style="max-height:70px; width: auto;">
       <br>
       <br><br>
       <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{loginhere}}</a> </h4>
@@ -47,7 +57,21 @@ content %}
   <br>
   <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button type="submit" class="btn btn-primary">{{submit}}</button>
+  <button type="submit" class="btn btn-primary" onclick="showModal()">{{submit}}</button>
 </form>
 <br><br><br>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{signup}}</h5>
+      </div>
+      <div class="modal-body">
+        {{databeingproccessed}}
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

@@ -2,12 +2,14 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
+from email_validator import validate_email, EmailNotValidError
+
 
 from website import CAPTCHA1
 from . import db
 from .models import Worker, Boss
 import uuid
-from .translator import getword
+from .translator import getword, loadtime
 
 auth = Blueprint('auth', __name__)
 global csrfg
@@ -92,6 +94,15 @@ def sign_up():
             return redirect(url_for('auth.sign_up'))
 
         email = request.form.get('email')
+
+        try:
+            v = validate_email(email, check_deliverability=True)
+            email = v["email"]
+        except EmailNotValidError as e:
+            flash('Email is invalid.', category='error')
+            return redirect(url_for('auth.sign_up'))
+
+
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
@@ -144,7 +155,7 @@ def sign_up():
                            signup=getword("signup", cookie),
                            enteremail=getword("enteremail", cookie),
                            alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
-                           loginhere=getword("loginhere", cookie))
+                           loginhere=getword("loginhere", cookie), databeingproccessed=getword("databeingproccessed", cookie))
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
 @login_required
