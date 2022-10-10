@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/style.css">
+
+    <link rel="apple-touch-icon" sizes="57x57"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-16x16.png">
+    <link rel="manifest"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/text-trunc.css">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage"
+        content="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/ms-icon-144x144.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="theme-color" content="#ffffff">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <title>Task {{ taskid }}</title>
+
+    <style>
+        /* Dashed border */
+        hr.dashed {
+            border-top: 3px dashed #bbb;
+        }
+
+        /* Dotted border */
+        hr.dotted {
+            border-top: 3px dotted #bbb;
+        }
+
+        /* Solid border */
+        hr.solid {
+            border-top: 3px solid #bbb;
+        }
+
+        /* Rounded border */
+        hr.rounded {
+            border-top: 8px solid #bbb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+
+<div class="container-fluid text-center">
+    {% set status = task1.complete %}
+    {% if status == 0 %}
+    {% set StatusText = "Not Started" %}
+    {% elif status == 1 %}
+    {% set StatusText = "Done" %}
+    {% endif %}
+    <hr class="dotted">
+    <br><br><br>
+    <h1>Task <strong>{{ taskid }}</strong></h1>
+    <br><br>
+
+    <h1>{{ title }}</h1>
+    <br><br>
+
+    <h3>{{ task }}</h3>
+    <br>
+    <hr class="dotted">
+    <br>
+    <div>
+        <h2>{{workeridtext}}: <strong>{{ workerid }}</strong></h2>
+        <h2>{{workernametext}}: <strong>{{ workername }}</strong></h2>
+        <h2>{{workeremailtext}} <strong>{{ workeremail }}</strong></h2>
+        {% if status == "Done" %}
+        <h2>{{taskstatustext}} <strong>{{done}}</strong></h2>
+        {% else %}
+        <h2>{{taskstatustext}}: <strong>{{notdone}}</strong></h2>
+        {% endif %}
+    </div>
+    <br>
+
+    <hr class="solid">
+    <br><br>
+
+    <h4>{{requestedbytext}}: <strong>{{boss}}</strong> {{attext}}<br><strong>
+        <script>
+            var now = new Date();
+            var days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+            var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                'September', 'October', 'November', 'December');
+            var date = ((now.getDate() < 10) ? "0" : "") + now.getDate();
+
+            function fourdigits(number) {
+                return (number < 1000) ? number + 1900 : number;
+            }
+            // get time with hours, minutes and seconds with leading zeros
+
+            var time2 = ((now.getHours() < 10) ? "0" : "") + now.getHours() + ":" + ((now.getMinutes() < 10) ? "0" :
+                    "") +
+                now.getMinutes() + ":" + ((now.getSeconds() < 10) ? "0" : "") + now.getSeconds() + "." + now
+                .getMilliseconds();
+            today = days[now.getDay()] + ", " +
+                months[now.getMonth()] + " " +
+                date + ", " +
+                (fourdigits(now.getYear())) + " | " + time2 + " ";
+            // write without document.write
+            document.write(today);
+        </script>
+    </strong></h4>
+    <br><br>
+
+    <img class="img-fluid" style="max-width: 400px"
+        src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg">
+    <br><br>
+    
+
+    <script>
+        // Await for the page to load then print
+        window.addEventListener('load', function () {
+            window.print();
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        window.onfocus = function () {
+            window.location = "/task/{{ taskid }}";
+        }
+    </script>
+
+
+</div>

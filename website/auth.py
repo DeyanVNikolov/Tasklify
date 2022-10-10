@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
+import requests
 
 
 from website import CAPTCHA1
@@ -14,9 +15,31 @@ from .translator import getword, loadtime
 auth = Blueprint('auth', __name__)
 global csrfg
 
+class StatusDenied(Exception):
+    print("StatusDenied Exception")
+
+
+@auth.errorhandler(StatusDenied)
+def redirect_on_status_denied1(error):
+    return render_template("maintenance.html"), 403
+
+def checkmaintenance():
+    pass
+    # try:
+    #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")
+    #     if r.json()["status"] == "maintain":
+    #         print("maintenance 1")
+    #         raise StatusDenied()
+    #     else:
+    #         pass
+    # except Exception as e:
+    #     print(e)
+    #     raise StatusDenied()
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -61,6 +84,7 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    checkmaintenance()
     if current_user.is_authenticated:
         logout_user()
         flash('Logged out successfully!', category='success')
@@ -71,6 +95,7 @@ def logout():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -160,6 +185,7 @@ def sign_up():
 @auth.route('/delete-account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -200,6 +226,7 @@ def delete_account():
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:

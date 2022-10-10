@@ -236,6 +236,48 @@ words = {
         "en": "Your data is being processed. Please wait and do not refresh the page.",
         "bg": "Вашите данни се обработват. Моля, изчакайте и не актуализирайте страницата.",
     },
+    "print": {
+        "en": "Print",
+        "bg": "Печат",
+    },
+    "workeridtext": {
+        "en": "Worker ID",
+        "bg": "ID на работника",
+    },
+    "workeremailtext": {
+        "en": "Worker Email",
+        "bg": "Имейл на работника",
+    },
+    "workernametext": {
+        "en": "Worker Name",
+        "bg": "Име на работника",
+    },
+    "taskstatustext": {
+        "en": "Task Status",
+        "bg": "Статус на задачата",
+    },
+    "requestedbytext": {
+        "en": "Requested By",
+        "bg": "Заявена от",
+    },
+    "attext": {
+        "en": "at",
+        "bg": "в",
+    },
+    "submitcodetext": {
+        "en": "You can submit your code through here to get a shareable link.",
+        "bg": "Можете да представите своя код чрез тук, за да получите връзка, която можете да споделите.",
+    },
+    "sevendaylimit": {
+        "en": "Your code will be available at this link for 7 days. After that, it will be deleted automatically.",
+        "bg": "Вашият код ще бъде наличен на тази връзка за 7 дни. След това ще бъде изтрит автоматично.",
+    },
+    "copy": {
+        "en": "Copy",
+        "bg": "Копирай",
+    },
+
+
 
 
 }

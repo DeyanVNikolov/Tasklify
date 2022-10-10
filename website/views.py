@@ -1,24 +1,57 @@
 import json
+from os.path import join, dirname, realpath
 
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, abort
 from flask_login import login_required, current_user
-
+from flask import current_app
+import os
 from . import db
+import base64
 from .models import Worker, Boss, Task
+from flask import current_app as app
+from flask_wtf.csrf import CSRFError
+from werkzeug.security import generate_password_hash, check_password_hash
+from website import csrfg
 from .translator import getword, loadtime
+from werkzeug.utils import secure_filename, send_from_directory
 import uuid
 import urllib
 import urllib.parse
 import urllib.request
 import urllib.error
 import requests
-
-
+from flask_limiter import Limiter
+from website import limiter
+from flask_limiter.util import get_remote_address
 views = Blueprint('views', __name__)
 
+global csrfg
+
+# check status of https://api.npoint.io/fdd18b346a9f50481a65 and if it is maintenance, then redirect to https://google.com
+
+class StatusDenied(Exception):
+    print("StatusDenied Exception")
+
+
+@views.errorhandler(StatusDenied)
+def redirect_on_status_denied(error):
+    return render_template("maintenance.html"), 403
+
+def checkmaintenance():
+    pass
+    # try:
+    #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")
+    #     if r.json()["status"] == "maintain":
+    #         print("maintenance 1")
+    #         raise StatusDenied()
+    #     else:
+    #         pass
+    # except:
+    #     raise StatusDenied()
 
 @views.route('/', methods=['GET'])
 def home():
+    checkmaintenance()
     return render_template("home.html", user=current_user)
 
 
@@ -57,12 +90,14 @@ def delete_note():
 @views.route('/profile')
 @login_required
 def profile():
+    checkmaintenance()
     return render_template("profile.html", user=current_user, emailtext=getword("emailshort", request.cookies.get('locale')), nametext=getword("name", request.cookies.get('locale')), profiletext=getword("profiletext", request.cookies.get('locale')), changepassword=getword("changepassword", request.cookies.get('locale')), deleteaccount=getword("deleteaccount", request.cookies.get('locale')))
 
 
 @views.route('/boss')
 @login_required
 def boss():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -81,6 +116,7 @@ def boss():
 @views.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -118,6 +154,7 @@ def tasks():
 @views.route('/workers', methods=["GET", "POST"])
 @login_required
 def workers():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -205,6 +242,7 @@ def workers():
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
 @login_required
 def worker(id):
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -248,10 +286,72 @@ def worker(id):
 
     return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie), workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
 
+@views.route('uploaded_file/<path:filename>', methods=['GET'])
+def uploaded_file(filename):
+    checkmaintenance()
+
+    if not current_user.is_authenticated:
+        flash("You need to be logged in to view this page", category="error")
+        return redirect(url_for('auth.login'))
+
+    print(filename)
+    if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
+        if current_user.accounttype == "worker":
+            print("worker")
+            imageid = filename.split("_")[0]
+            if Worker.query.filter_by(id=imageid).first() is None:
+                flash("You don't have permission to view this file", category="error")
+                return redirect(url_for('views.home'))
+            elif Worker.query.filter_by(id=imageid).first() is not None:
+                if Worker.query.filter_by(id=imageid).first().id != current_user.id:
+                    flash("You don't have permission to view this file", category="error")
+                    return redirect(url_for('views.home'))
+            return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+
+
+        elif current_user.accounttype == "boss":
+            print("boss")
+            imageid = filename.split("_")[0]
+            print(imageid)
+            if Boss.query.filter_by(id=imageid).first() is not None:
+                if Boss.query.filter_by(id=imageid).first().id == current_user.id:
+                    print(Boss.query.filter_by(id=imageid).first().id)
+                    print(current_user.id)
+                    print("yes")
+                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+            elif Worker.query.filter_by(id=imageid).first() is not None:
+                if Worker.query.filter_by(id=imageid).first().boss_id == current_user.id:
+                    print("yes")
+                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+
+            flash("You don't have permission to view this file", category="error")
+            return redirect(url_for('views.home'))
+
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+
+@views.route("/static/uploads/<path:filename>", methods=["GET"])
+def get_file(filename):
+    return redirect(url_for('views.uploaded_file', filename=filename))
+
+
+
+
+
+def hastebin(text):
+    r = requests.post("https://hastebin.com/documents", data=text)
+    return "https://hastebin.com/raw/" + r.json()["key"]
+
+
+# def uploadimage(image):
+#     r = requests.post(f"https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5&source={image_string}&format=json")
+#
+#     return r.json()
+
 
 @views.route('/task/<int:id>', methods=["GET", "POST"])
 @login_required
 def task(id):
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -287,8 +387,67 @@ def task(id):
             taskpost.complete = False
             db.session.commit()
             return redirect(url_for('views.task', id=id))
+        elif typeform == "hastebin":
+            if request.form.get('commenthaste') == "" or request.form.get('commenthaste') is None:
+                flash("No conent", category="error")
+                return redirect(url_for('views.task', id=id))
+            if len(request.form.get('commenthaste')) > 20000:
+                flash("Too long! 20000 character max", category="error")
+                return redirect(url_for('views.task', id=id))
+            hastebinlink = hastebin(request.form.get('commenthaste'))
+            return render_template("task.html", copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True, hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+        elif typeform == "uploadimage":
+            ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
-    return render_template("task.html", user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+            def allowed_file(filename):
+                return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+            print(request.files)
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                # check file size
+                if file.content_length > 15000000:
+                    flash("Max file size is 15MB", category="error")
+                    return redirect(url_for('views.task', id=id))
+                # check if file is suspicious
+                suspicious_file_types = [
+                    'application/x-dosexec',
+                    'application/x-msdownload',
+                    'application/x-msdos-program',
+                    'application/x-msi',
+                    'application/x-winexe',
+                    'application/x-shockwave-flash',
+                    'application/x-shockwave-flash2-preview',
+                    'application/x-java-applet',
+                    'application/x-java-bean',
+                    'application/x-java-vm',
+                ]
+                if file.content_type in suspicious_file_types:
+                    flash("We cannot accept this file type", category="error")
+                    return redirect(url_for('views.task', id=id))
+                print("uploading")
+                filename = secure_filename(file.filename)
+                finalfilename = str(current_user.id) + "_" + filename
+                UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
+                path = join(UPLOADS_PATH, finalfilename)
+                file.save(path)
+                imageurl = url_for('views.uploaded_file', filename=finalfilename)
+                print(imageurl)
+
+                return render_template("task.html", showimagemodal=True, imageurl=imageurl,copy=getword("copy", cookie), hastebinlink=None, showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+            else:
+                flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
+                return redirect(url_for('views.task', id=id))
+
+
+
+    return render_template("task.html", copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showimagemodal=False, showhastebinmodal=False, hastebinlink=None, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -303,17 +462,13 @@ def urlout(url):
 
 @views.route('/contact', methods=["GET", "POST"])
 def contact():
+    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
 
-    return render_template("contact.html", user=current_user,
-                           contactus=getword("contactus", cookie),
-                           contactusmessage=getword("contactusmessage", cookie),
-                           contactname=getword("contactname", cookie),
-                           contactemail=getword("contactemail", cookie))
-
+    return render_template("contact.html", user=current_user, contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie), contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])
@@ -321,3 +476,35 @@ def testpastebin():
     abort(403)
     return "false"
 
+
+@views.route("/printtask/<int:id>", methods=["GET", "POST"])
+def printtask(id):
+    checkmaintenance()
+    # cookie
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    taskdata = Task.query.filter_by(id=id).first()
+
+    worker = Worker.query.filter_by(id=taskdata.worker_id).first()
+    worker_id = worker.id
+    workername = worker.first_name
+    workeremail = worker.email
+
+    if taskdata is None:
+        flash("Task not found", category="error")
+        return redirect(url_for('views.home'))
+
+    if current_user.accounttype == "worker":
+        if taskdata.worker_id != current_user.id:
+            flash("Task not found", category="error")
+            return redirect(url_for('views.home'))
+
+    elif current_user.accounttype == "boss":
+        if taskdata.boss_id != current_user.id:
+            flash("Task not found", category="error")
+            return redirect(url_for('views.home'))
+
+    return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie), workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie, workeridtext=getword("workeridtext", cookie), workeremailtext=getword("workeremailtext", cookie), workernametext=getword("workernametext", cookie), taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie), requestedbytext=getword("requestedbytext", cookie))

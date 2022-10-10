@@ -11,6 +11,10 @@ from flask_simple_captcha import CAPTCHA
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_limiter import Limiter
+from flask import jsonify
+from flask_limiter.util import get_remote_address
+from website.translator import getword
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -28,6 +32,9 @@ def create_app():
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = "./translations"
     app.config['LANGUAGES'] = {'en': 'English', 'de': 'Deutsch'}
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+    app.config['UPLOAD_FOLDER'] = 'website/static/uploads'
+
     global CAPTCHA1
     CAPTCHA1 = CAPTCHA(config=app.config)
     global csrfg
@@ -37,6 +44,13 @@ def create_app():
     CAPTCHA1.init_app(app)
     toolbar = DebugToolbarExtension(app)
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+
+    app.jinja_env.globals.update(getword=getword)
+
+    global limiter
+
+    limiter = Limiter(app, key_func=get_remote_address, default_limits=["100 per minute"], storage_uri="memory://", )
+
 
 
     from .views import views
@@ -108,6 +122,10 @@ def create_app():
     def page_not_found(e):
         return render_template('notfound.html'), 404
 
+    @app.errorhandler(429)
+    def too_many_reqeusts(e):
+        return jsonify({"error": "Too many requests"}), 429
+
     @app.errorhandler(403)
     def forbidden(e):
         return render_template('forbidden.html'), 403
@@ -120,3 +138,11 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+
+
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run(debug=True)
