@@ -1,156 +1,167 @@
-{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content%}
+{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content %}
 
-<br><br>
-
-<div class="container text-center">
-
-    <h1>{{tasktext}} {{ taskid }}</h1>
     <br><br>
-    {% set status = task1.complete %}
-    {% if status == 0 %}
-    {% set status = "Not Started" %}
-    {% elif status == 1 %}
-    {% set status = "Done" %}
-    {% endif %}
 
-    <h2>{{title}}</h2>
-    <h3>{{task}}</h3>
-    <br><br>
-    <h4>{{statustext}}:
-        {% if status == "Done" %}
-        <span style="color:green">{{completed}}</span>
-        {% else %}
-        <span style="color:red">{{notstarted}}</span>
+    <div class="container text-center">
+
+        <h1>{{ tasktext }} {{ taskid }}</h1>
+        <br><br>
+        {% set status = task1.complete %}
+        {% if status == 0 %}
+            {% set status = "Not Started" %}
+        {% elif status == 1 %}
+            {% set status = "Done" %}
         {% endif %}
-    </h4>
-    <br><br>
-    {% if status == "Not Started" %}
-    <br><br>
-    <form method="POST">
-        <h4>{{submitcodetext}}</h4>
-        <input type="hidden" name="typeform" value="hastebin" />
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <input type="hidden" name="task_id" value="{{taskid}}" />
-        <textarea type="text" style="width: 600px; height: 200px; resize: both;" name="commenthaste" value=""
-            placeholder="Text"></textarea><br><br>
-        <button class="btn btn-primary">Paste</button>
-    </form>
-    <br><br>
-    <div class="container">
-        <h4>Photo Uploader</h4>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="hidden" name="typeform" value="uploadimage" />
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <br><br><br><br>
-    <div class="container">
-        <h3>Mark your task as done and add any photo, code link or personal comments in the field.</h3>
-        <form method="POST">
-            <input type="hidden" name="typeform" value="done" />
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input type="hidden" name="task_id" value="{{taskid}}" />
-            <textarea style="width: 600px; height: 200px; resize: both;" type="text" name="comment" value=""
-                placeholder="Comment"></textarea><br><br>
-            <button type="submit" class="btn btn-primary">{{done}}</button>
-        </form>
-    </div>
-    {% else %}
-    <form method="POST">
-        <input type="hidden" name="typeform" value="notdone" />
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <input type="hidden" name="task_id" value="{{taskid}}" />
-        <h3>{{task1.comment}}</h3>
+
+        <h2>{{ title }}</h2>
+        <h3>{{ task }}</h3>
+        <br><br>
+        <h4>{{ statustext }}:
+            {% if status == "Done" %}
+                <span style="color:green">{{ completed }}</span>
+            {% else %}
+                <span style="color:red">{{ notstarted }}</span>
+            {% endif %}
+        </h4>
+        <br><br>
+        {% if status == "Not Started" %}
+            <br>
+
+            <form method="POST" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+                <br>
+                <h4>{{ submitcodetext }}</h4>
+                <input type="hidden" name="typeform" value="hastebin"/>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="task_id" value="{{ taskid }}"/>
+                <textarea type="text" style="width: 100%; resize: both;" name="commenthaste" value=""
+                          placeholder="Text"></textarea><br><br>
+                <button class="btn btn-primary">Paste</button>
+                <br><br>
+            </form>
+            <br>
+            <div class="container">
+                <form method="POST" enctype="multipart/form-data"
+                      style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+                    <br>
+                    <h4>{{photouploader}}</h4>
+                    <br>
+                    <input class="form-control" style="white-space: initial" type="file" name="file">
+                    <br>
+                    <input type="hidden" name="typeform" value="uploadimage"/>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br><br>
+                </form>
+            </div>
+            <br><br>
+            <div class="container" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+                <br>
+                <h3>{{markyourtaskasdonetext}}</h3>
+                <form method="POST">
+                    <input type="hidden" name="typeform" value="done"/>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="task_id" value="{{ taskid }}"/>
+                    <textarea style=" width: 100%; resize: both;" type="text" name="comment" value=""
+                              placeholder="Comment"></textarea><br><br>
+                    <button type="submit" class="btn btn-primary">{{ done }}</button>
+                </form>
+                <br>
+            </div>
+        {% else %}
+            <form method="POST">
+                <input type="hidden" name="typeform" value="notdone"/>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="task_id" value="{{ taskid }}"/>
+                <h3>{{ task1.comment }}</h3>
+                <br>
+                <button type="submit" class="btn btn-primary">{{ notdone }}</button>
+            </form>
+        {% endif %}
         <br>
-        <button type="submit" class="btn btn-primary">{{notdone}}</button>
-    </form>
-    {% endif %}
-    <br>
-    <script>
-        function print() {
-            function loadOtherPage() {
+        <script>
+            function print() {
+                function loadOtherPage() {
 
-                $("<iframe>") // create a new iframe element
-                    .hide() // make it invisible
-                    .attr("src", "/printtask/{{taskid}}") // point the iframe to the page you want to print
-                    .appendTo("body"); // add iframe to the DOM to cause it to load the page
+                    $("<iframe>") // create a new iframe element
+                        .hide() // make it invisible
+                        .attr("src", "/printtask/{{taskid}}") // point the iframe to the page you want to print
+                        .appendTo("body"); // add iframe to the DOM to cause it to load the page
 
+                }
+
+                document.getElementById("PrintButton").disabled = true;
+                loadOtherPage();
+                // wait 5 seconds and then remove the iframe
+                setTimeout(function () {
+                    $("iframe").remove();
+                    document.getElementById("PrintButton").disabled = false;
+                }, 5000);
             }
-            document.getElementById("PrintButton").disabled = true;
-            loadOtherPage();
-            // wait 5 seconds and then remove the iframe
-            setTimeout(function () {
-                $("iframe").remove();
-                document.getElementById("PrintButton").disabled = false;
-            }, 5000);
-        }
-    </script>
-    <button id="PrintButton" onclick="print()" class="btn btn-primary">{{print}}</button>
+        </script>
+        <button id="PrintButton" onclick="print()" class="btn btn-primary">{{ print }}</button>
 
 
-    <script>
-        function copyToClipboard(element) {
-            navigator.clipboard.writeText(element);
-        }
-    </script>
+        <script>
+            function copyToClipboard(element) {
+                navigator.clipboard.writeText(element);
+            }
+        </script>
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">{{sevendaylimit}}</h5>
-                </div>
-                <div class="modal-body">
-                    <a href="{{hastebinlink}}" target="_blank"> {{hastebinlink}}</a>
-                    <br><br>
-                    <button type="button" class="btn btn-secondary"
-                        onclick="copyToClipboard('{{hastebinlink}}');">{{copy}}</button>
+        <div style="white-space: initial" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">{{ sevendaylimit }}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <a href="{{ hastebinlink }}" target="_blank"> {{ hastebinlink }}</a>
+                        <br><br>
+                        <button type="button" class="btn btn-secondary"
+                                onclick="copyToClipboard('{{ hastebinlink }}');">{{ copy }}</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle2">Photo Link</h5>
-                </div>
-                <div class="modal-body">
-                    <a href="{{imageurl}}" target="_blank">{{imageurl}}</a>
-                    <br><br>
-                    <button type="button" class="btn btn-secondary"
-                        onclick="copyToClipboard('https://tasklify.me{{imageurl}}')">{{copy}}</button>
+        <div style="white-space: initial" class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle2">{{photolinktexttitle}}</h5>
+                    </div>
+                    <div class="modal-body" style="overflow: scroll; overflow-x:scroll; white-space: initial; hyphens: auto;">
+                        <a href="{{ imageurl }}" target="_blank">{{ imageurl }}</a>
+                        <br><br>
+                        <button type="button" class="btn btn-secondary"
+                                onclick="copyToClipboard('https://tasklify.me{{ imageurl }}')">{{ copy }}</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        {% if showhastebinmodal %}
+
+            <script>
+                $(document).ready(function () {
+                    $('#exampleModalCenter').modal('show');
+                });
+            </script>
+
+        {% endif %}
+
+        {% if showimagemodal %}
+
+            <script>
+                $(document).ready(function () {
+                    $('#exampleModalCenter2').modal('show');
+                });
+            </script>
+
+        {% endif %}
+
+
     </div>
-
-    {% if showhastebinmodal %}
-
-    <script>
-        $(document).ready(function () {
-            $('#exampleModalCenter').modal('show');
-        });
-    </script>
-
-    {% endif %}
-
-    {% if showimagemodal %}
-
-    <script>
-        $(document).ready(function () {
-            $('#exampleModalCenter2').modal('show');
-        });
-    </script>
-
-    {% endif %}
-
-
-</div>
-<br><br><br>
+    <br><br><br>
 {% endblock %}

@@ -1,33 +1,25 @@
 import json
+import os
+import uuid
 from os.path import join, dirname, realpath
 
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, abort
-from flask_login import login_required, current_user
-from flask import current_app
-import os
-from . import db
-import base64
-from .models import Worker, Boss, Task
-from flask import current_app as app
-from flask_wtf.csrf import CSRFError
-from werkzeug.security import generate_password_hash, check_password_hash
-from website import csrfg
-from .translator import getword, loadtime
-from werkzeug.utils import secure_filename, send_from_directory
-import uuid
-import urllib
-import urllib.parse
-import urllib.request
-import urllib.error
 import requests
-from flask_limiter import Limiter
-from website import limiter
-from flask_limiter.util import get_remote_address
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, abort
+from flask import current_app as app
+from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename, send_from_directory
+
+from . import db
+from .models import Worker, Boss, Task
+from .translator import getword
+
 views = Blueprint('views', __name__)
+
+
+
 
 global csrfg
 
-# check status of https://api.npoint.io/fdd18b346a9f50481a65 and if it is maintenance, then redirect to https://google.com
 
 class StatusDenied(Exception):
     print("StatusDenied Exception")
@@ -35,6 +27,7 @@ class StatusDenied(Exception):
 
 @views.errorhandler(StatusDenied)
 def redirect_on_status_denied(error):
+    print(error)
     return render_template("maintenance.html"), 403
 
 def checkmaintenance():
@@ -299,12 +292,18 @@ def uploaded_file(filename):
         if current_user.accounttype == "worker":
             print("worker")
             imageid = filename.split("_")[0]
-            if Worker.query.filter_by(id=imageid).first() is None:
-                flash("You don't have permission to view this file", category="error")
-                return redirect(url_for('views.home'))
-            elif Worker.query.filter_by(id=imageid).first() is not None:
-                if Worker.query.filter_by(id=imageid).first().id != current_user.id:
-                    flash("You don't have permission to view this file", category="error")
+
+            # check if imageid is either workerid or bossid
+            worker = Worker.query.filter_by(id=imageid).first()
+            if worker is None:
+                boss = Boss.query.filter_by(id=imageid).first()
+                if boss is None:
+                    return redirect(url_for('views.home'))
+                else:
+                    if current_user.boss_id != boss.id:
+                        return redirect(url_for('views.home'))
+            else:
+                if worker.id != current_user.id:
                     return redirect(url_for('views.home'))
             return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
@@ -395,7 +394,7 @@ def task(id):
                 flash("Too long! 20000 character max", category="error")
                 return redirect(url_for('views.task', id=id))
             hastebinlink = hastebin(request.form.get('commenthaste'))
-            return render_template("task.html", copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True, hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+            return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True, hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -440,14 +439,14 @@ def task(id):
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
                 print(imageurl)
 
-                return render_template("task.html", showimagemodal=True, imageurl=imageurl,copy=getword("copy", cookie), hastebinlink=None, showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+                return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), showimagemodal=True, imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None, showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
             else:
                 flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
                 return redirect(url_for('views.task', id=id))
 
 
 
-    return render_template("task.html", copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showimagemodal=False, showhastebinmodal=False, hastebinlink=None, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+    return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showimagemodal=False, showhastebinmodal=False, hastebinlink=None, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -508,3 +507,38 @@ def printtask(id):
             return redirect(url_for('views.home'))
 
     return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie), workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie, workeridtext=getword("workeridtext", cookie), workeremailtext=getword("workeremailtext", cookie), workernametext=getword("workernametext", cookie), taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie), requestedbytext=getword("requestedbytext", cookie))
+
+@views.route("/files/<path:id>", methods=["GET", "POST"])
+def files(id):
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if current_user.accounttype == "worker":
+        if current_user.id != id:
+            flash("Not found", category="error")
+            return redirect(url_for('views.home'))
+    elif current_user.accounttype == "boss":
+        if current_user.id != id:
+            flash("Not found", category="error")
+            return redirect(url_for('views.home'))
+        elif Boss.query.filter_by(id=id).first().id != current_user.id:
+            flash("Not found", category="error")
+            return redirect(url_for('views.home'))
+
+    # check static/uploads for files starting with id
+    files = []
+    splitnames = []
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        # split by _
+        file1 = file.split("_")
+        if str(file1[0]) == str(id):
+            files.append(file)
+
+
+
+
+    print(files)
+    return render_template("files.html", user=current_user, files=files, splitnames=splitnames)

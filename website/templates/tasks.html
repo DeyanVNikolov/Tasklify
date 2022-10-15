@@ -2,7 +2,7 @@
 
 <br><br>
 
-<div class="container-fluid text-center text-truncate" style="max-width:100%">
+<div class="container-fluid text-center text-truncate" style="max-width:100%; overflow: auto">
 
     <h1>{{tasktextplural}}</h1>
     <br><br>
@@ -14,7 +14,8 @@
     {% set status = "Done" %}
     {% endif %}
     
-    <div id="{{task.task_id}}" class="col mb-4">
+    <div id="{{task.task_id}}" class="col mb-4" style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);">
+    <br>
         <h4>{{tasktext}} #{{ loop.index }}</h4>
         <h4>{{task.title}}</h4>
         <h4><a href="/task/{{task.task_id}}"><button class="btn btn-primary">{{moreinfo}}</button></a></h4>
@@ -26,7 +27,6 @@
                 <span style="color:red">{{notstarted}}</span>
             {% endif %}
         </h4>
-        <h4>{{workertext}}: {{current_user.first_name}}</h4>
         {% if status == "Not Started" %}
         <form method="POST">
             <input type="hidden" name="typeform" value="done"/>
@@ -40,8 +40,10 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="task_id" value="{{task.task_id}}"/>
             <button type="submit" class="btn btn-primary">{{notdone}}</button>
+        </form>
         {% endif %}
         <br>
+    <br>
     </div>
     
     {% endfor %}

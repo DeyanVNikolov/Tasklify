@@ -19,8 +19,6 @@ from website.translator import getword
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
-
-
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
@@ -45,8 +43,9 @@ def create_app():
     toolbar = DebugToolbarExtension(app)
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 
-    app.jinja_env.globals.update(getword=getword)
 
+    app.jinja_env.globals.update(getword=getword)
+    app.jinja_env.globals.update(undonetasks=undonetasks)
     global limiter
 
     limiter = Limiter(app, key_func=get_remote_address, default_limits=["100 per minute"], storage_uri="memory://", )
@@ -138,6 +137,15 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+
+def undonetasks():
+    from .models import Task
+    if current_user.accounttype == "worker":
+        print("worker")
+        print(current_user.first_name)
+        print(current_user.id)
+        return Task.query.filter_by(worker_id=current_user.id).filter_by(complete=False).count()
+
 
 
 

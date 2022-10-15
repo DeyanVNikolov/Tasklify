@@ -35,7 +35,7 @@
 <meta name="theme-color" content="#ffffff">
 
 <div class="container text-center text-truncate">
-<h1>Worker ID: {{ workerid }}</h1>
+<h1 style="overflow: auto;">Worker ID: {{ workerid }}</h1>
 <br><br><br>
 <h1>{{tasktextplural}}</h1>
 <br><br>
@@ -47,9 +47,10 @@
 {% set status = "Done" %}
 {% endif %}
 
-<div id="{{task.task_id}}" class="col mb-4">
+<div style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);"  id="{{task.task_id}}" class="col mb-4 text-center">
+<br>
     <h4>{{tasktext}} #{{ loop.index }}</h4>
-    <h4>{{task.title}}</h4>
+    <h4 style="">{{ task.title }}</h4>
     <h4><a href="/task/{{task.task_id}}"><button class="btn btn-primary">{{moreinfo}}</button></a></h4>
     <br>
     <h4>{{statustext}}: 
@@ -59,26 +60,7 @@
             <span style="color:red">{{notstarted}}</span>
         {% endif %}
     </h4>
-    <h4>{{workertext}}: {{worker.first_name}}</h4>
-    {% if status == "Not Started" %}
-    <form method="POST">
-        <input type="hidden" name="typeform" value="done"/>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
-        <input type="text" name="comment" value="" placeholder="Comment"/><br><br>
-        <button type="submit" class="btn btn-primary">{{done}}</button>
-    </form>
-    {% else %}
-    <form method="POST">
-        <input type="hidden" name="typeform" value="notdone"/>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
-        <br>
-        <h3>{{task.comment}}</h3>
-        <br>
-        <button type="submit" class="btn btn-primary">{{notdone}}</button>
-    </form>
-    {% endif %}
+    <h4 style=" overflow: auto">{{workertext}}: {{worker.first_name}}</h4>
     <form method="POST" style="padding-top: 5px;">
         <input type="hidden" name="typeform" value="delete"/>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -87,7 +69,7 @@
     </form>
     <br>
 </div>
-
+<br>
 {% endfor %}
 </div>
 

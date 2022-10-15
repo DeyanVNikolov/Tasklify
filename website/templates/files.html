@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content %}
+
+
+
+    <br><br>
+    <h1>My Files</h1>
+
+
+    {% for file in files %}
+        <a href="{{ url_for('views.uploaded_file', filename=file) }}">
+            <button type="button" class="btn btn-primary">{{ file }}</button>
+        </a><br><br>
+    {% endfor %}
+
+
+
+{% endblock %}

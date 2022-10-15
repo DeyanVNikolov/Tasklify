@@ -1,3 +1,5 @@
+from flask import request, current_app
+from flask_login import current_user, login_required
 words = {
 
     "email": {
@@ -276,6 +278,18 @@ words = {
         "en": "Copy",
         "bg": "Копирай",
     },
+    "photouploader": {
+        "en": "Photo Uploader",
+        "bg": "Качване на снимка",
+    },
+    "markyourtaskasdonetext": {
+        "en": "Add any photo link, code link or personal comments in the field and mark your task as done.",
+        "bg": "Добавете връзка за снимка, връзка за код или лични коментари в полето и маркирайте задачата си като изпълнена.",
+    },
+    "photolinktexttitle": {
+        "en": "Photo Link",
+        "bg": "Връзка за снимка",
+    },
 
 
 
@@ -296,5 +310,4 @@ def getword(word, target):
 def loadtime():
     # Load time and date
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
-
 

@@ -6,14 +6,12 @@
   <br><br><br><br>
   <h1>{{emailtext}}: {{ user.email }}</h1>
   <h1>{{nametext}}: {{ user.first_name }}</h1>
-  <br><br>
+  <br><br><br><br>
+    <a href="/files/{{ user.id }}"><button type="button" class="btn btn-primary">My Files</button></a>
+    <br><br><br>
   <a href="/auth/change-password" class="btn btn-primary"> {{ changepassword }}</a>
   <a href="/auth/delete-account" class="btn btn-danger">{{deleteaccount}}</a>
   <br><br><br><br>
-  {% if user.id == 1 %}
-  <h1>Current user is an Admin! Account protection is advised</h1>
-  <a href="/internal/admin-dashboard" class="btn btn-warning">Admin</a>
-  {% endif %}
 
   <br><br><br><br>
 

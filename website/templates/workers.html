@@ -2,7 +2,7 @@
 
 <br><br>
 
-<div class="container text-center text-truncate overflow-auto">
+<div class="container text-center text-truncate overflow-auto;">
     <div class="row row-cols-1 row-cols-md-2">
         {% for worker in current_user.workers %}
         <div id="{{worker.id}}" class="col mb-4">
@@ -21,23 +21,28 @@
                 <input type="hidden" name="worker_id" value="{{worker.id}}"/>
                 <button type="submit" class="btn btn-primary">{{workermenu}}</button>
             </form>
+         <a href="/files/{{ worker.id }}"><button class="btn btn-primary">Files</button></a>
+
         </div>
         <br>
         {% endfor %}
     </div>
     <br><br><br>
-    <h1>{{addworker}}</h1>
-    <br><br>
-    <form method="post">
+    <form method="post" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+        <br>
+            <h1>{{addworker}}</h1>
         <div class="form-group">
             <input type="text" class="form-control" id="ID" name="ID" placeholder="ID" />
           </div>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <input type="hidden" name="typeform" value="add"/>
+        <button type="submit" class="btn btn-primary">{{submit}}</button>
+        <br><br>
     </form>
     <br><br><br>
     <h1>{{addtask}}</h1>
-    <form method="post">
+    <form method="post" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+    <br>
         <div class="form-group">
             <input type="text" class="form-control" id="title" name="title" placeholder="Title" />
           </div>
@@ -63,6 +68,7 @@
             {% endfor %}
             <br><br>
             <button type="submit" class="btn btn-primary">{{submit}}</button>
+    <br><br>
     </form>
     <br><br><br>
 </div>
