@@ -290,6 +290,10 @@ words = {
         "en": "Photo Link",
         "bg": "Връзка за снимка",
     },
+    "idemail": {
+        "en": "Your registration ID was sent to your email.",
+        "bg": "Вашият регистрационен ID беше изпратен на вашия имейл.",
+    },
 
 
 

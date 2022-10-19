@@ -15,9 +15,6 @@ from .translator import getword
 
 views = Blueprint('views', __name__)
 
-
-
-
 global csrfg
 
 
@@ -25,27 +22,24 @@ class StatusDenied(Exception):
     print("StatusDenied Exception")
 
 
+def checkmaintenance():
+    pass
+
+
 @views.errorhandler(StatusDenied)
 def redirect_on_status_denied(error):
     print(error)
     return render_template("maintenance.html"), 403
 
-def checkmaintenance():
-    pass
-    # try:
-    #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")
-    #     if r.json()["status"] == "maintain":
-    #         print("maintenance 1")
-    #         raise StatusDenied()
-    #     else:
-    #         pass
-    # except:
-    #     raise StatusDenied()
 
 @views.route('/', methods=['GET'])
 def home():
     checkmaintenance()
     return render_template("home.html", user=current_user)
+
+@views.route("/home", methods=['GET'])
+def homeredirect():
+    return redirect(url_for("views.home"))
 
 
 @views.route('/notes', methods=['GET', 'POST'])
@@ -84,7 +78,12 @@ def delete_note():
 @login_required
 def profile():
     checkmaintenance()
-    return render_template("profile.html", user=current_user, emailtext=getword("emailshort", request.cookies.get('locale')), nametext=getword("name", request.cookies.get('locale')), profiletext=getword("profiletext", request.cookies.get('locale')), changepassword=getword("changepassword", request.cookies.get('locale')), deleteaccount=getword("deleteaccount", request.cookies.get('locale')))
+    return render_template("profile.html", user=current_user,
+                           emailtext=getword("emailshort", request.cookies.get('locale')),
+                           nametext=getword("name", request.cookies.get('locale')),
+                           profiletext=getword("profiletext", request.cookies.get('locale')),
+                           changepassword=getword("changepassword", request.cookies.get('locale')),
+                           deleteaccount=getword("deleteaccount", request.cookies.get('locale')))
 
 
 @views.route('/boss')
@@ -103,7 +102,9 @@ def boss():
         if current_user.boss_id is not None:
             return redirect(url_for('views.home'))
 
-    return render_template("boss.html", user=current_user, boss=getword("boss", cookie), accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie), id=current_user.registrationid)
+    return render_template("boss.html", user=current_user, boss=getword("boss", cookie),
+                           accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
+                           id=getword("idemail", cookie))
 
 
 @views.route('/tasks', methods=['GET', 'POST'])
@@ -138,10 +139,16 @@ def tasks():
     taskstodisplay = []
 
     for task in Task.query.filter_by(worker_id=current_user.id).all():
-        taskstodisplay.append({"task": task.task, "complete": task.complete, "actual_id": task.actual_id,
-                               "task_id": task.id, "title": task.title, "ordernumber": task.ordernumber})
+        taskstodisplay.append(
+            {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
+             "title": task.title, "ordernumber": task.ordernumber})
 
-    return render_template("tasks.html", notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie), moreinfo=getword("moreinfo", cookie), user=current_user, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie))
+    return render_template("tasks.html", notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie),
+                           moreinfo=getword("moreinfo", cookie), user=current_user, taskslist=taskstodisplay,
+                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                           workertext=getword("workertext", cookie), done=getword("done", cookie),
+                           tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
+                           completed=getword("completed", cookie))
 
 
 @views.route('/workers', methods=["GET", "POST"])
@@ -211,7 +218,8 @@ def workers():
                     for workerg in workersl:
                         tasknum += 1
                         print(tasknum)
-                        new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id, actual_id=acid, ordernumber=tasknum)
+                        new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
+                                        actual_id=acid, ordernumber=tasknum)
                         print(new_task)
                         db.session.add(new_task)
                         db.session.commit()
@@ -229,7 +237,13 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
-    return render_template("workers.html", user=current_user, idtext=getword("idtext", cookie), addworker=getword("addworker", cookie), delete=getword("delete", cookie), taskslist=taskstodisplay, workertext=getword("workertext", cookie), addtask=getword("addtask", cookie), email=getword("email", cookie), name=getword("name", cookie), selectall=getword("selectall", cookie), deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie), submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
+    return render_template("workers.html", user=current_user, idtext=getword("idtext", cookie),
+                           addworker=getword("addworker", cookie), delete=getword("delete", cookie),
+                           taskslist=taskstodisplay, workertext=getword("workertext", cookie),
+                           addtask=getword("addtask", cookie), email=getword("email", cookie),
+                           name=getword("name", cookie), selectall=getword("selectall", cookie),
+                           deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
+                           submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
@@ -253,9 +267,9 @@ def worker(id):
     taskstodisplay = []
 
     for task in Task.query.filter_by(worker_id=worker.id).all():
-        taskstodisplay.append({"task": task.task, "complete": task.complete, "actual_id": task.actual_id,
-                               "task_id": task.id, "ordernumber": task.ordernumber, "title": task.title,
-                               "comment": task.comment})
+        taskstodisplay.append(
+            {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
+             "ordernumber": task.ordernumber, "title": task.title, "comment": task.comment})
     if request.method == "POST":
         typeform = request.form.get('typeform')
         if typeform == 'done':
@@ -277,7 +291,13 @@ def worker(id):
             db.session.commit()
             return redirect(url_for('views.worker', id=id))
 
-    return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie), workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay, tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+    return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
+                           workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay,
+                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                           workertext=getword("workertext", cookie), done=getword("done", cookie),
+                           tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
+                           completed=getword("completed", cookie), delete=getword("delete", cookie))
+
 
 @views.route('uploaded_file/<path:filename>', methods=['GET'])
 def uploaded_file(filename):
@@ -328,23 +348,15 @@ def uploaded_file(filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
+
 @views.route("/static/uploads/<path:filename>", methods=["GET"])
 def get_file(filename):
     return redirect(url_for('views.uploaded_file', filename=filename))
 
 
-
-
-
 def hastebin(text):
     r = requests.post("https://hastebin.com/documents", data=text)
     return "https://hastebin.com/raw/" + r.json()["key"]
-
-
-# def uploadimage(image):
-#     r = requests.post(f"https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5&source={image_string}&format=json")
-#
-#     return r.json()
 
 
 @views.route('/task/<int:id>', methods=["GET", "POST"])
@@ -394,7 +406,19 @@ def task(id):
                 flash("Too long! 20000 character max", category="error")
                 return redirect(url_for('views.task', id=id))
             hastebinlink = hastebin(request.form.get('commenthaste'))
-            return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True, hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+            return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                                   photolinktexttitle=getword("photolinktexttitle", cookie),
+                                   photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
+                                   sevendaylimit=getword("sevendaylimit", cookie),
+                                   submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True,
+                                   hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user,
+                                   notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata,
+                                   title=taskdata.title, taskid=id, done=getword("done", cookie),
+                                   tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                                   workertext=getword("workertext", cookie),
+                                   tasktextplural=getword("tasktextplural", cookie),
+                                   notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                                   delete=getword("delete", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -415,18 +439,10 @@ def task(id):
                     flash("Max file size is 15MB", category="error")
                     return redirect(url_for('views.task', id=id))
                 # check if file is suspicious
-                suspicious_file_types = [
-                    'application/x-dosexec',
-                    'application/x-msdownload',
-                    'application/x-msdos-program',
-                    'application/x-msi',
-                    'application/x-winexe',
-                    'application/x-shockwave-flash',
-                    'application/x-shockwave-flash2-preview',
-                    'application/x-java-applet',
-                    'application/x-java-bean',
-                    'application/x-java-vm',
-                ]
+                suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
+                    'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
+                    'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
+                    'application/x-java-applet', 'application/x-java-bean', 'application/x-java-vm', ]
                 if file.content_type in suspicious_file_types:
                     flash("We cannot accept this file type", category="error")
                     return redirect(url_for('views.task', id=id))
@@ -439,14 +455,35 @@ def task(id):
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
                 print(imageurl)
 
-                return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), showimagemodal=True, imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None, showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+                return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                                       photolinktexttitle=getword("photolinktexttitle", cookie),
+                                       photouploader=getword("photouploader", cookie), showimagemodal=True,
+                                       imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
+                                       showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie),
+                                       submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie),
+                                       user=current_user, notdone=getword("notdone", cookie), task=taskdata.task,
+                                       task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie),
+                                       tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                                       workertext=getword("workertext", cookie),
+                                       tasktextplural=getword("tasktextplural", cookie),
+                                       notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                                       delete=getword("delete", cookie))
             else:
                 flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
                 return redirect(url_for('views.task', id=id))
 
-
-
-    return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie), photolinktexttitle=getword("photolinktexttitle", cookie), photouploader=getword("photouploader", cookie), copy=getword("copy", cookie), sevendaylimit=getword("sevendaylimit", cookie), submitcodetext=getword("submitcodetext", cookie), showimagemodal=False, showhastebinmodal=False, hastebinlink=None, print=getword("print", cookie), user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie), tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie), workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie), delete=getword("delete", cookie))
+    return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                           photolinktexttitle=getword("photolinktexttitle", cookie),
+                           photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
+                           sevendaylimit=getword("sevendaylimit", cookie),
+                           submitcodetext=getword("submitcodetext", cookie), showimagemodal=False,
+                           showhastebinmodal=False, hastebinlink=None, print=getword("print", cookie),
+                           user=current_user, notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata,
+                           title=taskdata.title, taskid=id, done=getword("done", cookie),
+                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                           workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie),
+                           notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                           delete=getword("delete", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -456,7 +493,12 @@ def urlout(url):
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("urlout.html", url=url, user=current_user, youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie), ifyourenotredirected=getword("ifyourenotredirected", cookie), oryoucango=getword("oryoucango", cookie), home=getword("home", cookie), thirdpartylink=getword("thirdpartylink", cookie), infiveseconds=getword("infiveseconds", cookie))
+    return render_template("urlout.html", url=url, user=current_user,
+                           youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie),
+                           ifyourenotredirected=getword("ifyourenotredirected", cookie),
+                           oryoucango=getword("oryoucango", cookie), home=getword("home", cookie),
+                           thirdpartylink=getword("thirdpartylink", cookie),
+                           infiveseconds=getword("infiveseconds", cookie))
 
 
 @views.route('/contact', methods=["GET", "POST"])
@@ -467,7 +509,9 @@ def contact():
     else:
         cookie = 'en'
 
-    return render_template("contact.html", user=current_user, contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie), contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
+    return render_template("contact.html", user=current_user, contactus=getword("contactus", cookie),
+                           contactusmessage=getword("contactusmessage", cookie),
+                           contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])
@@ -506,7 +550,15 @@ def printtask(id):
             flash("Task not found", category="error")
             return redirect(url_for('views.home'))
 
-    return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata, title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie), workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie, workeridtext=getword("workeridtext", cookie), workeremailtext=getword("workeremailtext", cookie), workernametext=getword("workernametext", cookie), taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie), requestedbytext=getword("requestedbytext", cookie))
+    return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata,
+                           title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie),
+                           workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie,
+                           workeridtext=getword("workeridtext", cookie),
+                           workeremailtext=getword("workeremailtext", cookie),
+                           workernametext=getword("workernametext", cookie),
+                           taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie),
+                           requestedbytext=getword("requestedbytext", cookie))
+
 
 @views.route("/files/<path:id>", methods=["GET", "POST"])
 def files(id):
@@ -522,11 +574,9 @@ def files(id):
             return redirect(url_for('views.home'))
     elif current_user.accounttype == "boss":
         if current_user.id != id:
-            flash("Not found", category="error")
-            return redirect(url_for('views.home'))
-        elif Boss.query.filter_by(id=id).first().id != current_user.id:
-            flash("Not found", category="error")
-            return redirect(url_for('views.home'))
+            if Worker.query.filter_by(id=id).first().boss_id != current_user.id:
+                flash("Not found", category="error")
+                return redirect(url_for('views.home'))
 
     # check static/uploads for files starting with id
     files = []
@@ -536,9 +586,6 @@ def files(id):
         file1 = file.split("_")
         if str(file1[0]) == str(id):
             files.append(file)
-
-
-
 
     print(files)
     return render_template("files.html", user=current_user, files=files, splitnames=splitnames)
