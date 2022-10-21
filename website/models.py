@@ -11,7 +11,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     task = db.Column(db.String(100), nullable=False)
-    complete = db.Column(db.Boolean, default=False)
+    complete = db.Column(db.String(100), default=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('worker.id'))
     boss_id = db.Column(db.Integer, db.ForeignKey('boss.id'))
     ordernumber = db.Column(db.Integer)

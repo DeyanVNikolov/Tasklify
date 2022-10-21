@@ -127,12 +127,12 @@ def tasks():
         if typeform == 'done':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
-            task.complete = True
+            task.complete = "2"
             db.session.commit()
         elif typeform == 'notdone':
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
-            taskpost.complete = False
+            taskpost.complete = "0"
             db.session.commit()
             return redirect(url_for('views.tasks'))
 
@@ -148,7 +148,7 @@ def tasks():
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
-                           completed=getword("completed", cookie))
+                           completed=getword("completed", cookie), started=getword("started", cookie))
 
 
 @views.route('/workers', methods=["GET", "POST"])
@@ -187,6 +187,11 @@ def workers():
         elif request.form.get("typeform") == "delete":
             id = request.form.get('worker_id')
             worker = Worker.query.filter_by(registrationid=id).first()
+            if worker.boss_id is not None and worker.boss_id != current_user.id:
+                flash("Worker not found", category="error")
+            else:
+                pass
+
             if worker is None:
                 flash("No worker with that ID", category="error")
             else:
@@ -272,6 +277,10 @@ def worker(id):
              "ordernumber": task.ordernumber, "title": task.title, "comment": task.comment})
     if request.method == "POST":
         typeform = request.form.get('typeform')
+        taskid = request.form.get('task_id')
+        if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
+            flash("You can't edit this task", category="error")
+            return redirect(url_for('views.workers'))
         if typeform == 'done':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
@@ -290,13 +299,21 @@ def worker(id):
             taskpost.complete = False
             db.session.commit()
             return redirect(url_for('views.worker', id=id))
+        elif typeform == 'deletefromall':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task_actual_id = task.actual_id
+            for task in Task.query.filter_by(actual_id=task_actual_id).all():
+                db.session.delete(task)
+            return redirect(url_for('views.worker', id=id))
 
     return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
                            workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay,
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
-                           completed=getword("completed", cookie), delete=getword("delete", cookie))
+                           completed=getword("completed", cookie), delete=getword("delete", cookie), started=getword("started", cookie),
+                           deletefromall=getword("deletefromall", cookie))
 
 
 @views.route('uploaded_file/<path:filename>', methods=['GET'])
@@ -384,11 +401,16 @@ def task(id):
 
     if request.method == "POST":
         typeform = request.form.get('typeform')
+        taskid = request.form.get('task_id')
+        if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
+            if Task.query.filter_by(id=taskid).first().worker_id != current_user.id:
+                flash("You can't edit this task", category="error")
+                return redirect(url_for('views.home'))
         if typeform == 'done':
             taskid = request.form.get('task_id')
             taskcomment = request.form.get('comment')
             taskpost = Task.query.get(taskid)
-            taskpost.complete = True
+            taskpost.complete = "2"
             taskpost.comment = taskcomment
             db.session.commit()
             return redirect(url_for('views.task', id=id))
@@ -418,7 +440,7 @@ def task(id):
                                    workertext=getword("workertext", cookie),
                                    tasktextplural=getword("tasktextplural", cookie),
                                    notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                   delete=getword("delete", cookie))
+                                   delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -467,10 +489,17 @@ def task(id):
                                        workertext=getword("workertext", cookie),
                                        tasktextplural=getword("tasktextplural", cookie),
                                        notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                       delete=getword("delete", cookie))
+                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
             else:
                 flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
                 return redirect(url_for('views.task', id=id))
+        elif typeform == "start":
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = "1"
+            db.session.commit()
+            return redirect(url_for('views.task', id=id))
+    print(taskdata.complete)
 
     return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                            photolinktexttitle=getword("photolinktexttitle", cookie),
@@ -483,7 +512,7 @@ def task(id):
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                           delete=getword("delete", cookie))
+                           delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -522,6 +551,7 @@ def testpastebin():
 
 @views.route("/printtask/<int:id>", methods=["GET", "POST"])
 def printtask(id):
+    abort(403)
     checkmaintenance()
     # cookie
     if 'locale' in request.cookies:
@@ -557,7 +587,7 @@ def printtask(id):
                            workeremailtext=getword("workeremailtext", cookie),
                            workernametext=getword("workernametext", cookie),
                            taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie),
-                           requestedbytext=getword("requestedbytext", cookie))
+                           requestedbytext=getword("requestedbytext", cookie), startedtext=getword("startedtext", cookie))
 
 
 @views.route("/files/<path:id>", methods=["GET", "POST"])

@@ -141,10 +141,11 @@ def create_database(app):
 def undonetasks():
     from .models import Task
     if current_user.accounttype == "worker":
-        print("worker")
         print(current_user.first_name)
         print(current_user.id)
-        return Task.query.filter_by(worker_id=current_user.id).filter_by(complete=False).count()
+        total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0").count() + Task.query.filter_by(worker_id=current_user.id).filter_by(complete="1").count()
+        return total
+
 
 
 

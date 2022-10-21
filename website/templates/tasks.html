@@ -8,9 +8,11 @@
     <br><br>
     {% for task in taskslist %}
     {% set status = task.complete %}
-    {% if status == 0 %}
+    {% if status == "0" %}
     {% set status = "Not Started" %}
-    {% elif status == 1 %}
+    {% elif status == "1" %}
+    {% set status = "Started" %}
+    {% elif status == "2" %}
     {% set status = "Done" %}
     {% endif %}
     
@@ -23,27 +25,13 @@
         <h4>{{statustext}}: 
             {% if status == "Done" %}
                 <span style="color:green">{{completed}}</span>
-            {% else %}
+            {% elif status == "Started" %}
+                <span style="color:orange">{{started}}</span>
+            {% elif status == "Not Started" %}
                 <span style="color:red">{{notstarted}}</span>
             {% endif %}
         </h4>
-        {% if status == "Not Started" %}
-        <form method="POST">
-            <input type="hidden" name="typeform" value="done"/>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="task_id" value="{{task.task_id}}"/>
-            <button type="submit" class="btn btn-primary">{{done}}</button>
-        </form>
-        {% else %}
-        <form method="POST">
-            <input type="hidden" name="typeform" value="notdone"/>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="task_id" value="{{task.task_id}}"/>
-            <button type="submit" class="btn btn-primary">{{notdone}}</button>
-        </form>
-        {% endif %}
         <br>
-    <br>
     </div>
     
     {% endfor %}

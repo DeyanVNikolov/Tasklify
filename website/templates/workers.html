@@ -3,7 +3,7 @@
 <br><br>
 
 <div class="container text-center text-truncate overflow-auto;">
-    <div class="row row-cols-1 row-cols-md-2">
+    <div class="" style="resize: both; overflow: auto; max-height: 100%; max-width: 100%; height: 300px; width: auto; border: 2px; border-color: black; border-style: dashed;">
         {% for worker in current_user.workers %}
         <div id="{{worker.id}}" class="col mb-4">
             <h4>{{workertext}} #{{ loop.index }}</h4>

@@ -294,6 +294,18 @@ words = {
         "en": "Your registration ID was sent to your email.",
         "bg": "Вашият регистрационен ID беше изпратен на вашия имейл.",
     },
+    "starttext": {
+        "en": "Start",
+        "bg": "Старт",
+    },
+    "started": {
+        "en": "Started",
+        "bg": "Стартиран",
+    },
+    "deletefromall": {
+        "en": "Delete this task from all workers",
+        "bg": "Изтрий тази задача от всички",
+    },
 
 
 
