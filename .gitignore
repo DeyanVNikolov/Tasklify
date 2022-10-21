@@ -4,3 +4,4 @@ __pycache__/
 \website\__pycache__
 website\__pycache__
 website/__pycache__
+generate_password.py
