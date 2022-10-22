@@ -277,7 +277,9 @@ def worker(id):
             task = Task.query.get(taskid)
             task_actual_id = task.actual_id
             for task in Task.query.filter_by(actual_id=task_actual_id).all():
+                print(task)
                 db.session.delete(task)
+            db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
     return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
