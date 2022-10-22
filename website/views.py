@@ -1,10 +1,10 @@
-import json
+import os
 import os
 import uuid
 from os.path import join, dirname, realpath
 
 import requests
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, abort
+from flask import Blueprint, render_template, request, flash, redirect, url_for, abort
 from flask import current_app as app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename, send_from_directory
@@ -15,6 +15,10 @@ from .translator import getword
 
 views = Blueprint('views', __name__)
 
+homepage = "views.home"
+workerspage = "views.workers"
+oneworkerpage = "views.worker"
+
 global csrfg
 
 
@@ -23,6 +27,7 @@ class StatusDenied(Exception):
 
 
 def checkmaintenance():
+    # Not in use
     pass
 
 
@@ -37,41 +42,10 @@ def home():
     checkmaintenance()
     return render_template("home.html", user=current_user)
 
+
 @views.route("/home", methods=['GET'])
 def homeredirect():
     return redirect(url_for("views.home"))
-
-
-@views.route('/notes', methods=['GET', 'POST'])
-@login_required
-def notes():
-    abort(403)
-    if request.method == 'POST':
-        note = request.form.get('note')
-
-        if len(note) < 1:
-            flash('Note is too short!', category='error')
-        else:
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added!', category='success')
-
-    return render_template("notes.html", user=current_user)
-
-
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    abort(403)
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-
-    return jsonify({})
 
 
 @views.route('/profile')
@@ -96,11 +70,11 @@ def boss():
         cookie = 'en'
 
     if current_user.accounttype == "boss":
-        return redirect(url_for('views.home'))
+        return redirect(url_for(homepage))
 
     if current_user.accounttype == "worker":
         if current_user.boss_id is not None:
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     return render_template("boss.html", user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
@@ -120,7 +94,7 @@ def tasks():
         return redirect(url_for('views.boss'))
 
     if current_user.accounttype == 'boss':
-        return redirect(url_for('views.workers'))
+        return redirect(url_for(workerspage))
 
     if request.method == 'POST':
         typeform = request.form.get('typeform')
@@ -162,7 +136,7 @@ def workers():
 
     if current_user.is_authenticated:
         if current_user.accounttype == "worker":
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     taskstodisplay = []
 
@@ -189,8 +163,6 @@ def workers():
             worker = Worker.query.filter_by(registrationid=id).first()
             if worker.boss_id is not None and worker.boss_id != current_user.id:
                 flash("Worker not found", category="error")
-            else:
-                pass
 
             if worker is None:
                 flash("No worker with that ID", category="error")
@@ -216,7 +188,7 @@ def workers():
                     workerslist = request.form.getlist('worker')
                     if len(workerslist) == 0:
                         flash("No workers selected", category="error")
-                        return redirect(url_for('views.workers'))
+                        return redirect(url_for(workerspage))
                     workersl = Worker.query.filter(Worker.id.in_(workerslist)).all()
                     tasknum = 0
                     acid = str(uuid.uuid4())
@@ -229,15 +201,16 @@ def workers():
                         db.session.add(new_task)
                         db.session.commit()
                     flash("Task added", category="success")
-                    redirect(url_for('views.workers'))
+                    redirect(url_for(workerspage))
                 except Exception as e:
                     flash(e, category="error")
         elif request.form.get("typeform") == "workermenu":
             workerid = request.form.get('worker_id')
-            return redirect(url_for('views.worker', id=workerid))
+            return redirect(url_for(oneworkerpage, id=workerid))
 
     for task in Task.query.filter_by(boss_id=current_user.id).all():
         taskstodisplay.append({"task": task.task, "actual_id": task.actual_id, "ordernumber": task.ordernumber})
+
     for task in taskstodisplay:
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
@@ -261,13 +234,13 @@ def worker(id):
         cookie = 'en'
 
     if current_user.accounttype == "worker":
-        return redirect(url_for('views.home'))
+        return redirect(url_for(homepage))
 
     worker = Worker.query.filter_by(id=id).first()
     if worker is None:
-        return redirect(url_for('views.workers'))
+        return redirect(url_for(workerspage))
     if worker.boss_id != current_user.id:
-        return redirect(url_for('views.workers'))
+        return redirect(url_for(workerspage))
 
     taskstodisplay = []
 
@@ -280,40 +253,40 @@ def worker(id):
         taskid = request.form.get('task_id')
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
             flash("You can't edit this task", category="error")
-            return redirect(url_for('views.workers'))
+            return redirect(url_for(workerspage))
         if typeform == 'done':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             task.complete = True
             db.session.commit()
-            return redirect(url_for('views.worker', id=id))
+            return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'delete':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             db.session.delete(task)
             db.session.commit()
-            return redirect(url_for('views.worker', id=id))
+            return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'notdone':
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
             taskpost.complete = False
             db.session.commit()
-            return redirect(url_for('views.worker', id=id))
+            return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'deletefromall':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             task_actual_id = task.actual_id
             for task in Task.query.filter_by(actual_id=task_actual_id).all():
                 db.session.delete(task)
-            return redirect(url_for('views.worker', id=id))
+            return redirect(url_for(oneworkerpage, id=id))
 
     return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
                            workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay,
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
-                           completed=getword("completed", cookie), delete=getword("delete", cookie), started=getword("started", cookie),
-                           deletefromall=getword("deletefromall", cookie))
+                           completed=getword("completed", cookie), delete=getword("delete", cookie),
+                           started=getword("started", cookie), deletefromall=getword("deletefromall", cookie))
 
 
 @views.route('uploaded_file/<path:filename>', methods=['GET'])
@@ -335,13 +308,13 @@ def uploaded_file(filename):
             if worker is None:
                 boss = Boss.query.filter_by(id=imageid).first()
                 if boss is None:
-                    return redirect(url_for('views.home'))
+                    return redirect(url_for(homepage))
                 else:
                     if current_user.boss_id != boss.id:
-                        return redirect(url_for('views.home'))
+                        return redirect(url_for(homepage))
             else:
                 if worker.id != current_user.id:
-                    return redirect(url_for('views.home'))
+                    return redirect(url_for(homepage))
             return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
 
@@ -361,7 +334,7 @@ def uploaded_file(filename):
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
             flash("You don't have permission to view this file", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
@@ -388,16 +361,16 @@ def task(id):
     taskdata = Task.query.filter_by(id=id).first()
     if taskdata is None:
         flash("Task not found", category="error")
-        return redirect(url_for('views.home'))
+        return redirect(url_for(homepage))
 
     if current_user.accounttype == "worker":
         if taskdata.worker_id != current_user.id:
             flash("Task not found", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
     elif current_user.accounttype == "boss":
         if taskdata.boss_id != current_user.id:
             flash("Task not found", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     if request.method == "POST":
         typeform = request.form.get('typeform')
@@ -405,7 +378,7 @@ def task(id):
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
             if Task.query.filter_by(id=taskid).first().worker_id != current_user.id:
                 flash("You can't edit this task", category="error")
-                return redirect(url_for('views.home'))
+                return redirect(url_for(homepage))
         if typeform == 'done':
             taskid = request.form.get('task_id')
             taskcomment = request.form.get('comment')
@@ -440,7 +413,8 @@ def task(id):
                                    workertext=getword("workertext", cookie),
                                    tasktextplural=getword("tasktextplural", cookie),
                                    notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                   delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
+                                   delete=getword("delete", cookie), starttext=getword("starttext", cookie),
+                                   started=getword("started", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -462,9 +436,10 @@ def task(id):
                     return redirect(url_for('views.task', id=id))
                 # check if file is suspicious
                 suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
-                    'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
-                    'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
-                    'application/x-java-applet', 'application/x-java-bean', 'application/x-java-vm', ]
+                                         'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
+                                         'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
+                                         'application/x-java-applet', 'application/x-java-bean',
+                                         'application/x-java-vm', ]
                 if file.content_type in suspicious_file_types:
                     flash("We cannot accept this file type", category="error")
                     return redirect(url_for('views.task', id=id))
@@ -489,7 +464,8 @@ def task(id):
                                        workertext=getword("workertext", cookie),
                                        tasktextplural=getword("tasktextplural", cookie),
                                        notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
+                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie),
+                                       started=getword("started", cookie))
             else:
                 flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
                 return redirect(url_for('views.task', id=id))
@@ -512,7 +488,8 @@ def task(id):
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                           delete=getword("delete", cookie), starttext=getword("starttext", cookie), started=getword("started", cookie))
+                           delete=getword("delete", cookie), starttext=getword("starttext", cookie),
+                           started=getword("started", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -568,17 +545,17 @@ def printtask(id):
 
     if taskdata is None:
         flash("Task not found", category="error")
-        return redirect(url_for('views.home'))
+        return redirect(url_for(homepage))
 
     if current_user.accounttype == "worker":
         if taskdata.worker_id != current_user.id:
             flash("Task not found", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     elif current_user.accounttype == "boss":
         if taskdata.boss_id != current_user.id:
             flash("Task not found", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
 
     return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata,
                            title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie),
@@ -587,7 +564,8 @@ def printtask(id):
                            workeremailtext=getword("workeremailtext", cookie),
                            workernametext=getword("workernametext", cookie),
                            taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie),
-                           requestedbytext=getword("requestedbytext", cookie), startedtext=getword("startedtext", cookie))
+                           requestedbytext=getword("requestedbytext", cookie),
+                           startedtext=getword("startedtext", cookie))
 
 
 @views.route("/files/<path:id>", methods=["GET", "POST"])
@@ -601,12 +579,12 @@ def files(id):
     if current_user.accounttype == "worker":
         if current_user.id != id:
             flash("Not found", category="error")
-            return redirect(url_for('views.home'))
+            return redirect(url_for(homepage))
     elif current_user.accounttype == "boss":
         if current_user.id != id:
             if Worker.query.filter_by(id=id).first().boss_id != current_user.id:
                 flash("Not found", category="error")
-                return redirect(url_for('views.home'))
+                return redirect(url_for(homepage))
 
     # check static/uploads for files starting with id
     files = []

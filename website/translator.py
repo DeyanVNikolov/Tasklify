@@ -1,5 +1,6 @@
 from flask import request, current_app
 from flask_login import current_user, login_required
+import time
 words = {
 
     "email": {
@@ -13,10 +14,6 @@ words = {
     "password": {
         "en": "Password",
         "bg": "Парола",
-    },
-    "enterpassword": {
-        "en": "Enter Password",
-        "bg": "Въведете парола",
     },
     "enteremail": {
         "en": "Enter Email",
@@ -61,10 +58,6 @@ words = {
     "enterpassword": {
         "en": "Enter Password",
         "bg": "Въведете парола",
-    },
-    "deleteaccount": {
-        "en": "Delete Account",
-        "bg": "Изтриване на акаунт",
     },
     "confirmdelete": {
         "en": "By checking this box and clicking the 'delete account' button, you agree that you want to delete your account, making it impossible to recover it.",
@@ -324,6 +317,13 @@ def getword(word, target):
         return "!!! WORD NOT FOUND !!! " + word
 
 def loadtime():
-    # Load time and date
+    from datetime import datetime
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    print(dt_string)
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
+
+
+loadtime()
+
 

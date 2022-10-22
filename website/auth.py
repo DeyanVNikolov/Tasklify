@@ -263,7 +263,7 @@ def change_password():
             flash('Captcha is incorrect.', category='error')
             return redirect(url_for('auth.change_password'))
 
-        if not confirm == 'on':
+        if confirm != 'on':
             flash('You must confirm you want to change your password.', category='error')
             return redirect(url_for('auth.change_password'))
 
