@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
 from email_validator import validate_email, EmailNotValidError
-from .mailsender import sendregisterationemail
+from .mailsender import sendregisterationemail, sendregisterationemailboss
 import requests
 
 
@@ -175,10 +175,11 @@ def sign_up():
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            sendregisterationemail(email, first_name, current_user.registrationid)
             if accounttype == 'worker':
+                sendregisterationemail(email, first_name, current_user.registrationid)
                 return redirect(url_for('views.boss'))
             else:
+                sendregisterationemailboss(email, first_name)
                 return redirect(url_for('views.home'))
 
 
