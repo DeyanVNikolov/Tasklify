@@ -34,17 +34,25 @@ def checkmaintenance():
 @views.errorhandler(StatusDenied)
 def redirect_on_status_denied(error):
     print(error)
-    return render_template("maintenance.html"), 403
+    return render_template("maintenance.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie)), 403
 
 
 @views.route('/', methods=['GET'])
 def home():
     checkmaintenance()
-    return render_template("home.html", user=current_user)
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+    return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
 
 
 @views.route("/home", methods=['GET'])
 def homeredirect():
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
     return redirect(url_for("views.home"))
 
 
@@ -52,7 +60,11 @@ def homeredirect():
 @login_required
 def profile():
     checkmaintenance()
-    return render_template("profile.html", user=current_user,
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+    return render_template("profile.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
                            emailtext=getword("emailshort", request.cookies.get('locale')),
                            nametext=getword("name", request.cookies.get('locale')),
                            profiletext=getword("profiletext", request.cookies.get('locale')),
@@ -76,7 +88,7 @@ def boss():
         if current_user.boss_id is not None:
             return redirect(url_for(homepage))
 
-    return render_template("boss.html", user=current_user, boss=getword("boss", cookie),
+    return render_template("boss.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
                            id=getword("idemail", cookie))
 
@@ -117,7 +129,7 @@ def tasks():
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber})
 
-    return render_template("tasks.html", notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie),
+    return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie),
                            moreinfo=getword("moreinfo", cookie), user=current_user, taskslist=taskstodisplay,
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
@@ -146,48 +158,48 @@ def workers():
             id = request.form.get('ID')
 
             if id == "" or id is None:
-                flash("Missing ID", category="error")
+                flash(getword("missingid", cookie), category="error")
             else:
                 worker = Worker.query.filter_by(registrationid=id).first()
                 if worker is None:
-                    flash("No worker with that ID", category="error")
+                    flash(getword("noworkerwithid", cookie), category="error")
                 else:
                     if worker.boss_id is None:
                         worker.boss_id = current_user.id
                         db.session.commit()
-                        flash("Worker added", category="success")
+                        flash(getword("workeradded", cookie), category="success")
                     else:
-                        flash("Worker already added", category="error")
+                        flash(getword("workeralreadyadded", cookie), category="error")
         elif request.form.get("typeform") == "delete":
             id = request.form.get('worker_id')
             worker = Worker.query.filter_by(registrationid=id).first()
             if worker.boss_id is not None and worker.boss_id != current_user.id:
-                flash("Worker not found", category="error")
+                flash(getword("workernotfound", cookie), category="error")
 
             if worker is None:
-                flash("No worker with that ID", category="error")
+                flash(getword("noworkerwithid", cookie), category="error")
             else:
                 if worker.boss_id is None:
-                    flash("Worker already removed", category="error")
+                    flash(geword("workeralreadyremoved", cookie), category="error")
                 else:
                     try:
                         worker.boss_id = None
                         for task in Task.query.filter_by(worker_id=worker.id).all():
                             db.session.delete(task)
                         db.session.commit()
-                        flash("Worker removed", category="success")
+                        flash(getword("workerremoved", cookie), category="success")
                     except Exception as e:
                         flash(e, category="error")
         elif request.form.get("typeform") == "task":
             task = request.form.get('task')
             title = request.form.get('title')
             if task == "" or task is None or title == "" or title is None:
-                flash("Missing task", category="error")
+                flash(getword("missingtask", cookie), category="error")
             else:
                 try:
                     workerslist = request.form.getlist('worker')
                     if len(workerslist) == 0:
-                        flash("No workers selected", category="error")
+                        flash(getword("noworkersselected", cookie), category="error")
                         return redirect(url_for(workerspage))
                     workersl = Worker.query.filter(Worker.id.in_(workerslist)).all()
                     tasknum = 0
@@ -200,7 +212,7 @@ def workers():
                         print(new_task)
                         db.session.add(new_task)
                         db.session.commit()
-                    flash("Task added", category="success")
+                    flash(getword("taskadded", cookie), category="success")
                     redirect(url_for(workerspage))
                 except Exception as e:
                     flash(e, category="error")
@@ -215,7 +227,7 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
-    return render_template("workers.html", user=current_user, idtext=getword("idtext", cookie),
+    return render_template("workers.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, idtext=getword("idtext", cookie),
                            addworker=getword("addworker", cookie), delete=getword("delete", cookie),
                            taskslist=taskstodisplay, workertext=getword("workertext", cookie),
                            addtask=getword("addtask", cookie), email=getword("email", cookie),
@@ -252,7 +264,7 @@ def worker(id):
         typeform = request.form.get('typeform')
         taskid = request.form.get('task_id')
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
-            flash("You can't edit this task", category="error")
+            flash(getword("youcantedittask", cookie), category="error")
             return redirect(url_for(workerspage))
         if typeform == 'done':
             taskid = request.form.get('task_id')
@@ -282,7 +294,7 @@ def worker(id):
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
-    return render_template("worker.html", notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
+    return render_template("worker.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
                            workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay,
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
@@ -296,7 +308,7 @@ def uploaded_file(filename):
     checkmaintenance()
 
     if not current_user.is_authenticated:
-        flash("You need to be logged in to view this page", category="error")
+        flash(getword("youneedtobeloggedin", cookie), category="error")
         return redirect(url_for('auth.login'))
 
     print(filename)
@@ -335,7 +347,7 @@ def uploaded_file(filename):
                     print("yes")
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
-            flash("You don't have permission to view this file", category="error")
+            flash(getword("nopermtoviewthisview", cookie), category="error")
             return redirect(url_for(homepage))
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
@@ -362,16 +374,16 @@ def task(id):
 
     taskdata = Task.query.filter_by(id=id).first()
     if taskdata is None:
-        flash("Task not found", category="error")
+        flash(getword("tasknotfound", cookie), category="error")
         return redirect(url_for(homepage))
 
     if current_user.accounttype == "worker":
         if taskdata.worker_id != current_user.id:
-            flash("Task not found", category="error")
+            flash(getword("tasknotfound", cookie), category="error")
             return redirect(url_for(homepage))
     elif current_user.accounttype == "boss":
         if taskdata.boss_id != current_user.id:
-            flash("Task not found", category="error")
+            flash(getword("tasknotfound", cookie), category="error")
             return redirect(url_for(homepage))
 
     if request.method == "POST":
@@ -379,7 +391,7 @@ def task(id):
         taskid = request.form.get('task_id')
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
             if Task.query.filter_by(id=taskid).first().worker_id != current_user.id:
-                flash("You can't edit this task", category="error")
+                flash(getword("youcantedittask", cookie), category="error")
                 return redirect(url_for(homepage))
         if typeform == 'done':
             taskid = request.form.get('task_id')
@@ -397,13 +409,13 @@ def task(id):
             return redirect(url_for('views.task', id=id))
         elif typeform == "hastebin":
             if request.form.get('commenthaste') == "" or request.form.get('commenthaste') is None:
-                flash("No conent", category="error")
+                flash(getword("nocontent", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
             if len(request.form.get('commenthaste')) > 20000:
-                flash("Too long! 20000 character max", category="error")
+                flash(getword("toolong20kmax", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
             hastebinlink = hastebin(request.form.get('commenthaste'))
-            return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+            return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                                    photolinktexttitle=getword("photolinktexttitle", cookie),
                                    photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
                                    sevendaylimit=getword("sevendaylimit", cookie),
@@ -429,12 +441,12 @@ def task(id):
                 return redirect(request.url)
             file = request.files['file']
             if file.filename == '':
-                flash('No selected file')
+                flash(getword("nofileselected", cookie), category="error")
                 return redirect(request.url)
             if file and allowed_file(file.filename):
                 # check file size
                 if file.content_length > 15000000:
-                    flash("Max file size is 15MB", category="error")
+                    flash(getword("filetoobig15mb", cookie), category="error")
                     return redirect(url_for('views.task', id=id))
                 # check if file is suspicious
                 suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
@@ -443,7 +455,7 @@ def task(id):
                                          'application/x-java-applet', 'application/x-java-bean',
                                          'application/x-java-vm', ]
                 if file.content_type in suspicious_file_types:
-                    flash("We cannot accept this file type", category="error")
+                    flash(getword("wecannotacceptthisfile", cookie), category="error")
                     return redirect(url_for('views.task', id=id))
                 print("uploading")
                 filename = secure_filename(file.filename)
@@ -454,7 +466,7 @@ def task(id):
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
                 print(imageurl)
 
-                return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                                        photolinktexttitle=getword("photolinktexttitle", cookie),
                                        photouploader=getword("photouploader", cookie), showimagemodal=True,
                                        imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
@@ -469,7 +481,7 @@ def task(id):
                                        delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                                        started=getword("started", cookie))
             else:
-                flash("Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif", category="error")
+                flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
         elif typeform == "start":
             taskid = request.form.get('task_id')
@@ -479,7 +491,7 @@ def task(id):
             return redirect(url_for('views.task', id=id))
     print(taskdata.complete)
 
-    return render_template("task.html", markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+    return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                            photolinktexttitle=getword("photolinktexttitle", cookie),
                            photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
                            sevendaylimit=getword("sevendaylimit", cookie),
@@ -501,7 +513,7 @@ def urlout(url):
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("urlout.html", url=url, user=current_user,
+    return render_template("urlout.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), url=url, user=current_user,
                            youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie),
                            ifyourenotredirected=getword("ifyourenotredirected", cookie),
                            oryoucango=getword("oryoucango", cookie), home=getword("home", cookie),
@@ -517,7 +529,7 @@ def contact():
     else:
         cookie = 'en'
 
-    return render_template("contact.html", user=current_user, contactus=getword("contactus", cookie),
+    return render_template("contact.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, contactus=getword("contactus", cookie),
                            contactusmessage=getword("contactusmessage", cookie),
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
 
@@ -546,20 +558,20 @@ def printtask(id):
     workeremail = worker.email
 
     if taskdata is None:
-        flash("Task not found", category="error")
+        flash(getword("tasknotfound", cookie), category="error")
         return redirect(url_for(homepage))
 
     if current_user.accounttype == "worker":
         if taskdata.worker_id != current_user.id:
-            flash("Task not found", category="error")
+            flash(getword("tasknotfound", cookie), category="error")
             return redirect(url_for(homepage))
 
     elif current_user.accounttype == "boss":
         if taskdata.boss_id != current_user.id:
-            flash("Task not found", category="error")
+            flash(getword("tasknotfound", cookie), category="error")
             return redirect(url_for(homepage))
 
-    return render_template("printtask.html", user=current_user, task=taskdata.task, task1=taskdata,
+    return render_template("printtask.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, task=taskdata.task, task1=taskdata,
                            title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie),
                            workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie,
                            workeridtext=getword("workeridtext", cookie),
@@ -580,12 +592,12 @@ def files(id):
 
     if current_user.accounttype == "worker":
         if current_user.id != id:
-            flash("Not found", category="error")
+            flash(getword("workernotfound", cookie), category="error")
             return redirect(url_for(homepage))
     elif current_user.accounttype == "boss":
         if current_user.id != id:
             if Worker.query.filter_by(id=id).first().boss_id != current_user.id:
-                flash("Not found", category="error")
+                flash(getword("workernotfound", cookie), category="error")
                 return redirect(url_for(homepage))
 
     # check static/uploads for files starting with id
@@ -598,4 +610,4 @@ def files(id):
             files.append(file)
 
     print(files)
-    return render_template("files.html", user=current_user, files=files, splitnames=splitnames)
+    return render_template("files.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, files=files, splitnames=splitnames)

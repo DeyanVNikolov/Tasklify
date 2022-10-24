@@ -23,7 +23,7 @@ class StatusDenied(Exception):
 @auth.errorhandler(StatusDenied)
 def redirect_on_status_denied1(error):
     flash("")
-    return render_template("maintenance.html"), 403
+    return render_template("maintenance.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie)), 403
 
 
 
@@ -65,18 +65,18 @@ def login():
 
             if user:
                 if check_password_hash(user.password, password):
-                    flash('Logged in successfully!', category='success')
+                    flash(getword("loggedinsuccess", cookie), category='success')
                     login_user(user, remember=True)
                     if accounttype == 'worker':
                         return redirect(url_for('views.boss'))
                     else:
                         return redirect(url_for('views.home'))
                 else:
-                    flash('Incorrect password, try again.', category='error')
+                    flash(getword("incorrectpass", cookie), category='error')
             else:
-                flash('Email does not exist.', category='error')
+                flash(getword("emailnotfound", cookie), category='error')
 
-    return render_template("login.html", user=current_user,
+    return render_template("login.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
                            emailtext=getword("email", cookie),
                            passwordtext=getword("password", cookie),
                            logintext=getword("login", cookie),
@@ -90,9 +90,13 @@ def login():
 @login_required
 def logout():
     checkmaintenance()
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
     if current_user.is_authenticated:
         logout_user()
-        flash('Logged out successfully!', category='success')
+        flash(getword("loggedoutsuccess", cookie), category='success')
         return redirect(url_for('auth.login'))
     else:
         return redirect(url_for('views.home'))
@@ -117,10 +121,10 @@ def sign_up():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html", user=current_user)
+            return render_template("hash_error.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
 
         if not CAPTCHA1.verify(c_text, c_hash):
-            flash('Captcha is incorrect.', category='error')
+            flash(getword("captchawrong", cookie), category='error')
             return redirect(url_for('auth.sign_up'))
 
         email = request.form.get('email')
@@ -131,7 +135,7 @@ def sign_up():
             email = v["email"]
             parts1 = email.split('@')
             if parts1[1] == "tasklify.me":
-                flash("Tasklify.me cannot be used as an email address.", category='error')
+                flash(getword("tasklifymedomainnotallowed", cookie), category='error')
                 return redirect(url_for('auth.sign_up'))
         except EmailNotValidError as e:
             flash(e, category='error')
@@ -150,15 +154,15 @@ def sign_up():
         else:
             user = None
         if user:
-            flash('Email already exists.', category='error')
+            flash(getword("emailalreadyexists", cookie), category='error')
         elif len(email) < 4:
-            flash('Email must be greater than 3 characters.', category='error')
+            flash(getword("emailtooshort", cookie), category='error')
         elif len(first_name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
+            flash(getword("nametooshort", cookie), category='error')
         elif password1 != password2:
-            flash('Passwords don\'t match.', category='error')
-        elif len(password1) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+            flash(getword("passwordsdontmatch", cookie), category='error')
+        elif len(password1) < 8:
+            flash(getword("passwordtooshort", cookie), category='error')
         else:
             if accounttype == 'worker':
                 key = uuid.uuid4().hex
@@ -168,13 +172,13 @@ def sign_up():
                 new_user = Boss(email=email, first_name=first_name,
                                 password=generate_password_hash(password1, method='sha256'), accounttype="boss")
             else:
-                flash('Account type not selected.', category='error')
+                flash("Error. Type not selected.", category='error')
                 return redirect(url_for('auth.sign_up'))
 
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('Account created!', category='success')
+            flash(getword("accountcreated", cookie), category='success')
             if accounttype == 'worker':
                 sendregisterationemail(email, first_name, current_user.registrationid)
                 return redirect(url_for('views.boss'))
@@ -183,7 +187,7 @@ def sign_up():
                 return redirect(url_for('views.home'))
 
 
-    return render_template("sign_up.html", user=current_user, captcha=captcha,
+    return render_template("sign_up.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
                            emailtext=getword("email", cookie),
                            nametext=getword("name", cookie),
                            passwordtext=getword("password", cookie),
@@ -206,7 +210,7 @@ def delete_account():
 
     if current_user.is_authenticated and current_user.accounttype == 'boss':
         if current_user.workers:
-            flash('You have workers, you cannot delete your account.', category='error')
+            flash(getword("youhaveworkerscannotdelete", cookie), category='error')
             return redirect(url_for('views.home'))
 
     if request.method == 'POST':
@@ -222,15 +226,15 @@ def delete_account():
                 if check_password_hash(user.password, password):
                     db.session.delete(user)
                     db.session.commit()
-                    flash('Account deleted successfully!', category='success')
+                    flash(getword("accontdeletesuccess", cookie), category='success')
                     return redirect(url_for('auth.login'))
                 else:
-                    flash('Incorrect password, try again.', category='error')
+                    flash(getword("incorrectpass", cookie), category='error')
         else:
-            flash('You must confirm you want to delete your account.', category='error')
+            flash(getword("youmustconfirmdelete", cookie), category='error')
 
 
-    return render_template("delete_account.html", user=current_user,
+    return render_template("delete_account.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
                            deleteaccount=getword("deleteaccount", cookie),
                            confirmtext=getword("confirmdelete", cookie),
                            password=getword("password", cookie),
@@ -252,7 +256,7 @@ def change_password():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html", user=current_user)
+            return render_template("hash_error.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
 
         confirm = request.form.get('confirm')
         email = current_user.email
@@ -261,28 +265,28 @@ def change_password():
         else:
             user = Boss.query.filter_by(email=email).first()
         if not CAPTCHA1.verify(c_text, c_hash):
-            flash('Captcha is incorrect.', category='error')
+            flash(getword("captchawrong", cookie), category='error')
             return redirect(url_for('auth.change_password'))
 
         if confirm != 'on':
-            flash('You must confirm you want to change your password.', category='error')
+            flash(getword("mustconfirmchangepassword", cookie), category='error')
             return redirect(url_for('auth.change_password'))
 
         if user:
             if check_password_hash(user.password, password1):
                 if password2 != password3:
-                    flash('Passwords don\'t match.', category='error')
-                elif len(password2) < 7:
-                    flash('Password must be at least 7 characters.', category='error')
+                    flash(getword("passwordsdontmatch", cookie), category='error')
+                elif len(password2) < 8:
+                    flash(getword("passwordtooshort", cookie), category='error')
                 else:
                     user.password = generate_password_hash(password2, method='sha256')
                     db.session.commit()
-                    flash('Password changed successfully!', category='success')
+                    flash(getword("passwordchangedsuccess", cookie), category='success')
                     return redirect(url_for('views.home'))
             else:
-                flash('Incorrect password, try again.', category='error')
+                flash(getword("incorrectpass", cookie), category='error')
 
-    return render_template("change_password.html", user=current_user, captcha=captcha,
+    return render_template("change_password.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
                            changepassword=getword("changepassword", cookie),
                            oldpassword=getword("oldpassword", cookie),
                            newpassword=getword("newpassword", cookie),

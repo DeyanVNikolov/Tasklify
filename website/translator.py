@@ -299,6 +299,187 @@ words = {
         "en": "Delete this task from all workers",
         "bg": "Изтрий тази задача от всички",
     },
+    "missingid": {
+        "en": "Missing ID",
+        "bg": "Липсващ ID",
+    },
+    "noworkerwithid": {
+        "en": "No worker with that ID",
+        "bg": "Няма работник с този ID",
+    },
+    "workeradded": {
+        "en": "Worker added",
+        "bg": "Работникът е добавен",
+    },
+    "workeralreadyremoved": {
+        "en": "Worker already removed",
+        "bg": "Работникът вече е премахнат",
+    },
+    "workerremoved": {
+        "en": "Worker removed",
+        "bg": "Работникът е премахнат",
+    },
+    "workeralreadyadded": {
+        "en": "Worker already added",
+        "bg": "Работникът вече е добавен",
+    },
+    "missingtask": {
+        "en": "Missing task",
+        "bg": "Липсваща задача",
+    },
+    "noworkersselected": {
+        "en": "No workers selected",
+        "bg": "Няма избрани работници",
+    },
+    "taskadded": {
+        "en": "Task added",
+        "bg": "Задачата е добавена",
+    },
+    "youcantedittask": {
+        "en": "You can't edit this task",
+        "bg": "Не можете да редактирате тази задача",
+    },
+    "youneedtobeloggedin": {
+        "en": "You need to be logged in to view this page",
+        "bg": "Трябва да сте влезли в системата, за да видите тази страница",
+    },
+    "nopermtoviewthisview": {
+        "en": "You don't have permission to view this file",
+        "bg": "Нямате право да преглеждате този файл",
+    },
+    "tasknotfound": {
+        "en": "Task not found",
+        "bg": "Задачата не е намерена",
+    },
+    "nocontent": {
+        "en": "No content",
+        "bg": "Няма съдържание",
+
+    },
+    "toolong20kmax": {
+        "en": "Too long. Max 20000 characters",
+        "bg": "Твърде дълго. Максимум 20000 символа",
+    },
+    "nofileselected": {
+        "en": "No file selected",
+        "bg": "Няма избран файл",
+    },
+    "Max file size is 15MB": {
+        "en": "Max file size is 15MB",
+        "bg": "Максималният размер на файла е 15MB",
+    },
+    "wecannotacceptthisfiletype": {
+        "en": "We cannot accept this file type",
+        "bg": "Не можем да приемем този тип файл",
+    },
+    "invalidtype": {
+        "en": "Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif",
+        "bg": "Невалиден формат. Позволените типове файлове са txt, pdf, png, jpg, jpeg, gif",
+    },
+    "workernotfound": {
+        "en": "Worker not found",
+        "bg": "Работникът не е намерен",
+    },
+    "loggedinsuccess": {
+        "en": "Logged in successfully",
+        "bg": "Успешно влязохте в системата",
+    },
+    "incorrectpass": {
+        "en": "Incorrect password, try again",
+        "bg": "Грешна парола, опитайте отново",
+    },
+    "emailnotfound": {
+        "en": "Email not found",
+        "bg": "Имейлът не е намерен",
+    },
+    "loggedoutsuccess": {
+        "en": "Logged out successfully",
+        "bg": "Успешно излязохте от системата",
+    },
+    "captchawrong": {
+        "en": "Captcha wrong",
+        "bg": "Капчата е грешна",
+    },
+    "tasklifymedomainnotallowed": {
+        "en": "Tasklify.me cannot be used as a domain for email",
+        "bg": "Tasklify.me не може да се използва като домейн за имейл",
+    },
+    "emailalreadyexists": {
+        "en": "Email already exists",
+        "bg": "Имейлът вече съществува",
+    },
+    "emailtooshort": {
+        "en": "Email too short",
+        "bg": "Имейлът е твърде къс",
+    },
+    "nametooshort": {
+        "en": "Name too short",
+        "bg": "Името е твърде късо",
+    },
+    "passwordtooshort": {
+        "en": "Password too short. At least 8 characters",
+        "bg": "Паролата е твърде къса. Поне 8 символа",
+    },
+    "passwordsdontmatch": {
+        "en": "Passwords don't match",
+        "bg": "Паролите не съвпадат",
+    },
+    "accountcreated": {
+        "en": "Account created",
+        "bg": "Акаунта е създаден",
+    },
+    "youhaveworkerscannotdelete": {
+        "en": "You have workers, you cannot delete your account",
+        "bg": "Имате работници, не можете да изтриете акаунта си",
+    },
+    "accontdeletesuccess": {
+        "en": "Account deleted successfully",
+        "bg": "Акаунта е изтрит успешно",
+    },
+    "youmustconfirmdelete": {
+        "en": "You must confirm deletion of your account",
+        "bg": "Трябва да потвърдите изтриването на акаунта си",
+    },
+    "mustconfirmchangepassword": {
+        "en": "You must confirm change of your password",
+        "bg": "Трябва да потвърдите промяната на паролата си",
+    },
+    "passwordchangedsuccess": {
+        "en": "Password changed successfully",
+        "bg": "Паролата е променена успешно",
+    },
+    "profilenav": {
+        "en": "Profile",
+        "bg": "Профил",
+    },
+    "loginnav": {
+        "en": "Login",
+        "bg": "Вход",
+    },
+    "signupnav": {
+        "en": "Sign up",
+        "bg": "Регистрация",
+    },
+    "tasksnav": {
+        "en": "Tasks",
+        "bg": "Задачи",
+    },
+    "workersnav": {
+        "en": "Workers",
+        "bg": "Работници",
+    },
+    "adminnav": {
+        "en": "Admin",
+        "bg": "Админ",
+    },
+    "logoutnav": {
+        "en": "Logout",
+        "bg": "Изход",
+    },
+    "homenav": {
+        "en": "Home",
+        "bg": "Начало",
+    }
 
 
 
@@ -308,11 +489,13 @@ words = {
 
 
 def getword(word, target):
+    if target not in ["en", "bg"]:
+        return "Invalid language"
     if word in words:
         if target in words[word]:
             return words[word][target]
         else:
-            return "No translation for " + target
+            return "!!! No translation for " + target + " !!!"
     else:
         return "!!! WORD NOT FOUND !!! " + word
 

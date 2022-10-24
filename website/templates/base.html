@@ -93,20 +93,20 @@
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/">Home</a>
-                <a class="nav-item nav-link" id="profile" href="/profile">Profile</a>
+                <a class="nav-item nav-link" id="home" href="/">{{ homenav }}</a>
+                <a class="nav-item nav-link" id="profile" href="/profile">{{ profilenav }}</a>
                 {% else %}
-                <a class="nav-item nav-link" id="home" href="/">Home</a>
-                <a class="nav-item nav-link" id="login" href="/auth/login">Login</a>
-                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up">Sign Up</a>
+                <a class="nav-item nav-link" id="home" href="/">{{ homenav }}</a>
+                <a class="nav-item nav-link" id="login" href="/auth/login">{{ loginnav }}</a>
+                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up">{{ signupnav }}</a>
                 {% endif %}
                 {% if user.accounttype == "worker" %}
-                <a class="nav-item nav-link" id="tasks" href="/tasks">Tasks <span
+                <a class="nav-item nav-link" id="tasks" href="/tasks">{{ tasksnav }} <span
                         class="badge badge-light">{{ undonetasks() }}</span></a>
 
                 {% endif %}
                 {% if user.accounttype == "boss" %}
-                <a class="nav-item nav-link" id="workers" href="/workers">Workers</a>
+                <a class="nav-item nav-link" id="workers" href="/workers">{{ workersnav }}</a>
                 {% endif %}
             </div>
         </div>
@@ -114,8 +114,8 @@
         {% if user.is_authenticated %}
         {% if user.accounttype == "boss" and user.additionalpermissions == "ADMIN" %}
         <form class="form-inline my-2 my-lg-0">
-            <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2">Admin</a>
-            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">Log out</a>
+            <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2">{{ adminnav }}</a>
+            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">{{ logoutnav }}</a>
         </form>
         <div class="dropdown dropleft">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -129,7 +129,7 @@
         </div>
         {% else %}
         <form class="form-inline my-2 my-lg-0">
-            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">Log out</a>
+            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">{{ logoutnav }}</a>
         </form>
         <div class="dropdown dropleft">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -184,8 +184,8 @@
                                 src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome.svg"
                                 style="max-height: 60px"></a></h2>
                     <p class="menu">
-                        <a href="/">Home</a>
-                        <a href="/contact">Contact</a>
+                        <a href="/">{{ home }}</a>
+                        <a href="/contact">{{ contact }}</a>
                     </p>
                     <!-- <ul class="ftco-footer-social p-0">
                   <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><span
@@ -221,8 +221,6 @@
                             function fourdigits(number) {
                                 return (number < 1000) ? number + 1900 : number;
                             }
-
-                            // get time with hours, minutes and seconds with leading zeros
 
                             var time2 = ((now.getHours() < 10) ? "0" : "") + now.getHours() + ":" + ((now.getMinutes() <
                                         10) ? "0" :
