@@ -1,5 +1,4 @@
 import os
-import os
 import uuid
 from os.path import join, dirname, realpath
 
@@ -34,7 +33,11 @@ def checkmaintenance():
 @views.errorhandler(StatusDenied)
 def redirect_on_status_denied(error):
     print(error)
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie)), 403
+    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie)), 403
 
 
 @views.route('/', methods=['GET'])
@@ -44,7 +47,11 @@ def home():
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
+    return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user)
 
 
 @views.route("/home", methods=['GET'])
@@ -64,7 +71,11 @@ def profile():
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("profile.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
+    return render_template("profile.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
                            emailtext=getword("emailshort", request.cookies.get('locale')),
                            nametext=getword("name", request.cookies.get('locale')),
                            profiletext=getword("profiletext", request.cookies.get('locale')),
@@ -88,7 +99,11 @@ def boss():
         if current_user.boss_id is not None:
             return redirect(url_for(homepage))
 
-    return render_template("boss.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, boss=getword("boss", cookie),
+    return render_template("boss.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
                            id=getword("idemail", cookie))
 
@@ -129,7 +144,11 @@ def tasks():
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber})
 
-    return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie),
+    return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           notdone=getword("notdone", cookie), tasktitle=getword("tasktitle", cookie),
                            moreinfo=getword("moreinfo", cookie), user=current_user, taskslist=taskstodisplay,
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
@@ -227,7 +246,11 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
-    return render_template("workers.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, idtext=getword("idtext", cookie),
+    return render_template("workers.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, idtext=getword("idtext", cookie),
                            addworker=getword("addworker", cookie), delete=getword("delete", cookie),
                            taskslist=taskstodisplay, workertext=getword("workertext", cookie),
                            addtask=getword("addtask", cookie), email=getword("email", cookie),
@@ -294,13 +317,18 @@ def worker(id):
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
-    return render_template("worker.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), notdone=getword("notdone", cookie), moreinfo=getword("moreinfo", cookie),
-                           workerid=id, user=current_user, worker=worker, taskslist=taskstodisplay,
-                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
-                           workertext=getword("workertext", cookie), done=getword("done", cookie),
-                           tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
-                           completed=getword("completed", cookie), delete=getword("delete", cookie),
-                           started=getword("started", cookie), deletefromall=getword("deletefromall", cookie))
+    return render_template("worker.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), notdone=getword("notdone", cookie),
+                           moreinfo=getword("moreinfo", cookie), workerid=id, user=current_user, worker=worker,
+                           taskslist=taskstodisplay, tasktext=getword("tasktext", cookie),
+                           statustext=getword("statustext", cookie), workertext=getword("workertext", cookie),
+                           done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie),
+                           notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                           delete=getword("delete", cookie), started=getword("started", cookie),
+                           deletefromall=getword("deletefromall", cookie))
 
 
 @views.route('uploaded_file/<path:filename>', methods=['GET'])
@@ -415,7 +443,12 @@ def task(id):
                 flash(getword("toolong20kmax", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
             hastebinlink = hastebin(request.form.get('commenthaste'))
-            return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+            return render_template("task.html", profilenav=getword("profilenav", cookie),
+                                   loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                   tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                   adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                   homenav=getword("homenav", cookie),
+                                   markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                                    photolinktexttitle=getword("photolinktexttitle", cookie),
                                    photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
                                    sevendaylimit=getword("sevendaylimit", cookie),
@@ -466,7 +499,12 @@ def task(id):
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
                 print(imageurl)
 
-                return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                return render_template("task.html", profilenav=getword("profilenav", cookie),
+                                       loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                       tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                       adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                       homenav=getword("homenav", cookie),
+                                       markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                                        photolinktexttitle=getword("photolinktexttitle", cookie),
                                        photouploader=getword("photouploader", cookie), showimagemodal=True,
                                        imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
@@ -491,7 +529,11 @@ def task(id):
             return redirect(url_for('views.task', id=id))
     print(taskdata.complete)
 
-    return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+    return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
                            photolinktexttitle=getword("photolinktexttitle", cookie),
                            photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
                            sevendaylimit=getword("sevendaylimit", cookie),
@@ -513,7 +555,11 @@ def urlout(url):
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
-    return render_template("urlout.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), url=url, user=current_user,
+    return render_template("urlout.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), url=url, user=current_user,
                            youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie),
                            ifyourenotredirected=getword("ifyourenotredirected", cookie),
                            oryoucango=getword("oryoucango", cookie), home=getword("home", cookie),
@@ -529,8 +575,12 @@ def contact():
     else:
         cookie = 'en'
 
-    return render_template("contact.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, contactus=getword("contactus", cookie),
-                           contactusmessage=getword("contactusmessage", cookie),
+    return render_template("contact.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
+                           contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie),
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
 
 
@@ -571,7 +621,11 @@ def printtask(id):
             flash(getword("tasknotfound", cookie), category="error")
             return redirect(url_for(homepage))
 
-    return render_template("printtask.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, task=taskdata.task, task1=taskdata,
+    return render_template("printtask.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, task=taskdata.task, task1=taskdata,
                            title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie),
                            workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie,
                            workeridtext=getword("workeridtext", cookie),
@@ -610,4 +664,13 @@ def files(id):
             files.append(file)
 
     print(files)
-    return render_template("files.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, files=files, splitnames=splitnames)
+    return render_template("files.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user, files=files, splitnames=splitnames)
+
+
+@views.route("/docs", methods=["GET"], subdomain="docs")
+def docs():
+    return "Hey"

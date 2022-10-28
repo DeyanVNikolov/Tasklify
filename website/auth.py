@@ -1,20 +1,20 @@
+import uuid
+
+from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
-from email_validator import validate_email, EmailNotValidError
-from .mailsender import sendregisterationemail, sendregisterationemailboss
-import requests
-
 
 from website import CAPTCHA1
 from . import db
+from .mailsender import sendregisterationemail, sendregisterationemailboss
 from .models import Worker, Boss
-import uuid
-from .translator import getword, loadtime
+from .translator import getword
 
 auth = Blueprint('auth', __name__)
 global csrfg
+
 
 class StatusDenied(Exception):
     print("StatusDenied Exception")
@@ -23,23 +23,15 @@ class StatusDenied(Exception):
 @auth.errorhandler(StatusDenied)
 def redirect_on_status_denied1(error):
     flash("")
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie)), 403
-
-
+    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie)), 403
 
 
 def checkmaintenance():
-    pass
-    # try:
-    #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")
-    #     if r.json()["status"] == "maintain":
-    #         print("maintenance 1")
-    #         raise StatusDenied()
-    #     else:
-    #         pass
-    # except Exception as e:
-    #     print(e)
-    #     raise StatusDenied()
+    pass  # try:  #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")  #     if r.json()["status"] == "maintain":  #         print("maintenance 1")  #         raise StatusDenied()  #     else:  #         pass  # except Exception as e:  #     print(e)  #     raise StatusDenied()
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -76,14 +68,14 @@ def login():
             else:
                 flash(getword("emailnotfound", cookie), category='error')
 
-    return render_template("login.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
-                           emailtext=getword("email", cookie),
-                           passwordtext=getword("password", cookie),
-                           logintext=getword("login", cookie),
-                           enterpassword=getword("enterpassword", cookie),
-                           enteremail=getword("enteremail", cookie),
-                           registerhere=getword("registerhere", cookie),
-                           notregistered=getword("notregistered", cookie))
+    return render_template("login.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user, emailtext=getword("email", cookie),
+                           passwordtext=getword("password", cookie), logintext=getword("login", cookie),
+                           enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
+                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie))
 
 
 @auth.route('/logout')
@@ -121,14 +113,17 @@ def sign_up():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
+            return render_template("hash_error.html", profilenav=getword("profilenav", cookie),
+                                   loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                   tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                   adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                   homenav=getword("homenav", cookie), user=current_user)
 
         if not CAPTCHA1.verify(c_text, c_hash):
             flash(getword("captchawrong", cookie), category='error')
             return redirect(url_for('auth.sign_up'))
 
         email = request.form.get('email')
-
 
         try:
             v = validate_email(email, check_deliverability=True)
@@ -140,8 +135,6 @@ def sign_up():
         except EmailNotValidError as e:
             flash(e, category='error')
             return redirect(url_for('auth.sign_up'))
-
-
 
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
@@ -167,7 +160,8 @@ def sign_up():
             if accounttype == 'worker':
                 key = uuid.uuid4().hex
                 new_user = Worker(email=email, first_name=first_name,
-                                  password=generate_password_hash(password1, method='sha256'), accounttype="worker", registrationid=key)
+                                  password=generate_password_hash(password1, method='sha256'), accounttype="worker",
+                                  registrationid=key)
             elif accounttype == 'boss':
                 new_user = Boss(email=email, first_name=first_name,
                                 password=generate_password_hash(password1, method='sha256'), accounttype="boss")
@@ -186,18 +180,19 @@ def sign_up():
                 sendregisterationemailboss(email, first_name)
                 return redirect(url_for('views.home'))
 
-
-    return render_template("sign_up.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
-                           emailtext=getword("email", cookie),
-                           nametext=getword("name", cookie),
-                           passwordtext=getword("password", cookie),
-                           passwordconfirm=getword("cnewpassword", cookie),
-                           submit=getword("submit", cookie),
-                           firstandlast=getword("firstandlast", cookie),
-                           signup=getword("signup", cookie),
-                           enteremail=getword("enteremail", cookie),
+    return render_template("sign_up.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
+                           emailtext=getword("email", cookie), nametext=getword("name", cookie),
+                           passwordtext=getword("password", cookie), passwordconfirm=getword("cnewpassword", cookie),
+                           submit=getword("submit", cookie), firstandlast=getword("firstandlast", cookie),
+                           signup=getword("signup", cookie), enteremail=getword("enteremail", cookie),
                            alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
-                           loginhere=getword("loginhere", cookie), databeingproccessed=getword("databeingproccessed", cookie))
+                           loginhere=getword("loginhere", cookie),
+                           databeingproccessed=getword("databeingproccessed", cookie))
+
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
 @login_required
@@ -233,12 +228,14 @@ def delete_account():
         else:
             flash(getword("youmustconfirmdelete", cookie), category='error')
 
+    return render_template("delete_account.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
+                           deleteaccount=getword("deleteaccount", cookie), confirmtext=getword("confirmdelete", cookie),
+                           password=getword("password", cookie), enterpassword=getword("enterpassword", cookie))
 
-    return render_template("delete_account.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user,
-                           deleteaccount=getword("deleteaccount", cookie),
-                           confirmtext=getword("confirmdelete", cookie),
-                           password=getword("password", cookie),
-                           enterpassword=getword("enterpassword", cookie))
 
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
@@ -256,7 +253,11 @@ def change_password():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user)
+            return render_template("hash_error.html", profilenav=getword("profilenav", cookie),
+                                   loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                   tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                   adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                   homenav=getword("homenav", cookie), user=current_user)
 
         confirm = request.form.get('confirm')
         email = current_user.email
@@ -286,13 +287,14 @@ def change_password():
             else:
                 flash(getword("incorrectpass", cookie), category='error')
 
-    return render_template("change_password.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
-                           changepassword=getword("changepassword", cookie),
-                           oldpassword=getword("oldpassword", cookie),
-                           newpassword=getword("newpassword", cookie),
-                           cnewpassword=getword("cnewpassword", cookie),
-                           confirmtext=getword("confirm", cookie),
-                           enterpassword=getword("enterpassword", cookie))
+    return render_template("change_password.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
+                           changepassword=getword("changepassword", cookie), oldpassword=getword("oldpassword", cookie),
+                           newpassword=getword("newpassword", cookie), cnewpassword=getword("cnewpassword", cookie),
+                           confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie))
 
 
 @auth.errorhandler(CSRFError)
