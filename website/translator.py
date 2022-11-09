@@ -53,7 +53,7 @@ words = {
     },
     "confirm": {
         "en": "By checking this box and clicking the 'change password' button, you agree that you want to change your account password, making the old password invalid immediately after clicking the button.",
-        "bg": "Отметнете тази кутийка и натиснете бутона 'Смяна на парола', за да потвърдите, че искате да смените паролата си, като старата парола става невалидна веднага след натискането на бутона.",
+        "bg": "Отмятайки тази кутийка и натискайки бутона 'Смяна на парола', за да потвърдите, че искате да смените паролата си, като старата парола става невалидна веднага след натискането на бутона.",
     },
     "enterpassword": {
         "en": "Enter Password",
@@ -61,7 +61,7 @@ words = {
     },
     "confirmdelete": {
         "en": "By checking this box and clicking the 'delete account' button, you agree that you want to delete your account, making it impossible to recover it.",
-        "bg": "Отметнете тази кутийка и натиснете бутона 'Изтриване на акаунт', за да потвърдите, че искате да изтриете акаунта си, като той става невъзможен за възстановяване.",
+        "bg": "Отмятайки тази кутийка и натискайки бутона 'Изтриване на акаунт', за да потвърдите, че искате да изтриете акаунта си, като той става невъзможен за възстановяване.",
     },
     "submit": {
         "en": "Submit",
@@ -120,8 +120,8 @@ words = {
         "bg": "Статус",
     },
     "workertext": {
-        "en": "Worker",
-        "bg": "Работник",
+        "en": "Employee",
+        "bg": "Служител",
     },
     "done": {
         "en": "Done",
@@ -152,8 +152,8 @@ words = {
         "bg": "Отмени избора",
     },
     "workermenu": {
-        "en": "Worker Menu",
-        "bg": "Меню на работника",
+        "en": "Employee Menu",
+        "bg": "Меню на служител",
     },
     "moreinfo": {
         "en": "More Info",
@@ -168,16 +168,16 @@ words = {
         "bg": "Не е готово",
     },
     "selectworkers": {
-        "en": "Select Workers",
-        "bg": "Избери работници",
+        "en": "Select Employees",
+        "bg": "Избери служители",
     },
     "idtext": {
         "en": "ID",
         "bg": "ID",
     },
     "addworker": {
-        "en": "Add Worker",
-        "bg": "Добави работник",
+        "en": "Add Employee",
+        "bg": "Добави служител",
     },
     "youllberedirectedto": {
         "en": "You'll be redirected to",
@@ -236,16 +236,16 @@ words = {
         "bg": "Печат",
     },
     "workeridtext": {
-        "en": "Worker ID",
-        "bg": "ID на работника",
+        "en": "Employee ID",
+        "bg": "ID на служител",
     },
     "workeremailtext": {
-        "en": "Worker Email",
-        "bg": "Имейл на работника",
+        "en": "Employee Email",
+        "bg": "Имейл на служител",
     },
     "workernametext": {
-        "en": "Worker Name",
-        "bg": "Име на работника",
+        "en": "Employee Name",
+        "bg": "Име на служител",
     },
     "taskstatustext": {
         "en": "Task Status",
@@ -296,40 +296,40 @@ words = {
         "bg": "Стартиран",
     },
     "deletefromall": {
-        "en": "Delete this task from all workers",
-        "bg": "Изтрий тази задача от всички",
+        "en": "Delete this task from all employees",
+        "bg": "Изтрий тази задача от всички служители",
     },
     "missingid": {
         "en": "Missing ID",
         "bg": "Липсващ ID",
     },
     "noworkerwithid": {
-        "en": "No worker with that ID",
+        "en": "No employee with that ID",
         "bg": "Няма работник с този ID",
     },
     "workeradded": {
-        "en": "Worker added",
-        "bg": "Работникът е добавен",
+        "en": "Еmployee added",
+        "bg": "Служител добавен",
     },
     "workeralreadyremoved": {
-        "en": "Worker already removed",
-        "bg": "Работникът вече е премахнат",
+        "en": "Employee already removed",
+        "bg": "Служителът вече е премахнат",
     },
     "workerremoved": {
-        "en": "Worker removed",
-        "bg": "Работникът е премахнат",
+        "en": "Employee removed",
+        "bg": "Служител премахнат",
     },
     "workeralreadyadded": {
-        "en": "Worker already added",
-        "bg": "Работникът вече е добавен",
+        "en": "Employee already added",
+        "bg": "Служителът вече е добавен",
     },
     "missingtask": {
         "en": "Missing task",
         "bg": "Липсваща задача",
     },
     "noworkersselected": {
-        "en": "No workers selected",
-        "bg": "Няма избрани работници",
+        "en": "No employees selected",
+        "bg": "Няма избрани служители",
     },
     "taskadded": {
         "en": "Task added",
@@ -377,8 +377,8 @@ words = {
         "bg": "Невалиден формат. Позволените типове файлове са txt, pdf, png, jpg, jpeg, gif",
     },
     "workernotfound": {
-        "en": "Worker not found",
-        "bg": "Работникът не е намерен",
+        "en": "Еmployee not found",
+        "bg": "Служителят не е намерен",
     },
     "loggedinsuccess": {
         "en": "Logged in successfully",
@@ -429,8 +429,8 @@ words = {
         "bg": "Акаунта е създаден",
     },
     "youhaveworkerscannotdelete": {
-        "en": "You have workers, you cannot delete your account",
-        "bg": "Имате работници, не можете да изтриете акаунта си",
+        "en": "You have employees, you cannot delete your account",
+        "bg": "Имате служители, не можете да изтриете акаунта си",
     },
     "accontdeletesuccess": {
         "en": "Account deleted successfully",
@@ -465,8 +465,8 @@ words = {
         "bg": "Задачи",
     },
     "workersnav": {
-        "en": "Workers",
-        "bg": "Работници",
+        "en": "Employees",
+        "bg": "Служители",
     },
     "adminnav": {
         "en": "Admin",

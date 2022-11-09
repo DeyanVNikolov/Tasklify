@@ -328,7 +328,7 @@ def worker(id):
                            done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
-                           deletefromall=getword("deletefromall", cookie))
+                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie))
 
 
 @views.route('uploaded_file/<path:filename>', methods=['GET'])
@@ -674,3 +674,24 @@ def files(id):
 @views.route("/docs", methods=["GET"], subdomain="docs")
 def docs():
     return "Hey"
+
+@views.route("/privacy", methods=["GET"])
+def privacy():
+    abort(403)
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if cookie == "en":
+        return render_template("privacy.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                                   signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                                   workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                                   logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                                   user=current_user)
+    elif cookie == "bg":
+        return render_template("privacybg.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                                   signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                                   workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                                   logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                                   user=current_user)
