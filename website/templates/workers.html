@@ -4,8 +4,9 @@
 
     <div class="container text-center text-truncate overflow-auto;">
         <div class=""
-             style="resize: both; overflow: auto; max-height: 100%; max-width: 100%; height: 350px; width: auto; border: 2px; border-color: black; border-style: dashed;">
+             style="resize: both; overflow: auto; max-height: 100%; max-width: 100%; height: 400px; width: auto; border: 2px; border-color: black; border-style: dashed;">
             {% for worker in current_user.workers %}
+                <br>
                 <div id="{{ worker.id }}" class="col mb-4">
                     <h4>{{ workertext }} #{{ loop.index }}</h4>
                     <h4>{{ email }}: {{ worker.email }}</h4>
@@ -24,7 +25,7 @@
                     </form>
                     <br>
                     <a href="/files/{{ worker.id }}">
-                        <button class="btn btn-primary">Files</button>
+                        <button class="btn btn-primary">{{ myfiles }}</button>
                     </a>
 
                 </div>

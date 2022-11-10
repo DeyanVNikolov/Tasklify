@@ -7,7 +7,7 @@
   <h1>{{emailtext}}: {{ user.email }}</h1>
   <h1>{{nametext}}: {{ user.first_name }}</h1>
   <br><br><br><br>
-    <a href="/files/{{ user.id }}"><button type="button" class="btn btn-primary">My Files</button></a>
+    <a href="/files/{{ user.id }}"><button type="button" class="btn btn-primary">{{ myfiles }}</button></a>
     <br><br><br>
   <a href="/auth/change-password" class="btn btn-primary"> {{ changepassword }}</a>
   <a href="/auth/delete-account" class="btn btn-danger">{{deleteaccount}}</a>

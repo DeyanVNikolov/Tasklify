@@ -195,6 +195,14 @@ words = {
         "en": "Click here",
         "bg": "Натиснете тук",
     },
+    "myfiles": {
+        "en": "My Files",
+        "bg": "Моите файлове",
+    },
+    "empmyfiles": {
+        "en": "Employee Files",
+        "bg": "Файлове на служител",
+    },
     "home": {
         "en": "home",
         "bg": "начало",

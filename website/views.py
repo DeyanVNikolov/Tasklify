@@ -90,7 +90,8 @@ def profile():
                            nametext=getword("name", request.cookies.get('locale')),
                            profiletext=getword("profiletext", request.cookies.get('locale')),
                            changepassword=getword("changepassword", request.cookies.get('locale')),
-                           deleteaccount=getword("deleteaccount", request.cookies.get('locale')))
+                           deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
+                           myfiles=getword("myfiles", request.cookies.get('locale')))
 
 
 @views.route('/boss')
@@ -267,7 +268,7 @@ def workers():
                            name=getword("name", cookie), selectall=getword("selectall", cookie),
                            deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
                            submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie),
-                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie))
+                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie), myfiles=getword("empmyfiles", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
