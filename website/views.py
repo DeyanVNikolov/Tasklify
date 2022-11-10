@@ -3,13 +3,23 @@ import uuid
 from os.path import join, dirname, realpath
 
 import requests
-from flask import Blueprint, render_template, request, flash, redirect, url_for, abort
+from flask import abort
 from flask import current_app as app
-from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename, send_from_directory
 
+global csrfg
+from .models import Task
+
+from email_validator import validate_email, EmailNotValidError
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask_login import login_required, current_user
+from werkzeug.security import generate_password_hash
+
+from website import CAPTCHA1
 from . import db
-from .models import Worker, Boss, Task
+from .mailsender import sendregisterationemailboss
+from .models import Worker, Boss
+
 from .translator import getword
 
 views = Blueprint('views', __name__)
@@ -256,7 +266,8 @@ def workers():
                            addtask=getword("addtask", cookie), email=getword("email", cookie),
                            name=getword("name", cookie), selectall=getword("selectall", cookie),
                            deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
-                           submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie))
+                           submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie),
+                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
@@ -675,23 +686,93 @@ def files(id):
 def docs():
     return "Hey"
 
+
 @views.route("/privacy", methods=["GET"])
 def privacy():
     abort(403)
+
+
+@views.route("/employ/sign-up", methods=["GET", "POST"])
+def employ_signup():
+
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
 
-    if cookie == "en":
-        return render_template("privacy.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
-                                   signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
-                                   workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
-                                   logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                                   user=current_user)
-    elif cookie == "bg":
-        return render_template("privacybg.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
-                                   signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
-                                   workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
-                                   logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                                   user=current_user)
+    if current_user.accounttype == "worker":
+        return redirect(url_for(homepage))
+
+    captcha = CAPTCHA1.create()
+
+    if request.method == 'POST':
+        c_hash = request.form.get('captcha-hash')
+        c_text = request.form.get('captcha-text')
+        if c_hash is None:
+            return render_template("hash_error.html", profilenav=getword("profilenav", cookie),
+                                   loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                   tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                   adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                   homenav=getword("homenav", cookie), user=current_user)
+
+        if not CAPTCHA1.verify(c_text, c_hash):
+            flash(getword("captchawrong", cookie), category='error')
+            return redirect(url_for('views.employ_signup'))
+
+        email = request.form.get('email')
+
+        try:
+            v = validate_email(email, check_deliverability=True)
+            email = v["email"]
+            parts1 = email.split('@')
+            if parts1[1] == "tasklify.me":
+                flash(getword("tasklifymedomainnotallowed", cookie), category='error')
+                return redirect(url_for('views.employ_signup'))
+        except EmailNotValidError as e:
+            flash(e, category='error')
+            return redirect(url_for('views.employ_signup'))
+
+        first_name = request.form.get('firstName')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        user = Worker.query.filter_by(email=email).first()
+        if not user:
+            user = None
+
+        if user:
+            flash(getword("emailalreadyexists", cookie), category='error')
+        elif len(email) < 4:
+            flash(getword("emailtooshort", cookie), category='error')
+        elif len(first_name) < 2:
+            flash(getword("nametooshort", cookie), category='error')
+        elif password1 != password2:
+            flash(getword("passwordsdontmatch", cookie), category='error')
+        elif len(password1) < 8:
+            flash(getword("passwordtooshort", cookie), category='error')
+        else:
+            key = uuid.uuid4().hex
+            new_user = Worker(email=email, first_name=first_name,
+                              password=generate_password_hash(password1, method='sha256'), accounttype="worker",
+                              registrationid=key)
+
+            db.session.add(new_user)
+            db.session.commit()
+            flash(getword("accountcreated", cookie), category='success')
+            sendregisterationemailboss(email, first_name)
+            return redirect(url_for('views.workers'))
+
+    return render_template("employ_signup.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
+                           emailtext=getword("email", cookie), nametext=getword("name", cookie),
+                           passwordtext=getword("password", cookie), passwordconfirm=getword("cnewpassword", cookie),
+                           submit=getword("submit", cookie), firstandlast=getword("firstandlast", cookie),
+                           signup=getword("signupemploy", cookie), enteremail=getword("enteremail", cookie),
+                           alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
+                           loginhere=getword("loginhere", cookie),
+                           databeingproccessed=getword("databeingproccessed", cookie),
+                           employreccode=getword("employreccode", cookie),
+                           addemployeeinfosignup=getword("addemployeeinfosignup", cookie))

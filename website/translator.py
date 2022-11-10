@@ -192,8 +192,8 @@ words = {
         "bg": "или можете да отидете на",
     },
     "here": {
-        "en": "click here",
-        "bg": "натиснете тук",
+        "en": "Click here",
+        "bg": "Натиснете тук",
     },
     "home": {
         "en": "home",
@@ -479,12 +479,19 @@ words = {
     "homenav": {
         "en": "Home",
         "bg": "Начало",
-    }
-
-
-
-
-}
+    },
+    "signupemploy": {
+        "en": "Sign up your employee",
+        "bg": "Регистрирайте служителя си",
+    },
+    "addemployeeinfosignup": {
+        "en": 'You need to input this code in page "Employees", section "Add Employee"',
+        "bg": 'Трябва да въведете този код на страницата "Служители", секция "Добави служител"',
+    },
+    "employreccode": {
+        "en": "Your employee will receive confirmation email with registraion code",
+        "bg": "Служителят ви ще получи имейл за потвърждение с код за регистрация",
+    }, }
 
 
 
