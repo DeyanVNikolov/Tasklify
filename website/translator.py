@@ -499,7 +499,13 @@ words = {
     "employreccode": {
         "en": "Your employee will receive confirmation email with registraion code",
         "bg": "Служителят ви ще получи имейл за потвърждение с код за регистрация",
-    }, }
+    },
+    "uploadtext": {
+        "en": "Upload",
+        "bg": "Качи",
+    }
+
+}
 
 
 

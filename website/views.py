@@ -473,7 +473,7 @@ def task(id):
                                    tasktextplural=getword("tasktextplural", cookie),
                                    notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                                    delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                   started=getword("started", cookie))
+                                   started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -529,7 +529,7 @@ def task(id):
                                        tasktextplural=getword("tasktextplural", cookie),
                                        notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                                        delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                       started=getword("started", cookie))
+                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
             else:
                 flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -557,7 +557,7 @@ def task(id):
                            workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                           started=getword("started", cookie))
+                           started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])

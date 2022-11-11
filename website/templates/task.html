@@ -39,27 +39,27 @@
         <form method="POST" enctype="multipart/form-data"
             style="border-style: dashed; padding-left: 10px; padding-right: 10px">
             <br>
-            <h4>{{photouploader}}</h4>
+            <h4>{{photouploader}} <i class="fa-solid fa-cloud-arrow-up"></i></h4>
             <br>
             <input class="form-control" style="white-space: initial" type="file" name="file">
             <br>
             <input type="hidden" name="typeform" value="uploadimage" />
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{{ uploadtext }} &nbsp;<i class="fa-solid fa-file-arrow-up"></i></button>
             <br><br>
         </form>
     </div>
     <br><br>
     <div class="container" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
         <br>
-        <h3>{{markyourtaskasdonetext}}</h3>
+        <h3><i class="fa-solid fa-comment"></i> {{markyourtaskasdonetext}}</h3>
         <form method="POST">
             <input type="hidden" name="typeform" value="done" />
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <input type="hidden" name="task_id" value="{{ taskid }}" />
             <textarea style=" width: 100%; resize: both;" type="text" name="comment" value=""
                 placeholder="Comment"></textarea><br><br>
-            <button type="submit" class="btn btn-primary">{{ done }}</button>
+            <button type="submit" class="btn btn-primary">{{ done }} <i class="fa-solid fa-check"></i></button>
         </form>
         <br>
     </div>

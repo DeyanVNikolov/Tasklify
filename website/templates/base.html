@@ -94,20 +94,20 @@
     <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
             {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/">{{ homenav }}</a>
-                <a class="nav-item nav-link" id="profile" href="/profile">{{ profilenav }}</a>
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
+                <a class="nav-item nav-link" id="profile" href="/profile"><i class="fa-sharp fa-solid fa-user"></i></a>
             {% else %}
                 <a class="nav-item nav-link" id="home" href="/">{{ homenav }}</a>
                 <a class="nav-item nav-link" id="login" href="/auth/login">{{ loginnav }}</a>
                 <a class="nav-item nav-link" id="signUp" href="/auth/sign-up">{{ signupnav }}</a>
             {% endif %}
             {% if user.accounttype == "worker" %}
-                <a class="nav-item nav-link" id="tasks" href="/tasks">{{ tasksnav }} <span
+                <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> <span
                         class="badge badge-light">{{ undonetasks() }}</span></a>
 
             {% endif %}
             {% if user.accounttype == "boss" %}
-                <a class="nav-item nav-link" id="workers" href="/workers">{{ workersnav }}</a>
+                <a class="nav-item nav-link" id="workers" href="/workers"><i class="fa-sharp fa-solid fa-users"></i></a>
             {% endif %}
         </div>
     </div>
@@ -115,17 +115,17 @@
     {% if user.is_authenticated %}
         {% if user.accounttype == "boss" and user.additionalpermissions == "ADMIN" %}
             <form class="form-inline my-2 my-lg-0">
-                <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2">{{ adminnav }}</a>
-                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">{{ logoutnav }}</a>
+                <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-lock"></i></a>
+                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-right-from-bracket"></i></a>
             </form>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Language
+                    <i class="fa-solid fa-language"></i>
                 </button>
                 <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" onclick="setlang('en')">English</a>
-                    <a class="dropdown-item" onclick="setlang('bg')">Bulgarian</a>
+                    <a class="dropdown-item" onclick="setlang('bg')">Български</a>
                 </div>
             </div>
         {% else %}
