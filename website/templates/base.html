@@ -97,9 +97,9 @@
                 <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
                 <a class="nav-item nav-link" id="profile" href="/profile"><i class="fa-sharp fa-solid fa-user"></i></a>
             {% else %}
-                <a class="nav-item nav-link" id="home" href="/">{{ homenav }}</a>
-                <a class="nav-item nav-link" id="login" href="/auth/login">{{ loginnav }}</a>
-                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up">{{ signupnav }}</a>
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
+                <a class="nav-item nav-link" id="login" href="/auth/login"><i class="fa-solid fa-right-to-bracket"></i></a>
+                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up"><i class="fa-solid fa-user-plus"></i></a>
             {% endif %}
             {% if user.accounttype == "worker" %}
                 <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> <span
@@ -130,16 +130,16 @@
             </div>
         {% else %}
             <form class="form-inline my-2 my-lg-0">
-                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2">{{ logoutnav }}</a>
+                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-right-from-bracket"></i></a>
             </form>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Language
+                    <i class="fa-solid fa-language"></i>
                 </button>
                 <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" onclick="setlang('en')">English</a>
-                    <a class="dropdown-item" onclick="setlang('bg')">Bulgarian</a>
+                    <a class="dropdown-item" onclick="setlang('bg')">Български</a>
                 </div>
             </div>
         {% endif %}
@@ -147,11 +147,11 @@
         <div class="dropdown dropleft">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Language
+                <i class="fa-solid fa-language"></i>
             </button>
             <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" onclick="setlang('en')">English</a>
-                <a class="dropdown-item" onclick="setlang('bg')">Bulgarian</a>
+                <a class="dropdown-item" onclick="setlang('bg')">Български</a>
             </div>
         </div>
     {% endif %}
