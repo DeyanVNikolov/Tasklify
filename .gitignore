@@ -7,3 +7,4 @@ website/__pycache__
 generate_password.py
 website/database.db
 database.db
+test.py
