@@ -61,7 +61,16 @@ def home():
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                           user=current_user)
+                           user=current_user, tooltext1=getword("tooltext1", cookie),
+                           tooltext2=getword("tooltext2", cookie), tooltext3=getword("tooltext3", cookie),
+                           employees=getword("workersnav", cookie), tasks=getword("tasksnav", cookie),
+                           register=getword("signup", cookie), login=getword("login", cookie),
+                           boss=getword("boss", cookie), worker=getword("worker", cookie),
+                           enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
+                           notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
+                           logout=getword("logout", cookie), profile=getword("profile", cookie),
+
+                           )
 
 
 @views.route("/home", methods=['GET'])
@@ -268,7 +277,8 @@ def workers():
                            name=getword("name", cookie), selectall=getword("selectall", cookie),
                            deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
                            submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie),
-                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie), myfiles=getword("empmyfiles", cookie))
+                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie),
+                           myfiles=getword("empmyfiles", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])

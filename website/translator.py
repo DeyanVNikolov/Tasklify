@@ -83,6 +83,10 @@ words = {
         "en": "Login here",
         "bg": "Влезте тук",
     },
+    "logout": {
+        "en": "Logout",
+        "bg": "Изход",
+    },
     "registerhere": {
         "en": "Register here",
         "bg": "Регистрирайте се тук",
@@ -503,7 +507,19 @@ words = {
     "uploadtext": {
         "en": "Upload",
         "bg": "Качи",
-    }
+    },
+    "tooltext1": {
+        "en": "Tasklify is a company task allocation tool!",
+        "bg": "Tasklify е инструмент за разпределяне на задачи в компания!",
+    },
+    "tooltext2": {
+        "en": "It's a very good tool for your company!",
+        "bg": "Това е много добър инструмент за вашата компания!",
+    },
+    "tooltext3": {
+        "en": "If you are interested, sign-up today!",
+        "bg": "Ако сте заинтересовани, регистрирайте се днес!"
+    },
 
 }
 
