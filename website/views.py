@@ -68,9 +68,7 @@ def home():
                            boss=getword("boss", cookie), worker=getword("worker", cookie),
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
-                           logout=getword("logout", cookie), profile=getword("profile", cookie),
-
-                           )
+                           logout=getword("logout", cookie), profile=getword("profile", cookie))
 
 
 @views.route("/home", methods=['GET'])
@@ -193,7 +191,6 @@ def workers():
 
     if request.method == "POST":
         if request.form.get("typeform") == "add":
-            print("adding worker")
             id = request.form.get('ID')
 
             if id == "" or id is None:
@@ -245,10 +242,8 @@ def workers():
                     acid = str(uuid.uuid4())
                     for workerg in workersl:
                         tasknum += 1
-                        print(tasknum)
                         new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
                                         actual_id=acid, ordernumber=tasknum)
-                        print(new_task)
                         db.session.add(new_task)
                         db.session.commit()
                     flash(getword("taskadded", cookie), category="success")
@@ -334,7 +329,6 @@ def worker(id):
             task = Task.query.get(taskid)
             task_actual_id = task.actual_id
             for task in Task.query.filter_by(actual_id=task_actual_id).all():
-                print(task)
                 db.session.delete(task)
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
@@ -353,18 +347,21 @@ def worker(id):
                            deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie))
 
 
-@views.route('uploaded_file/<path:filename>', methods=['GET'])
+@views.route('/uploaded_file/<path:filename>', methods=['GET'])
 def uploaded_file(filename):
     checkmaintenance()
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
 
     if not current_user.is_authenticated:
         flash(getword("youneedtobeloggedin", cookie), category="error")
         return redirect(url_for('auth.login'))
 
-    print(filename)
     if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
         if current_user.accounttype == "worker":
-            print("worker")
             imageid = filename.split("_")[0]
 
             # check if imageid is either workerid or bossid
@@ -383,18 +380,12 @@ def uploaded_file(filename):
 
 
         elif current_user.accounttype == "boss":
-            print("boss")
             imageid = filename.split("_")[0]
-            print(imageid)
             if Boss.query.filter_by(id=imageid).first() is not None:
                 if Boss.query.filter_by(id=imageid).first().id == current_user.id:
-                    print(Boss.query.filter_by(id=imageid).first().id)
-                    print(current_user.id)
-                    print("yes")
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
             elif Worker.query.filter_by(id=imageid).first() is not None:
                 if Worker.query.filter_by(id=imageid).first().boss_id == current_user.id:
-                    print("yes")
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
             flash(getword("nopermtoviewthisview", cookie), category="error")
@@ -439,10 +430,21 @@ def task(id):
     if request.method == "POST":
         typeform = request.form.get('typeform')
         taskid = request.form.get('task_id')
+
+        if taskid != str(id):
+            flash(getword("tasknotfound", cookie), category="error")
+            return redirect(url_for("views.task", id=id))
+
+        task = Task.query.filter_by(id=taskid).first()
+        if task is None:
+            flash(getword("tasknotfound", cookie), category="error")
+            return redirect(url_for("views.task", id=id))
+
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
             if Task.query.filter_by(id=taskid).first().worker_id != current_user.id:
                 flash(getword("youcantedittask", cookie), category="error")
-                return redirect(url_for(homepage))
+                return redirect(url_for("views.task", id=id))
+
         if typeform == 'done':
             taskid = request.form.get('task_id')
             taskcomment = request.form.get('comment')
@@ -490,7 +492,6 @@ def task(id):
             def allowed_file(filename):
                 return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-            print(request.files)
             if 'file' not in request.files:
                 flash('No file part')
                 return redirect(request.url)
@@ -512,14 +513,12 @@ def task(id):
                 if file.content_type in suspicious_file_types:
                     flash(getword("wecannotacceptthisfile", cookie), category="error")
                     return redirect(url_for('views.task', id=id))
-                print("uploading")
                 filename = secure_filename(file.filename)
                 finalfilename = str(current_user.id) + "_" + filename
                 UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
                 path = join(UPLOADS_PATH, finalfilename)
                 file.save(path)
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
-                print(imageurl)
 
                 return render_template("task.html", profilenav=getword("profilenav", cookie),
                                        loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -549,7 +548,6 @@ def task(id):
             taskpost.complete = "1"
             db.session.commit()
             return redirect(url_for('views.task', id=id))
-    print(taskdata.complete)
 
     return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),

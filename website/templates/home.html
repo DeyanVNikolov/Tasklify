@@ -4,7 +4,7 @@
 <link href="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
 
 <br><br><br><br>
-<div class="main container-fluid" style="height:fit-content">
+<div class="main container-fluid" >
     <div class="content">
         <div class="afterlogin text-home" style="max-width:700px">
             <h1><span><img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg" style="max-height:70px; width: auto; padding: 10px 0px 0px 0px"></h1>
@@ -12,7 +12,7 @@
             <p class="par">{{tooltext1}} <br>
                 {{tooltext2}}<br> {{tooltext3}}</p>
             {% if not user.is_authenticated %}
-            <a href="/auth/sign-up"><button class="cn">{{register}}</button></a>
+            <a href="/auth/sign-up"><button class="cn" style="width:110px">{{register}}</button></a>
             {% endif %}
         </div>
 
@@ -75,6 +75,6 @@
 </div>
 </div>
 
-<br><br>
+<br><br><br><br><br><br><br><br><br>
 
 {% endblock %}

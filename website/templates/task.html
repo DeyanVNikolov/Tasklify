@@ -45,6 +45,7 @@
             <br>
             <input type="hidden" name="typeform" value="uploadimage" />
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="task_id" value="{{ taskid }}" />
             <button type="submit" class="btn btn-primary">{{ uploadtext }} &nbsp;<i class="fa-solid fa-file-arrow-up"></i></button>
             <br><br>
         </form>

@@ -8,3 +8,4 @@ generate_password.py
 website/database.db
 database.db
 test.py
+*.db-journal

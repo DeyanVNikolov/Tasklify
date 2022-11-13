@@ -223,20 +223,7 @@ body {
         transform: translate(0%,-5%);
         border-radius: 10px;
         padding: 25px;
-    }
-    .form input{
-        width: 240px;
-        height: 35px;
-        background: transparent;
-        border-bottom: 1px solid #ff7200;
-        border-top: none;
-        border-right: none;
-        border-left: none;
-        color: #fff;
-        font-size: 15px;
-        letter-spacing: 1px;
-        margin-top: 30px;
-        font-family: sans-serif;
+    
     }
     .btnn a{
         font-size: 16px;
@@ -303,20 +290,6 @@ body {
         transform: translate(0%,-5%);
         border-radius: 10px;
         padding: 25px;
-    }
-    .form input{
-        width: 240px;
-        height: 35px;
-        background: transparent;
-        border-bottom: 1px solid #ff7200;
-        border-top: none;
-        border-right: none;
-        border-left: none;
-        color: #fff;
-        font-size: 15px;
-        letter-spacing: 1px;
-        margin-top: 30px;
-        font-family: sans-serif;
     }
     .btnn a{
         font-size: 16px;
