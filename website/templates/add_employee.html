@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <br><br>
+    <a href="/workers"><button class="btn-primary btn">{{ goback }}</button></a>
+    <br><br>
+<div class="container text-center">
+        <form method="post" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+        <br>
+        <h1>{{ addworker }}</h1>
+        <div class="form-group">
+            <input type="text" class="form-control" id="ID" name="ID" placeholder="ID" />
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="typeform" value="add" />
+        <button type="submit" class="btn btn-primary">{{ submit }}</button>
+        <br><br>
+    </form>
+</div>
+{% endblock %}

@@ -520,6 +520,11 @@ words = {
         "en": "If you are interested, sign-up today!",
         "bg": "Ако сте заинтересовани, регистрирайте се днес!"
     },
+    "goback": {
+        "en": "Go back",
+        "bg": "Върни се",
+
+    }
 
 }
 

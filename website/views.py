@@ -785,3 +785,44 @@ def employ_signup():
                            databeingproccessed=getword("databeingproccessed", cookie),
                            employreccode=getword("employreccode", cookie),
                            addemployeeinfosignup=getword("addemployeeinfosignup", cookie))
+
+
+@views.route("/add/employee", methods=["GET", "POST"])
+def add_employee():
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if current_user.accounttype == "worker":
+        return redirect(url_for(homepage))
+
+    if request.method == 'POST':
+        if request.form.get("typeform") == "add":
+            id = request.form.get('ID')
+
+            if id == "" or id is None:
+                flash(getword("missingid", cookie), category="error")
+            else:
+                worker = Worker.query.filter_by(registrationid=id).first()
+                if worker is None:
+                    flash(getword("noworkerwithid", cookie), category="error")
+                else:
+                    if worker.boss_id is None:
+                        worker.boss_id = current_user.id
+                        db.session.commit()
+                        flash(getword("workeradded", cookie), category="success")
+                    else:
+                        flash(getword("workeralreadyadded", cookie), category="error")
+
+    return render_template("add_employee.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
+                           addemployee=getword("addemployee", cookie),
+                           addemployeeinfo=getword("addemployeeinfo", cookie), enterid=getword("enterid", cookie),
+                           submit=getword("submit", cookie), databeingproccessed=getword("databeingproccessed", cookie),
+                           addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
+                           addworker=getword("addworker", cookie), goback=getword("goback", cookie))
