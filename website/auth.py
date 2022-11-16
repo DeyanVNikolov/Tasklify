@@ -132,9 +132,10 @@ def sign_up():
             if parts1[1] == "tasklify.me":
                 flash(getword("tasklifymedomainnotallowed", cookie), category='error')
                 return redirect(url_for('auth.sign_up'))
-        except EmailNotValidError as e:
-            flash(e, category='error')
+        except Exception as e:
+            flash(str(e), category='error')
             return redirect(url_for('auth.sign_up'))
+
 
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
@@ -158,7 +159,7 @@ def sign_up():
             flash(getword("passwordtooshort", cookie), category='error')
         else:
             if accounttype == 'worker':
-                key = uuid.uuid4().hex
+                key = uuid.uuid4().hex[:8]
                 new_user = Worker(email=email, first_name=first_name,
                                   password=generate_password_hash(password1, method='sha256'), accounttype="worker",
                                   registrationid=key)

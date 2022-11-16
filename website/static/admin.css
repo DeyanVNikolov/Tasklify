@@ -1,6 +1,7 @@
 
 body {
-    overflow-x: hidden;
+    overflow: auto;
+    max-height: fit-content;
 }
 
 
@@ -20,7 +21,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .last-appointments,
@@ -119,11 +120,22 @@ td i {
 }
 
 @media(max-width:530px) {
-    .cards {
-        grid-template-columns: 1fr;
+    .last-appointments,
+    .doctor-visiting {
+        font-size: 70%;
+        padding: 10px;
+        min-height: 200px;
     }
-    .last-appointments td:nth-child(3) {
-        display: none;
+    .cards,
+    .tables {
+        padding: 10px;
+    }
+    .search input {
+        padding: 0 10px;
+    }
+    .user {
+        width: 40px;
+        height: 40px;
     }
 }
 
@@ -133,6 +145,7 @@ td i {
         font-size: 70%;
         padding: 10px;
         min-height: 200px;
+        overflow: auto;
     }
     .cards,
     .tables {
