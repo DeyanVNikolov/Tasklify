@@ -115,8 +115,10 @@
     {% if user.is_authenticated %}
         {% if user.accounttype == "boss" and user.additionalpermissions == "ADMIN" %}
             <form class="form-inline my-2 my-lg-0">
-                <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-lock"></i></a>
-                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2"><i
+                        class="fa-solid fa-lock"></i></a>
+                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
+                        class="fa-solid fa-right-from-bracket"></i></a>
             </form>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -126,11 +128,16 @@
                 <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" onclick="setlang('en')">English</a>
                     <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                    <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                    <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                    <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                    <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
                 </div>
             </div>
         {% else %}
             <form class="form-inline my-2 my-lg-0">
-                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
+                        class="fa-solid fa-right-from-bracket"></i></a>
             </form>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -140,6 +147,10 @@
                 <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" onclick="setlang('en')">English</a>
                     <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                    <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                    <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                    <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                    <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
                 </div>
             </div>
         {% endif %}
@@ -149,10 +160,14 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-language"></i>
             </button>
-            <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" onclick="setlang('en')">English</a>
-                <a class="dropdown-item" onclick="setlang('bg')">Български</a>
-            </div>
+                <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" onclick="setlang('en')">English</a>
+                    <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                    <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                    <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                    <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                    <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
+                </div>
         </div>
     {% endif %}
 
@@ -212,11 +227,11 @@
                 <p>
                     <script>
                         var now = new Date();
-                        var days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
-                            'Saturday');
-                        var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July',
+                        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                            'Saturday'];
+                        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                             'August',
-                            'September', 'October', 'November', 'December');
+                            'September', 'October', 'November', 'December'];
                         var date = ((now.getDate() < 10) ? "0" : "") + now.getDate();
 
                         function fourdigits(number) {

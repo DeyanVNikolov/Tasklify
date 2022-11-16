@@ -7,18 +7,18 @@
 
     <div class="last-appointments container-fluid text-truncate" style="width: 100%; height: fit-content;" style="overflow-x:auto">
         <div class="heading text-truncate" style="overflow: auto">
-            <h2>Административен панел</h2>&nbsp;
+            <h2>{{adminpaneltext}}</h2>&nbsp;
             <div class="justify-content-right" >
-                <a href="/add/employee" class="btn1">Добави служител</a>
-                <a href="/employ/sign-up" class="btn1">Регистрирай служител</a>
-                <a href="/add/task" class="btn1">Добави задача</a>
+                <a href="/add/employee" class="btn1">{{addemployeebutton}}</a>
+                <a href="/employ/sign-up" class="btn1">{{registeryouremployee}}</a>
+                <a href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
         <table class="appointments text-truncate">
             <thead>
-                <td>Име</td>
-                <td>Email</td>
-                <td>Действие</td>
+                <td>{{name}}</td>
+                <td>{{email}}</td>
+                <td>{{actiontext}}</td>
             </thead>
             <tbody>
                 {% for worker in current_user.workers %}

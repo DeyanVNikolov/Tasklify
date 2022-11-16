@@ -273,7 +273,10 @@ def workers():
                            deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
                            submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie),
                            signupemploy=getword("signupemploy", cookie), here=getword("here", cookie),
-                           myfiles=getword("empmyfiles", cookie))
+                           myfiles=getword("empmyfiles", cookie), adminpaneltext=getword("adminpaneltext", cookie),
+                           addemployeebutton=getword("addemployeebutton", cookie),
+                           registeryouremployee=getword("registeryouremployee", cookie),
+                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])
@@ -876,4 +879,5 @@ def add_task():
                            selectall=getword("selectall", cookie), deselectall=getword("deselectall", cookie),
                            workermenu=getword("workermenu", cookie), submit=getword("submit", cookie),
                            selectworkers=getword("selectworkers", cookie), signupemploy=getword("signupemploy", cookie),
-                           here=getword("here", cookie), myfiles=getword("empmyfiles", cookie), addtasktext=getword("addtask", cookie), goback=getword("goback", cookie))
+                           here=getword("here", cookie), myfiles=getword("empmyfiles", cookie),
+                           addtasktext=getword("addtask", cookie), goback=getword("goback", cookie))
