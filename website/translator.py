@@ -1102,7 +1102,6 @@ words = {
         "de": "Mitarbeiter",
         "fr": "Employé",
         "ru": "Сотрудник"
-
     }
 
 }
