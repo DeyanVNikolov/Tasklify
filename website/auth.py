@@ -75,7 +75,8 @@ def login():
                            user=current_user, emailtext=getword("email", cookie),
                            passwordtext=getword("password", cookie), logintext=getword("login", cookie),
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
-                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie))
+                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie))
 
 
 @auth.route('/logout')
@@ -159,7 +160,7 @@ def sign_up():
             flash(getword("passwordtooshort", cookie), category='error')
         else:
             if accounttype == 'worker':
-                key = uuid.uuid4().hex[:8]
+                key = uuid.uuid4().hex[:12]
                 new_user = Worker(email=email, first_name=first_name,
                                   password=generate_password_hash(password1, method='sha256'), accounttype="worker",
                                   registrationid=key)
@@ -192,7 +193,8 @@ def sign_up():
                            signup=getword("signup", cookie), enteremail=getword("enteremail", cookie),
                            alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
                            loginhere=getword("loginhere", cookie),
-                           databeingproccessed=getword("databeingproccessed", cookie))
+                           databeingproccessed=getword("databeingproccessed", cookie), signupas=getword("signupas", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])

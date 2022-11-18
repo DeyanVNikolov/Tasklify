@@ -1,5 +1,6 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
+<link rel="stylesheet" href="/static/signup.css">
     <script>
         function showModal() {
             const inpObj = document.getElementById("email");
@@ -18,45 +19,41 @@ content %}
         <br>
         <br><br>
     </div>
-    <form method="POST">
-        <div class="form-group">
-            <label for="email">{{ emailtext }}</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="{{ enteremail }}"/>
-        </div>
-        <div class="form-group">
-            <label for="firstName">{{ nametext }}</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{ firstandlast }}"/>
-        </div>
-        <div class="form-group">
-            <label for="password1">{{ passwordtext }}</label>
-            <input type="password" class="form-control" id="password1" name="password1"
-                   placeholder="{{ passwordtext }}"/>
-        </div>
-        <div class="form-group">
-            <label for="password2">{{ passwordconfirm }}</label>
-            <input type="password" class="form-control" id="password2" name="password2"
-                   placeholder="{{ passwordconfirm }}"/>
-        </div>
-        <br/>
-        <img src="{{ captcha_img(captcha) }}">
-        <br>
-        <br>
-        <input type="text" class="form-control" class="simple-captcha-text" name="captcha-text" ,
-               placeholder="CAPTCHA CODE">
-        <br>
-        <br>
+    <div class="container containersign text-center">
 
-        <ul>
-            <li>{{ employreccode }}</li>
-            <li>{{ addemployeeinfosignup }}</li>
-        </ul>
-        <br>
-
-
-        <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <button type="submit" class="btn btn-primary" onclick="showModal()">{{ submit }}</button>
-    </form>
+        <form method="POST">
+          <div class="main-user-info">
+            <div class="user-input-box">
+              <label for="email">{{emailtext}}</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
+            </div>
+            <div class="user-input-box">
+               <label for="firstName">{{nametext}}</label>
+              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{firstandlast}}" />
+            </div>
+            <div class="user-input-box">
+              <label for="password1">{{passwordtext}}</label>
+              <input type="password" class="form-control" id="password1" name="password1" placeholder="{{passwordtext}}" />
+            </div>
+            <div class="user-input-box">
+              <label for="password2">{{passwordconfirm}}</label>
+              <input type="password" class="form-control" id="password2" name="password2" placeholder="{{passwordconfirm}}" />
+            </div>
+          </div>
+          <div class="gender-details-box">
+            <br>
+            <img src="{{ captcha_img(captcha) }}"><br><br>
+            <div class="user-input-box" style="width:100%; justify-content:center !important;">
+            <input type="text" class="form-control" class="simple-captcha-text" name="captcha-text", placeholder="CAPTCHA CODE">
+          </div>
+        </div>
+          <div class="form-submit-btn">
+            <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="btn btn-primary" onclick="showModal()">{{submit}}</button>
+          </div>
+        </form>
+      </div>
     <br><br><br>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"

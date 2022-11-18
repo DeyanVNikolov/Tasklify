@@ -1,5 +1,7 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
 %}
+
+<link rel="stylesheet" href="/static/signup.css">
 <div class="container text-center">
   <br><br><br>
   <h3 align="center">{{logintext}}</h3>
@@ -9,33 +11,35 @@
   <h4 align="center">{{ notregistered }} <br> <a href="/auth/sign-up">{{registerhere}}</a> </h4>
   <br><br>
 </div>
+<div class="container containersign text-center">
+
   <form method="POST">
-    <div class="form-group">
-      <label for="email">{{ emailtext }}</label>
-      <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
-    </div>
-    <div class="form-group">
-      <fieldset>
-      <label for="password">{{ passwordtext }}</label>
-      <input type="password" class="form-control" id="password" name="password" placeholder="{{enterpassword}}" />
-    </div>
-    <br>
-    
-    <div class="form-group form-check">
-      <div>
+    <div class="main-user-info">
+      <div class="user-input-box">
+        <label for="email">{{ emailtext }}</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
+      </div>
+      <div class="user-input-box">
+        <label for="password">{{ passwordtext }}</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="{{enterpassword}}" />
+      </div>
+      </div>
+    <div class="gender-details-box">
+      <span class="gender-title">{{signupas}}</span>
+      <div class="gender-category" style="font-size: 25px;">
         <input type="radio" id="worker" name="accounttype" value="worker" checked>
-        <label for="huey">Worker</label>
-      </div>
-  
-      <div>
+        <label for="worker">{{worker}}</label>
         <input type="radio" id="boss" name="accounttype" value="boss">
-        <label for="dewey">Boss</label>
+        <label for="boss">{{boss}}</label>
       </div>
-  
+      <br>
+  </div>
+    <div class="form-submit-btn">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <button type="submit" class="btn btn-primary">{{logintext}}</button>
     </div>
-    <br />
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <button type="submit" class="btn btn-primary">{{logintext}}</button>
   </form>
+</div>
+<br><br><br><br><br>
       <br><br><br>
 {% endblock %}

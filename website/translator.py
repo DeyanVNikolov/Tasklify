@@ -1086,6 +1086,23 @@ words = {
         "de": "Aktionen",
         "fr": "Actions",
         "ru": "Действия"
+    },
+    "signupas": {
+        "en": "Sign up as",
+        "bg": "Регистрирай се като",
+        "es": "Regístrate como",
+        "de": "Melde dich an als",
+        "fr": "Inscrivez-vous en tant que",
+        "ru": "Зарегистрируйтесь как"
+    },
+    "worker": {
+        "en": "Employee",
+        "bg": "Служител",
+        "es": "Empleado",
+        "de": "Mitarbeiter",
+        "fr": "Employé",
+        "ru": "Сотрудник"
+
     }
 
 }
@@ -1099,7 +1116,7 @@ def getword(word, target):
         if target in words[word]:
             return words[word][target]
         else:
-            return "!!! No translation for " + target + " !!!"
+            return "!!! No translation for " + target + " and " + word + " !!!"
     else:
         return "!!! WORD NOT FOUND !!! " + word
 
@@ -1109,8 +1126,5 @@ def loadtime():
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(dt_string)
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
-
-
-loadtime()
 
 

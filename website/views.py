@@ -17,7 +17,7 @@ from werkzeug.security import generate_password_hash
 
 from website import CAPTCHA1
 from . import db
-from .mailsender import sendregisterationemailboss
+from .mailsender import sendregisterationemailboss, sendregisterationemail
 from .models import Worker, Boss
 
 from .translator import getword
@@ -763,7 +763,7 @@ def employ_signup():
         elif len(password1) < 8:
             flash(getword("passwordtooshort", cookie), category='error')
         else:
-            key = uuid.uuid4().hex
+            key = uuid.uuid4().hex[:12]
             new_user = Worker(email=email, first_name=first_name,
                               password=generate_password_hash(password1, method='sha256'), accounttype="worker",
                               registrationid=key)
@@ -771,7 +771,7 @@ def employ_signup():
             db.session.add(new_user)
             db.session.commit()
             flash(getword("accountcreated", cookie), category='success')
-            sendregisterationemailboss(email, first_name)
+            sendregisterationemail(email, first_name, key)
             return redirect(url_for('views.workers'))
 
     return render_template("employ_signup.html", profilenav=getword("profilenav", cookie),
@@ -787,7 +787,8 @@ def employ_signup():
                            loginhere=getword("loginhere", cookie),
                            databeingproccessed=getword("databeingproccessed", cookie),
                            employreccode=getword("employreccode", cookie),
-                           addemployeeinfosignup=getword("addemployeeinfosignup", cookie))
+                           addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie))
 
 
 @views.route("/add/employee", methods=["GET", "POST"])
