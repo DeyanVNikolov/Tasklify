@@ -95,6 +95,19 @@
     background: rgba(56, 204, 93, 0.7);
     color: rgb(255, 255, 255);
 }
+.rounded-background-signup {
+    background-color: lightgray;
+    border-radius: 7px;
+}
+
+.taskfield1 {
+    border-radius: 7px;
+}
+
+.taskfield2 {
+    border-radius: 7px;
+    resize: vertical;
+}
 
 @media(max-width: 600px){
     .container{

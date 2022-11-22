@@ -1140,6 +1140,14 @@ words = {
         "de": "Sie haben keine Mitarbeiter",
         "fr": "Vous n'avez pas d'employés",
         "ru": "У вас нет сотрудников"
+    },
+    "titletext": {
+        "en": "Title",
+        "bg": "Заглавие",
+        "es": "Título",
+        "de": "Titel",
+        "fr": "Titre",
+        "ru": "Заголовок"
     }
 
 }

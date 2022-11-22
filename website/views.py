@@ -991,7 +991,8 @@ def add_task():
                            workermenu=getword("workermenu", cookie), submit=getword("submit", cookie),
                            selectworkers=getword("selectworkers", cookie), signupemploy=getword("signupemploy", cookie),
                            here=getword("here", cookie), myfiles=getword("empmyfiles", cookie),
-                           addtasktext=getword("addtask", cookie), goback=getword("goback", cookie))
+                           addtasktext=getword("addtask", cookie), goback=getword("goback", cookie),
+                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie))
 
 
 @views.route("/cookies-disabled", methods=["GET"])
