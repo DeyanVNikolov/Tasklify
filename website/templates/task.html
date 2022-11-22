@@ -23,23 +23,39 @@
         <span style="color:green">{{ completed }}</span>
         {% elif status == "Started" %}
         <span style="color:orange">{{ started }}</span>
+       <h4 class="font-weight-bold">{{due}}: {{datedue}}</h4>
         {% elif status == "Not Started" %}
         <span style="color:red">{{ notstarted }}</span>
+       <h4 class="font-weight-bold">{{due}}: {{datedue}}</h4>
         {% endif %}
     </h4>
     <br><br>
     {% if status == "Started" %}
     <br>
 
-    <form method="POST" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
-        <h1>TODO -- КАЧВАНЕ НА КОДОВИ ФАЙЛОВЕ - СКОРО</h1>
-    </form>
+        <div class="container">
+            <form method="POST" enctype="multipart/form-data"
+                style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+                <br>
+                <h4>{{fileuploader}} <i class="fa-solid fa-cloud-arrow-up"></i></h4>
+                <h5 class="font-weight-bold">200MB - ".zip", ".rar", ".7z"</h5>
+                <br>
+                <input class="form-control" style="white-space: initial" type="file" name="file" id="file">
+                <br>
+                <input type="hidden" name="typeform" value="uploadzip" />
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="task_id" value="{{ taskid }}" />
+                <button type="submit" class="btn btn-primary">{{ uploadtext }} &nbsp;<i class="fa-solid fa-file-arrow-up"></i></button>
+                <br><br>
+            </form>
+        </div>
     <br>
     <div class="container">
         <form method="POST" enctype="multipart/form-data"
             style="border-style: dashed; padding-left: 10px; padding-right: 10px">
             <br>
             <h4>{{photouploader}} <i class="fa-solid fa-cloud-arrow-up"></i></h4>
+            <h5 class="font-weight-bold">15MB - '.txt', '.pdf', '.png', '.jpg', '.jpeg', '.gif'</h5>
             <br>
             <input class="form-control" style="white-space: initial" type="file" name="file">
             <br>

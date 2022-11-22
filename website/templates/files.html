@@ -2,15 +2,24 @@
 
 
 
-    <br><br>
-    <h1>My Files</h1>
+<br><br><br><br>
+<h1>My Files</h1>
 
 
-    {% for file in files %}
-        <a href="{{ url_for('views.uploaded_file', filename=file) }}">
-            <button type="button" class="btn btn-primary">{{ file }}</button>
-        </a><br><br>
-    {% endfor %}
+{% for file in files %}
+<hr>
+<br>
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="typeform" value="delete" />
+    <input type="hidden" name="file" value="{{file}}" />
+    <a href="{{ url_for('views.uploaded_file', filename=file) }}">
+        <button type="button" class="btn btn-primary">{{ file }}</button></a> - <button
+        class="btn btn-danger" type="submit">{{delete}}</button>
+</form>
+<br>
+<br>
+{% endfor %}
 
 
 

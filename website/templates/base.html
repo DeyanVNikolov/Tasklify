@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html>
 
+<!-- 
+
+Tasklify is a copyrighted product of Deyan Nikolov & Martin Anastasov. All rights reserved.
+
+It is available for free use under the terms of the GNU General Public License v3.0. 
+as per regulations of competitions and olympiads that this platform may be presented at.
+
+The source code is available at https://github.com/deyanvnikolov/tasklify
+
+Copyright © 2022 Deyan Nikolov & Martin Anastasov. All rights reserved.
+Created under regulation of ITPG-Varna. 
+
+
+!!! Editing this file in inspector is not recommended. !!!
+
+
+-->
+
+
+
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +34,7 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/ionicons.min.css">
-    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/style.css">    
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/style.css">
     <link rel="apple-touch-icon" sizes="57x57"
         href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60"
@@ -71,6 +92,13 @@
 
             }
         }
+    </script>
+    <script>
+        window.addEventListener("load", () => {
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("/static/service-worker.js");
+            }
+        });
     </script>
     <script type="text/javascript" src="https://cdn.tasklify.me/content-delivery-network/secure/index.js"></script>
 

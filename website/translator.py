@@ -764,15 +764,14 @@ words = {
         "de": "Wir können diesen Dateityp nicht akzeptieren",
         "fr": "Nous ne pouvons pas accepter ce type de fichier",
         "ru": "Мы не можем принять этот тип файла"
-
     },
     "invalidtype": {
-        "en": "Invalid Format. Allowed file types are txt, pdf, png, jpg, jpeg, gif",
-        "bg": "Невалиден формат. Позволените типове файлове са txt, pdf, png, jpg, jpeg, gif",
-        "es": "Formato no válido. Los tipos de archivo permitidos son txt, pdf, png, jpg, jpeg, gif",
-        "de": "Ungültiges Format. Erlaubte Dateitypen sind txt, pdf, png, jpg, jpeg, gif",
-        "fr": "Format invalide. Les types de fichiers autorisés sont txt, pdf, png, jpg, jpeg, gif",
-        "ru": "Неверный формат. Разрешенные типы файлов: txt, pdf, png, jpg, jpeg, gif"
+        "en": "Invalid Format.",
+        "bg": "Невалиден формат.",
+        "es": "Formato inválido.",
+        "de": "Ungültiges Format.",
+        "fr": "Format invalide.",
+        "ru": "Неверный формат."
     },
     "workernotfound": {
         "en": "Еmployee not found",
@@ -1102,6 +1101,37 @@ words = {
         "de": "Mitarbeiter",
         "fr": "Employé",
         "ru": "Сотрудник"
+    },
+    "due": {
+        "en": "Due",
+        "bg": "До",
+        "es": "Debido",
+        "de": "Fällig",
+        "fr": "Dû",
+        "ru": "До"
+    },
+    "fileuploader": {
+        "en": "File Uploader",
+        "bg": "Качване на файл",
+        "es": "Cargador de archivos",
+        "de": "Datei Uploader",
+        "fr": "Téléchargeur de fichiers",
+    },
+    "dateinpast": {
+        "en": "Date is in the past",
+        "bg": "Датата е в миналото",
+        "es": "La fecha está en el pasado",
+        "de": "Datum ist in der Vergangenheit",
+        "fr": "La date est dans le passé",
+        "ru": "Дата в прошлом"
+    },
+    "missingdate": {
+        "en": "Missing date",
+        "bg": "Липсваща дата",
+        "es": "Fecha faltante",
+        "de": "Fehlendes Datum",
+        "fr": "Date manquante",
+        "ru": "Отсутствует дата"
     }
 
 }

@@ -12,6 +12,9 @@
         <div class="form-group">
             <input type="text" class="form-control" id="task" name="task" placeholder="Task" />
         </div>
+        <br>
+        <input type="datetime-local" id="date" name="date">
+       <br>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <input type="hidden" name="typeform" value="task" />
         <br>

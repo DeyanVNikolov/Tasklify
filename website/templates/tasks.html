@@ -20,6 +20,7 @@
     <br>
         <h4>{{tasktext}} #{{ loop.index }}</h4>
         <h4>{{task.title}}</h4>
+        <strong><h4>{{due}}: {{task.datedue}}</h4> </strong>
         <h4><a href="/task/{{task.task_id}}"><button class="btn btn-primary">{{moreinfo}}</button></a></h4>
         <br>
         <h4>{{statustext}}: 

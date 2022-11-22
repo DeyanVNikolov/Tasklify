@@ -1,11 +1,14 @@
 import os
+import time
 import uuid
 from os.path import join, dirname, realpath
 
 import requests
+from dateutil import parser
 from flask import abort
 from flask import current_app as app
 from werkzeug.utils import secure_filename, send_from_directory
+import datetime
 
 global csrfg
 from .models import Task
@@ -17,7 +20,7 @@ from werkzeug.security import generate_password_hash
 
 from website import CAPTCHA1
 from . import db
-from .mailsender import sendregisterationemailboss, sendregisterationemail
+from .mailsender import sendregisterationemail
 from .models import Worker, Boss
 
 from .translator import getword
@@ -158,9 +161,11 @@ def tasks():
     taskstodisplay = []
 
     for task in Task.query.filter_by(worker_id=current_user.id).all():
+        datedue = task.datedue
+        dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
         taskstodisplay.append(
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
-             "title": task.title, "ordernumber": task.ordernumber})
+             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat})
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -171,7 +176,8 @@ def tasks():
                            tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
-                           completed=getword("completed", cookie), started=getword("started", cookie))
+                           completed=getword("completed", cookie), started=getword("started", cookie),
+                           due=getword("due", cookie))
 
 
 @views.route('/workers', methods=["GET", "POST"])
@@ -488,7 +494,9 @@ def task(id):
                                    tasktextplural=getword("tasktextplural", cookie),
                                    notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                                    delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                   started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
+                                   started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
+                                   datedue=dateformat, due=getword("due", cookie),
+                                   fileuploader=getword("fileuploader", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -523,6 +531,9 @@ def task(id):
                 file.save(path)
                 imageurl = url_for('views.uploaded_file', filename=finalfilename)
 
+                datedue = taskdata.datedue
+                dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
+
                 return render_template("task.html", profilenav=getword("profilenav", cookie),
                                        loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                        tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
@@ -541,7 +552,9 @@ def task(id):
                                        tasktextplural=getword("tasktextplural", cookie),
                                        notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                                        delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
+                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
+                                       datedue=dateformat, due=getword("due", cookie),
+                                       fileuploader=getword("fileuploader", cookie))
             else:
                 flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -551,6 +564,70 @@ def task(id):
             taskpost.complete = "1"
             db.session.commit()
             return redirect(url_for('views.task', id=id))
+        elif typeform == "uploadzip":
+            ALLOWED_EXTENSIONS1 = ['zip', 'rar', '7z']
+
+            def allowed_file(filename):
+                return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS1
+
+            if 'file' not in request.files:
+                flash('No file part', category="error")
+                return redirect(request.url)
+
+            file = request.files['file']
+            if file.filename == '':
+                flash(getword("nofileselected", cookie), category="error")
+                return redirect(url_for('views.task', id=id))
+            if file and allowed_file(file.filename):
+                # check file size
+                if file.content_length > 200000000:
+                    flash("File too big! 200MB", category="error")
+                    return redirect(url_for('views.task', id=id))
+                # check if file is suspicious
+                suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
+                                         'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
+                                         'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
+                                         'application/x-java-applet', 'application/x-java-bean',
+                                         'application/x-java-vm', ]
+                if file.content_type in suspicious_file_types:
+                    flash(getword("wecannotacceptthisfile", cookie), category="error")
+                    return redirect(url_for('views.task', id=id))
+                filename = secure_filename(file.filename)
+                finalfilename = str(current_user.id) + "_" + filename
+                UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
+                path = join(UPLOADS_PATH, finalfilename)
+                file.save(path)
+                imageurl = url_for('views.uploaded_file', filename=finalfilename)
+                datedue = taskdata.datedue
+                dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
+                return render_template("task.html", profilenav=getword("profilenav", cookie),
+                                       loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                                       tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                                       adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                                       homenav=getword("homenav", cookie),
+                                       markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
+                                       photolinktexttitle=getword("photolinktexttitle", cookie),
+                                       photouploader=getword("photouploader", cookie), showimagemodal=True,
+                                       imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
+                                       showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie),
+                                       submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie),
+                                       user=current_user, notdone=getword("notdone", cookie), task=taskdata.task,
+                                       task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie),
+                                       tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                                       workertext=getword("workertext", cookie),
+                                       tasktextplural=getword("tasktextplural", cookie),
+                                       notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie),
+                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
+                                       datedue=dateformat, due=getword("due", cookie),
+                                       fileuploader=getword("fileuploader", cookie))
+
+            else:
+                flash(getword("invalidtype", cookie), category="error")
+                return redirect(url_for('views.task', id=id))
+
+    datedue = taskdata.datedue
+    dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
 
     return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -568,7 +645,8 @@ def task(id):
                            workertext=getword("workertext", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                           started=getword("started", cookie), uploadtext=getword("uploadtext", cookie))
+                           started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
+                           datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -686,12 +764,24 @@ def files(id):
         if str(file1[0]) == str(id):
             files.append(file)
 
+    if request.method == "POST":
+        print("POST")
+        if request.form.get("typeform") == "delete":
+            file = request.form.get("file")
+            try:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file))
+            except Exception as e:
+                print(e)
+                flash(getword("error", cookie), category="error")
+                return redirect(url_for("views.files", id=id))
+            return redirect(url_for("views.files", id=id))
+
     print(files)
     return render_template("files.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                           user=current_user, files=files, splitnames=splitnames)
+                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie))
 
 
 @views.route("/docs", methods=["GET"], subdomain="docs")
@@ -845,29 +935,43 @@ def add_task():
 
     if request.method == 'POST':
         if request.form.get("typeform") == "task":
-            task = request.form.get('task')
-            title = request.form.get('title')
-            if task == "" or task is None or title == "" or title is None:
-                flash(getword("missingtask", cookie), category="error")
+            date = request.form.get('date')
+
+            if date is None or date == "" or date == " ":
+                print("Date is none")
+                flash(getword("missingdate", cookie), category="error")
             else:
-                try:
-                    workerslist = request.form.getlist('worker')
-                    if len(workerslist) == 0:
-                        flash(getword("noworkersselected", cookie), category="error")
-                        return redirect(url_for(workerspage))
-                    workersl = Worker.query.filter(Worker.id.in_(workerslist)).all()
-                    tasknum = 0
-                    acid = str(uuid.uuid4())
-                    for workerg in workersl:
-                        tasknum += 1
-                        new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
-                                        actual_id=acid, ordernumber=tasknum)
-                        db.session.add(new_task)
-                        db.session.commit()
-                    flash(getword("taskadded", cookie), category="success")
-                    redirect(url_for(workerspage))
-                except Exception as e:
-                    flash(str(e), category="error")
+
+
+                datedue = parser.parse(date)
+
+                if datedue < datetime.datetime.now():
+                    flash(getword("dateinpast", cookie), category="error")
+                    return redirect(url_for('views.add_task'))
+
+                task = request.form.get('task')
+                title = request.form.get('title')
+                if task == "" or task is None or title == "" or title is None:
+                    flash(getword("missingtask", cookie), category="error")
+                else:
+                    try:
+                        workerslist = request.form.getlist('worker')
+                        if len(workerslist) == 0:
+                            flash(getword("noworkersselected", cookie), category="error")
+                            return redirect(url_for(workerspage))
+                        workersl = Worker.query.filter(Worker.id.in_(workerslist)).all()
+                        tasknum = 0
+                        acid = str(uuid.uuid4())
+                        for workerg in workersl:
+                            tasknum += 1
+                            new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
+                                            actual_id=acid, ordernumber=tasknum, datedue=datedue)
+                            db.session.add(new_task)
+                            db.session.commit()
+                        flash(getword("taskadded", cookie), category="success")
+                        redirect(url_for(workerspage))
+                    except Exception as e:
+                        flash(str(e), category="error")
 
     return render_template("add_task.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -887,3 +991,8 @@ def add_task():
 @views.route("/cookies-disabled", methods=["GET"])
 def cookies_disabled():
     return render_template("cookies_disabled.html", user=current_user)
+
+
+@views.route("/offline", methods=["GET"])
+def offline():
+    return render_template("offline.html", user=current_user)

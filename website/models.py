@@ -4,7 +4,9 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Sequence
 from sqlalchemy.dialects.postgresql import UUID
 from . import db
 import uuid
+import datetime
 import sqlalchemy.dialects.postgresql as postgresql
+import time
 
 
 class Task(db.Model):
@@ -17,6 +19,7 @@ class Task(db.Model):
     ordernumber = db.Column(db.Integer)
     actual_id = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.String(100))
+    datedue = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return '<Task %r>' % self.id
