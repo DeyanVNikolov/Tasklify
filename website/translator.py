@@ -1132,6 +1132,14 @@ words = {
         "de": "Fehlendes Datum",
         "fr": "Date manquante",
         "ru": "Отсутствует дата"
+    },
+    "noworkers": {
+        "en": "You have no employees",
+        "bg": "Нямате служители",
+        "es": "No tienes empleados",
+        "de": "Sie haben keine Mitarbeiter",
+        "fr": "Vous n'avez pas d'employés",
+        "ru": "У вас нет сотрудников"
     }
 
 }

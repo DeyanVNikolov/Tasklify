@@ -933,6 +933,12 @@ def add_task():
     if current_user.accounttype == "worker":
         return redirect(url_for(homepage))
 
+    if current_user.accounttype == "boss":
+        workers = Worker.query.filter_by(boss_id=current_user.id).all()
+        if workers is None or len(workers) == 0 or workers == [] or workers == "":
+            flash(getword("noworkers", cookie), category="error")
+            return redirect(url_for(homepage))
+
     if request.method == 'POST':
         if request.form.get("typeform") == "task":
             date = request.form.get('date')
