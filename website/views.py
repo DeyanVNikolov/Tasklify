@@ -10,9 +10,6 @@ from flask import current_app as app
 from werkzeug.utils import secure_filename, send_from_directory
 import datetime
 
-global csrfg
-from .models import Task
-
 from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
@@ -24,6 +21,7 @@ from .mailsender import sendregisterationemail
 from .models import Worker, Boss
 
 from .translator import getword
+from .models import Task
 
 views = Blueprint('views', __name__)
 
@@ -944,7 +942,6 @@ def add_task():
                 print("Date is none")
                 flash(getword("missingdate", cookie), category="error")
             else:
-
 
                 datedue = parser.parse(date)
 

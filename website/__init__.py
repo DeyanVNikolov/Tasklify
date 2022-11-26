@@ -15,18 +15,6 @@ from flask_limiter import Limiter
 from flask import jsonify
 from flask_limiter.util import get_remote_address
 from website.translator import getword
-import pymysql
-import os
-from dotenv import load_dotenv
-# check if it's server or local
-if path.exists("./env"):
-    print("Running local database")
-    project_folder = os.path.expanduser('./env')  # adjust as appropriate
-    load_dotenv(os.path.join(project_folder, '.env'))
-else:
-    print("Running server database")
-    project_folder = os.path.expanduser('~/env')  # adjust as appropriate
-    load_dotenv(os.path.join(project_folder, '.env'))
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -35,7 +23,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     # mysql
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://sql7580978:{os.getenv("SQL_PASSWORD")}@sql7.freemysqlhosting.net:3306/sql7580978'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    # pooling timeout
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_CAPTCHA_KEY'] = 'wMmeltW4mhwidorQRli6Oijuhygtfgybunxx9VPXldz'
     app.config["TEMPLATES_AUTO_RELOAD"] = True
