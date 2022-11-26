@@ -13,3 +13,4 @@ test.js
 env/
 .env
 test.js
+test.cpp
