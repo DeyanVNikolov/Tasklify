@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+<link rel="stylesheet" href="/static/signup.css" type="text/css" />
+<div class="container text-center">
+    <br><br>
+    <h1>{{addtasktext}} </h1>
+    <br><br>
+    <a href="/workers"><button class="btn-success btn">{{ goback }}</button></a>
+    <br><br>
+    <div class="container containersign text-center">
+
+        <form method="POST">
+            <div class="main-user-info">
+                    <div class="form-group" style="width:100%">
+                        <input type="text" class="form-control taskfield1" id="title" name="title" placeholder="{{titletext1}}" />
+                    </div>
+                
+                    <div class="form-group" style="width:100%">
+                        <textarea type="text" class="taskfield2" style="resize:vertical; width: 100%; min-height: 100px;" id="task" name="task" placeholder="{{tasktext1}}"></textarea>
+                        
+                    </div>
+            </div>
+            <br>
+            <input class="form-control" type="datetime-local" id="date" name="date">
+            <br>
+            <div class="rounded-background-signup">
+                <br>
+                <div class="form-check">
+                    <h3>{{ selectworkers }}</h3>
+                    <input type="button" onclick='selects()' class="btn btn-success" value="{{ selectall }}" />
+                    <input type="button" onclick='deSelect()' class="btn btn-success" value="{{ deselectall }}" />
+                </div>
+                <br>
+                {% for worker in current_user.workers %}
+                <div class="form-check">
+                    <input style="transform: scale(1.3); margin-top: 10px;" class="form-check-input" type="checkbox"
+                        value="{{ worker.id }}" id="worker{{ worker.id }}" name="worker">
+                    <label style="font-size:20px" class="form-check-label" for="worker{{ worker.id }}">
+                        {{ worker.first_name }}
+                    </label>
+                </div>
+                {% endfor %}
+                <br>
+            </div>
+            <div class="form-submit-btn">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="typeform" value="task" />
+                <button type="submit" class="btn btn-success" onclick="showModal()">{{submit}}</button>
+            </div>
+        </form>
+    </div>
+
+    <br><br>
+</div>
+{% endblock %}

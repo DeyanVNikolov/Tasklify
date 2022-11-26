@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<br><br>
+
+<div class="container-fluid text-center text-truncate" style="max-width:100%; overflow: auto">
+
+    <h1>{{tasktextplural}}</h1>
+    <br><br>
+    {% for task in taskslist %}
+    {% set status = task.complete %}
+    {% if status == "0" %}
+    {% set status = "Not Started" %}
+    {% elif status == "1" %}
+    {% set status = "Started" %}
+    {% elif status == "2" %}
+    {% set status = "Done" %}
+    {% endif %}
+    
+    <div id="{{task.task_id}}" class="col mb-4" style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);">
+    <br>
+        <h4>{{tasktext}} #{{ loop.index }}</h4>
+        <h4>{{task.title}}</h4>
+        <strong><h4>{{due}}: {{task.datedue}}</h4> </strong>
+        <h4><a href="/task/{{task.task_id}}"><button class="btn btn-success">{{moreinfo}}</button></a></h4>
+        <br>
+        <h4>{{statustext}}: 
+            {% if status == "Done" %}
+                <span style="color:green">{{completed}}</span>
+            {% elif status == "Started" %}
+                <span style="color:orange">{{started}}</span>
+            {% elif status == "Not Started" %}
+                <span style="color:red">{{notstarted}}</span>
+            {% endif %}
+        </h4>
+        <br>
+    </div>
+    
+    {% endfor %}
+    </div>
+
+
+
+
+
+{% endblock %}

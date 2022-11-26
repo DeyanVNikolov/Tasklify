@@ -1,0 +1,166 @@
+{% extends "base.html" %} {% block title %}Task{% endblock %} {% block content %}
+
+<br><br>
+
+<div class="container text-center">
+
+    <h1>{{ tasktext }} {{ taskid }}</h1>
+    <br><br>
+    {% set status = task1.complete %}
+    {% if status == "0" %}
+    {% set status = "Not Started" %}
+    {% elif status == "1" %}
+    {% set status = "Started" %}
+    {% elif status == "2" %}
+    {% set status = "Done" %}
+    {% endif %}
+
+    <h2>{{ title }}</h2>
+    <h3>{{ task }}</h3>
+    <br><br>
+    <h4>{{ statustext }}:
+        {% if status == "Done" %}
+        <span style="color:green">{{ completed }}</span>
+        {% elif status == "Started" %}
+        <span style="color:orange">{{ started }}</span>
+       <h4 class="font-weight-bold">{{due}}: {{datedue}}</h4>
+        {% elif status == "Not Started" %}
+        <span style="color:red">{{ notstarted }}</span>
+       <h4 class="font-weight-bold">{{due}}: {{datedue}}</h4>
+        {% endif %}
+    </h4>
+    <br><br>
+    {% if status == "Started" %}
+    <br>
+
+        <div class="container">
+            <form method="POST" enctype="multipart/form-data"
+                style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+                <br>
+                <h4>{{fileuploader}} <i class="fa-solid fa-cloud-arrow-up"></i></h4>
+                <h5 class="font-weight-bold">200MB - ".zip", ".rar", ".7z"</h5>
+                <br>
+                <input class="form-control" style="white-space: initial" type="file" name="file" id="file">
+                <br>
+                <input type="hidden" name="typeform" value="uploadzip" />
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="task_id" value="{{ taskid }}" />
+                <button type="submit" class="btn btn-success">{{ uploadtext }} &nbsp;<i class="fa-solid fa-file-arrow-up"></i></button>
+                <br><br>
+            </form>
+        </div>
+    <br>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data"
+            style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+            <br>
+            <h4>{{photouploader}} <i class="fa-solid fa-cloud-arrow-up"></i></h4>
+            <h5 class="font-weight-bold">15MB - '.txt', '.pdf', '.png', '.jpg', '.jpeg', '.gif'</h5>
+            <br>
+            <input class="form-control" style="white-space: initial" type="file" name="file">
+            <br>
+            <input type="hidden" name="typeform" value="uploadimage" />
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="task_id" value="{{ taskid }}" />
+            <button type="submit" class="btn btn-success">{{ uploadtext }} &nbsp;<i class="fa-solid fa-file-arrow-up"></i></button>
+            <br><br>
+        </form>
+    </div>
+    <br><br>
+    <div class="container" style="border-style: dashed; padding-left: 10px; padding-right: 10px">
+        <br>
+        <h3><i class="fa-solid fa-comment"></i> {{markyourtaskasdonetext}}</h3>
+        <form method="POST">
+            <input type="hidden" name="typeform" value="done" />
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="task_id" value="{{ taskid }}" />
+            <textarea style=" width: 100%; resize: both;" type="text" name="comment" value=""
+                placeholder="Comment"></textarea><br><br>
+            <button type="submit" class="btn btn-success">{{ done }} <i class="fa-solid fa-check"></i></button>
+        </form>
+        <br>
+    </div>
+    {% elif status == "Not Started" %}
+    <form method="POST">
+        <input type="hidden" name="typeform" value="start" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="task_id" value="{{ taskid }}" />
+        <br>
+        <button type="submit" class="btn btn-success">{{ starttext }}</button>
+    </form>
+    {% else %}
+    <form method="POST">
+        <input type="hidden" name="typeform" value="notdone" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="task_id" value="{{ taskid }}" />
+        <h3>{{ task1.comment }}</h3>
+        <br>
+        <button type="submit" class="btn btn-success">{{ notdone }}</button>
+    </form>
+    {% endif %}
+    <br>
+    <script>
+        function copyToClipboard(element) {
+            navigator.clipboard.writeText(element);
+        }
+    </script>
+
+    <div style="white-space: initial" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{ sevendaylimit }}</h5>
+                </div>
+                <div class="modal-body">
+                    <a href="{{ hastebinlink }}" target="_blank"> {{ hastebinlink }}</a>
+                    <br><br>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="copyToClipboard('{{ hastebinlink }}');">{{ copy }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="white-space: initial" class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle2">{{photolinktexttitle}}</h5>
+                </div>
+                <div class="modal-body"
+                    style="overflow: scroll; overflow-x:scroll; white-space: initial; hyphens: auto;">
+                    <a href="{{ imageurl }}" target="_blank">{{ imageurl }}</a>
+                    <br><br>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="copyToClipboard('https://tasklify.me{{ imageurl }}')">{{ copy }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if showhastebinmodal %}
+
+    <script>
+        $(document).ready(function () {
+            $('#exampleModalCenter').modal('show');
+        });
+    </script>
+
+    {% endif %}
+
+    {% if showimagemodal %}
+
+    <script>
+        $(document).ready(function () {
+            $('#exampleModalCenter2').modal('show');
+        });
+    </script>
+
+    {% endif %}
+
+
+</div>
+<br><br><br>
+{% endblock %}

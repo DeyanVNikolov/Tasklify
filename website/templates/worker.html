@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+
+<br><br>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+<link rel="stylesheet" href="static/custom-style/ionicons.min.css">
+<link rel="stylesheet" href="static/custom-style/style.css">
+
+<div class="container text-center text-truncate">
+<h2 style="overflow: auto;">{{ workeridtext }}: {{ workerid }}</h2>
+<br><br><br>
+<h1>{{tasktextplural}}</h1>
+<br><br>
+{% for task in taskslist %}
+{% set status = task.complete %}
+{% if status == "0" %}
+{% set status = "Not Started" %}
+{% elif status == "1" %}
+{% set status = "Started" %}
+{% elif status == "2" %}
+{% set status = "Done" %}
+{% endif %}
+
+<div style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);"  id="{{task.task_id}}" class="col mb-4 text-center">
+<br>
+    <h4>{{tasktext}} #{{ loop.index }}</h4>
+    <h4 style="">{{ task.title }}</h4>
+    <h4><a href="/task/{{task.task_id}}"><button class="btn btn-success">{{moreinfo}}</button></a></h4>
+    <br>
+    <h4>{{statustext}}: 
+        {% if status == "Done" %}
+            <span style="color:green">{{completed}}</span>
+        {% elif status == "Started" %}
+            <span style="color:orange">{{started}}</span>
+        {% elif status == "Not Started" %}
+            <span style="color:red">{{notstarted}}</span>
+        {% endif %}
+    </h4>
+    <h4 style=" overflow: auto">{{workertext}}: {{worker.first_name}}</h4>
+    <form method="POST" style="padding-top: 5px;">
+        <input type="hidden" name="typeform" value="delete"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+        <button type="submit" class="btn btn-success">{{delete}}</button>
+    </form>
+    <form method="POST" style="padding-top: 5px;">
+      <input type="hidden" name="typeform" value="deletefromall"/>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+      <button type="submit" class="btn btn-success">{{deletefromall}}</button>
+  </form>
+    <br>
+</div>
+<br>
+{% endfor %}
+</div>
+
+
+{% endblock %}

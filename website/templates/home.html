@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<link rel="stylesheet" href="/static/stylehome.css">
+<link href="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
+
+<br><br><br><br>
+<div class="main container-fluid" >
+    <div class="content">
+        <div class="afterlogin text-home" style="max-width:700px">
+            <h1><span><img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg" style="max-height:70px; width: auto; padding: 10px 0px 0px 0px"></h1>
+            <br>
+            <p class="par">{{tooltext1}} <br>
+                {{tooltext2}}<br> {{tooltext3}}</p>
+            {% if not user.is_authenticated %}
+            <a href="/auth/sign-up"><button class="cn" style="max-width:fit-content; min-width:fit-content">{{register}}</button></a>
+            {% endif %}
+        </div>
+
+        <!----Form---->
+        {% if not user.is_authenticated %}
+        <div class="form">
+            <h2 style="width:100%">{{login}}</h2>
+            <br>
+            <form action="/auth/login" method="POST">
+                <input type="email" name="email" id="email" placeholder="{{enteremail}}">
+                <br><br>
+                <input type="password" name="password" id="password" placeholder="{{enterpassword}}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            
+                <br><br>
+
+                <div class="max-height:50px" style="color:rgb(13, 13, 13)">
+                    <div>
+                        <input type="radio" id="worker" name="accounttype" value="worker" checked>
+                        <label for="huey">{{employees}}</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="boss" name="accounttype" value="boss">
+                        <label for="dewey">{{boss}}</label>
+                    </div>
+                    <button class="btnn" style="width: 100% !important;" type="submit">{{login}}</button>
+                </div>
+                <br>
+
+                <div class="afterlogin">
+                    <p class="link">{{notregistered}}<br>
+                        <span style="padding-bottom: 50px;"><a style="color:blue" href="/auth/sign-up">{{registerhere}}</a></p></span>
+
+                </div>
+            </form>
+            {% else %}
+            <div class="form">
+               {% if user.is_authenticated %}
+               {% if user.accounttype == "boss" %}
+                <h2>Welcome, {{ user.first_name }}</h2>
+                <br><br>
+                <a href="/workers"><button class="btnn" style="width: 100% !important;">{{employees}}</button></a>
+                <br><br><br>
+                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important;">{{logout}}</button></a>
+                {% else %}
+                <h2>Welcome, {{ user.first_name }}</h2>
+                <br><br>
+                <a href="/tasks"><button class="btnn" style="width: 100% !important;">{{tasks}}</button></a>
+                <br><br><br>
+                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important;">{{logout}}</button></a>
+                {% endif %}
+                {% endif %}
+        </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<br><br><br><br><br><br><br><br><br>
+
+{% endblock %}

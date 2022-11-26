@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<!-- 
+
+Tasklify is a copyrighted product of Deyan Nikolov & Martin Anastasov. All rights reserved.
+
+It is available for free use under the terms of the GNU General Public License v3.0. 
+as per regulations of competitions and olympiads that this platform may be presented at.
+
+The source code is available at https://github.com/deyanvnikolov/tasklify
+
+Copyright © 2022 Deyan Nikolov & Martin Anastasov. All rights reserved.
+Created under regulation of ITPG-Varna. 
+
+
+!!! Editing this file in inspector is not recommended. !!!
+
+
+-->
+
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/style.css">
+    <link rel="apple-touch-icon" sizes="57x57"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/favicon-16x16.png">
+    <link rel="manifest"
+        href="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/text-trunc.css">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage"
+        content="https://cdn.tasklify.me/content-delivery-network/secure/image/tab-image/favicon/ms-icon-144x144.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="theme-color" content="#ffffff">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+
+    <script type="text/javascript">
+        function selects() {
+            var ele = document.getElementsByName('worker');
+            for (var i = 0; i < ele.length; i++) {
+                if (ele[i].type == 'checkbox')
+                    ele[i].checked = true;
+            }
+        }
+
+        function deSelect() {
+            var ele = document.getElementsByName('worker');
+            for (var i = 0; i < ele.length; i++) {
+                if (ele[i].type == 'checkbox')
+                    ele[i].checked = false;
+
+            }
+        }
+    </script>
+    <script>
+        window.addEventListener("load", () => {
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("/static/service-worker.js");
+            }
+        });
+    </script>
+    <script type="text/javascript" src="https://cdn.tasklify.me/content-delivery-network/secure/index.js"></script>
+
+    <style>
+        textarea {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+
+
+    <title>Tasklify</title>
+</head>
+
+<body style="white-space: initial; min-height: 100vh;" class="d-flex flex-column min-vh-100 h-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
+                <a class="nav-item nav-link" id="profile" href="/profile"><i class="fa-sharp fa-solid fa-user"></i></a>
+                {% else %}
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
+                <a class="nav-item nav-link" id="login" href="/auth/login"><i
+                        class="fa-solid fa-right-to-bracket"></i></a>
+                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up"><i class="fa-solid fa-user-plus"></i></a>
+                {% endif %}
+                {% if user.accounttype == "worker" %}
+                <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> <span
+                        class="badge badge-light">{{ undonetasks() }}</span></a>
+
+                {% endif %}
+                {% if user.accounttype == "boss" %}
+                <a class="nav-item nav-link" id="workers" href="/workers"><i class="fa-sharp fa-solid fa-users"></i></a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        {% if user.accounttype == "boss" and user.additionalpermissions == "ADMIN" %}
+        <form class="form-inline my-2 my-lg-0">
+            <a href="/internal/admin-dashboard" class="btn btn-warning my-2 my-sm-0 mr-sm-2"><i
+                    class="fa-solid fa-lock"></i></a>
+            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
+                    class="fa-solid fa-right-from-bracket"></i></a>
+        </form>
+        <div class="dropdown dropleft">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-language"></i>
+            </button>
+            <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" onclick="setlang('en')">English</a>
+                <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
+            </div>
+        </div>
+        {% else %}
+        <form class="form-inline my-2 my-lg-0">
+            <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
+                    class="fa-solid fa-right-from-bracket"></i></a>
+        </form>
+        <div class="dropdown dropleft">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-language"></i>
+            </button>
+            <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" onclick="setlang('en')">English</a>
+                <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="dropdown dropleft">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-language"></i>
+            </button>
+            <div class="dropdown-menu" style="min-width: fit-content" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" onclick="setlang('en')">English</a>
+                <a class="dropdown-item" onclick="setlang('bg')">Български</a>
+                <a class="dropdown-item" onclick="setlang('es')">Español</a>
+                <a class="dropdown-item" onclick="setlang('de')">Deutsch</a>
+                <a class="dropdown-item" onclick="setlang('fr')">Français</a>
+                <a class="dropdown-item" onclick="setlang('ru')">Русский</a>
+            </div>
+        </div>
+        {% endif %}
+
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+        <i class="fa-solid fa-square-check"></i> {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+    <div class="container">{% block content %} {% endblock %}</div>
+    <footer class="footer-07 mt-auto">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <h2 class="footer-heading"><a href="/" class="logo"><img class="img-fluid"
+                                src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome.svg"
+                                style="max-height: 60px"></a></h2>
+                    <p class="menu">
+                        <a href="/">Home</a>
+                        <a href="/contact">Contact</a>
+                    </p>
+                    <!-- <ul class="ftco-footer-social p-0">
+              <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><span
+                    class="ion-logo-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Instagram"><span
+                    class=""><i class="fab fa-instagram"></i></span></a></li>
+            </ul> -->
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+                    <p class="copyright">
+                        Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        <br>All rights reserved | <a href="https://deyanvnikolov.github.io/me/">Deyan
+                            Nikolov</a> & <a href="#">Martin Anastasov</a>
+                        <br>
+                        Made with <i class="fas fa-heart"></i> in Varna, Bulgaria.
+                    </p>
+                    <br><br>
+                    <p>
+                        <script>
+                            var now = new Date();
+                            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                                'Saturday'
+                            ];
+                            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                                'August',
+                                'September', 'October', 'November', 'December'
+                            ];
+                            var date = ((now.getDate() < 10) ? "0" : "") + now.getDate();
+
+                            function fourdigits(number) {
+                                return (number < 1000) ? number + 1900 : number;
+                            }
+
+                            var time2 = ((now.getHours() < 10) ? "0" : "") + now.getHours() + ":" + ((now.getMinutes() <
+                                        10) ? "0" :
+                                    "") +
+                                now.getMinutes() + ":" + ((now.getSeconds() < 10) ? "0" : "") + now.getSeconds() + "." +
+                                now
+                                .getMilliseconds();
+                            today = days[now.getDay()] + ", " +
+                                months[now.getMonth()] + " " +
+                                date + ", " +
+                                (fourdigits(now.getYear())) + " | " + time2 + " ";
+                            // write without document.write
+                            document.write(today);
+                        </script>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script>
+        $(document).ready(function () {
+            function replace_content(content) {
+                var exp_match = /(\b(https?|):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+                var element_content = content.replace(exp_match, "<a href='$1'>$1</a>");
+                var new_exp_match = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+                var new_content = element_content.replace(new_exp_match,
+                    '$1<a target="_blank" href="http://$2">$2</a>');
+                return new_content;
+            }
+
+            var content = $('#content').html();
+            $('#content').html(replace_content(content));
+        });
+    </script>
+
+</body>
+
+</html>

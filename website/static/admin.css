@@ -1,0 +1,162 @@
+
+body {
+    overflow: auto;
+    max-height: fit-content;
+}
+
+
+
+
+.tables {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 20px;
+    align-items: self-start;
+    padding: 0 20px 20px 20px;
+}
+
+.img-box-small {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: scroll;
+}
+
+.last-appointments,
+.doctor-visiting {
+    min-height: fit-content;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #444;
+}
+
+.btn1 {
+    padding: 5px 10px;
+    background: #444;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+}
+
+table {
+    margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead td {
+    font-weight: 600;
+    color: #333;
+}
+
+table tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+tbody tr:hover {
+    background: #444;
+    color: #fff;
+}
+
+table tbody tr:last-child {
+    border-bottom: none;
+}
+
+td {
+    padding: 9px 5px;
+}
+
+td i {
+    padding: 7px;
+    color: #fff;
+    border-radius: 50px;
+}
+
+.last-appointments table tbody td:last-child {
+    white-space: nowrap;
+}
+
+.fa-eye {
+    background: #32bea6;
+}
+
+.fa-edit {
+    background: #63b4f4;
+}
+
+.fa-trash-alt {
+    background: #ed5564;
+}
+
+@media(max-width:1090px) {
+    .sidebar {
+        width: 60px;
+    }
+    .main {
+        width: calc(100% - 60px);
+        left: 60px;
+    }
+    .top-bar {
+        width: calc(100% - 60px);
+    }
+}
+
+@media(max-width:860px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .tables {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:530px) {
+    .last-appointments,
+    .doctor-visiting {
+        font-size: 70%;
+        padding: 10px;
+        min-height: 200px;
+    }
+    .cards,
+    .tables {
+        padding: 10px;
+    }
+    .search input {
+        padding: 0 10px;
+    }
+    .user {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media(max-width:420px) {
+    .last-appointments,
+    .doctor-visiting {
+        font-size: 70%;
+        padding: 10px;
+        min-height: 200px;
+        overflow: auto;
+    }
+    .cards,
+    .tables {
+        padding: 10px;
+    }
+    .search input {
+        padding: 0 10px;
+    }
+    .user {
+        width: 40px;
+        height: 40px;
+    }
+}
+
