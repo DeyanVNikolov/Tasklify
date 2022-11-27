@@ -36,7 +36,6 @@ def create_app():
     app.config["TEMPLATES_AUTO_RELOAD"] = True
     app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = "./translations"
-    app.config['LANGUAGES'] = {'en': 'English', 'de': 'Deutsch'}
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
     app.config['UPLOAD_FOLDER'] = 'website/static/uploads'
@@ -79,7 +78,7 @@ def create_app():
                     return current_user.is_authenticated
 
         column_searchable_list = ['email', 'id']
-        column_list = ['id', 'email', 'first_name', "password", "boss_id", "accounttype", "registrationid", "additionalpermissions", "tasks", "user_id"]
+        column_list = ['id', 'email', 'first_name', "password", "boss_id", "accounttype", "registrationid", "additionalpermissions", "tasks"]
 
 
     class TaskView(ModelView):
