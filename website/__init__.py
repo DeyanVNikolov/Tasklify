@@ -20,9 +20,11 @@ from dotenv import load_dotenv
 
 # check if server or local
 if path.exists("./env"):
+    print("Local")
     load_dotenv("./env/.env")
 else:
-    load_dotenv("~/env/.env")
+    print("Server")
+    project_folder = os.path.expanduser('~/my-project-dir')
 
 
 
