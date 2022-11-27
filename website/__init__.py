@@ -1,3 +1,4 @@
+import os
 import os.path as op
 from os import path
 
@@ -15,6 +16,9 @@ from flask_limiter import Limiter
 from flask import jsonify
 from flask_limiter.util import get_remote_address
 from website.translator import getword
+from dotenv import load_dotenv
+
+load_dotenv("./env/.env")
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -23,7 +27,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     # mysql
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{os.getenv("SQL_USER")}:{os.getenv("SQL_PASSWORD")}@{os.getenv("SQL_HOST")}:{os.getenv("SQL_PORT")}/{os.getenv("SQL_DBNAME")}'
     # pooling timeout
     app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
