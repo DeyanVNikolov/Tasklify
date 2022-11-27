@@ -18,7 +18,13 @@ from flask_limiter.util import get_remote_address
 from website.translator import getword
 from dotenv import load_dotenv
 
-load_dotenv("./env/.env")
+# check if server or local
+if path.exists("./env"):
+    load_dotenv("./env/.env")
+else:
+    load_dotenv("~/env/.env")
+
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
