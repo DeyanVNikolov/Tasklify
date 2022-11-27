@@ -17,11 +17,14 @@ from flask import jsonify
 from flask_limiter.util import get_remote_address
 from website.translator import getword
 from dotenv import load_dotenv
+import requests
 
 # check if server or local
 load_dotenv(".env")
 
 print("Starting up...")
+ip = requests.get("https://api.ipify.org?format=json").json()["ip"]
+print(ip)
 
 print("_____")
 print(os.getenv("SQL_PASSWORD"))
