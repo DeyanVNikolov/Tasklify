@@ -784,10 +784,6 @@ def docs():
     return "Hey"
 
 
-@views.route("/privacy", methods=["GET"])
-def privacy():
-    abort(403)
-
 
 @views.route("/employ/sign-up", methods=["GET", "POST"])
 def employ_signup():
@@ -996,4 +992,17 @@ def cookies_disabled():
 
 @views.route("/offline", methods=["GET"])
 def offline():
-    return render_template("offline.html", user=current_user)
+    abort(403)
+
+@views.route("/privacy", methods=["GET"])
+def privacy():
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    return render_template("privacy.html", user=current_user, privacypolicytitle=getword("privacypolicytitle", cookie),
+                            privacypolicytext1=getword("privacypolicytext1", cookie), privacypolicytext2=getword("privacypolicytext2", cookie),
+                            privacypolicytext3=getword("privacypolicytext3", cookie), privacypolicytext4=getword("privacypolicytext4", cookie),
+                            privacypolicytext5=getword("privacypolicytext5", cookie), privacypolicytext6=getword("privacypolicytext6", cookie),
+                            privacypolicytext7=getword("privacypolicytext7", cookie), privacypolicytext8=getword("privacypolicytext8", cookie))

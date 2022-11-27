@@ -1156,7 +1156,121 @@ words = {
         "de": "Demo-Konten können nicht zum Anmelden verwendet werden. Bitte registrieren Sie Ihr eigenes Konto.",
         "fr": "Les comptes de démonstration ne peuvent pas être utilisés pour la connexion. Veuillez enregistrer votre propre compte.",
         "ru": "Демо-аккаунты не могут использоваться для входа. Пожалуйста, зарегистрируйте свой собствен аккаунт."
-    }
+    },
+    "privacypolicytitle": {
+        "en": "Privacy Policy",
+        "bg": "Политика за поверителност",
+        "es": "Política de privacidad",
+        "de": "Datenschutz-Bestimmungen",
+        "fr": "Politique de confidentialité",
+        "ru": "Политика конфиденциальности"
+    },
+    "privacypolicytext1": {
+        "bg": "е изградил своята политика на дейност като се базира на "
+              "уважение към Вашата поверителност по отношение на всички данни, които изискваме от Вас "
+              "в нашия уебсайт https://tasklify.me и в други наши сайтове или други, с които оперираме.",
+        "es": "ha construido su política de privacidad basándose en el respeto a su privacidad en relación con todos los datos que le pedimos "
+                "en nuestro sitio web https://tasklify.me y en otros sitios web o plataformas que operamos.",
+        "de": "hat seine Datenschutzrichtlinie aufgebaut, indem er auf den Respekt vor Ihrer Privatsphäre in Bezug auf alle Daten, die wir von Ihnen "
+                "auf unserer Website https://tasklify.me und auf anderen Websites oder Plattformen, die wir betreiben, verlangen.",
+        "fr": "a construit sa politique de confidentialité en s'appuyant sur le respect de votre vie privée par rapport à toutes les données que nous vous demandons "
+                "sur notre site web https://tasklify.me et sur d'autres sites web ou plateformes que nous exploitons.",
+        "ru": "создал свою политику конфиденциальности, основываясь на уважении к вашей конфиденциальности по отношению ко всем данным, которые мы запрашиваем у вас "
+                "на нашем веб-сайте https://tasklify.me и на других веб-сайтах или платформах, которые мы используем.",
+        "en": "has built its privacy policy based on respect for your privacy regarding all data that we request from you "
+                "on our website https://tasklify.me and on other websites or platforms that we operate."
+    },
+    "privacypolicytext2": {
+        "bg": "За да Ви предоставим нашата услуга, изискваме от Вас лична информация и то"
+              "само, когато действително се нуждаем от нея. Изискваме я по съвсем законен и коректен начин, като предварително"
+              "сме Ви уведомили и сме получили Вашето съгласие за събиране на личните Ви данни. Разбира се, ние сме Ви"
+              "инфрмирали защо изискваме и събираме личните Ви данни и как ще ги използваме. ",
+        "es": "Para poder ofrecerle nuestro servicio, necesitamos que nos proporcione información personal y solo cuando realmente la necesitemos. "
+                "La solicitamos de manera totalmente legal y correcta, previamente le hemos informado y hemos obtenido su consentimiento para recopilar sus datos personales. "
+                "Por supuesto, le hemos informado de por qué necesitamos y recopilamos sus datos personales y cómo los utilizaremos.",
+        "de": "Um Ihnen unseren Service anbieten zu können, benötigen wir, dass Sie uns persönliche Informationen bereitstellen und dies nur, wenn wir sie wirklich benötigen. "
+                "Wir bitten Sie auf rechtlich korrekte und korrekte Weise, und Sie haben uns zuvor darüber informiert und Ihre Zustimmung zur Erfassung Ihrer persönlichen Daten erteilt. "
+                "Natürlich haben wir Sie darüber informiert, warum wir Ihre persönlichen Daten benötigen und sammeln und wie wir sie verwenden werden.",
+        "fr": "Pour pouvoir vous offrir notre service, nous avons besoin que vous nous fournissiez des informations personnelles et uniquement lorsque nous en avons vraiment besoin. "
+                "Nous vous demandons de manière totalement légale et correcte, et vous nous avez informés à l'avance et nous avons obtenu votre consentement pour collecter vos données personnelles. "
+                "Bien sûr, nous vous avons informés de pourquoi nous avons besoin et collectons vos données personnelles et comment nous allons les utiliser.",
+        "ru": "Чтобы предоставить вам нашу услугу, нам нужна ваша личная информация и только тогда, когда нам действительно нужна эта информация. "
+                "Мы просим вас законно и корректно, и вы нам заранее сообщили и дали нам свое согласие на сбор ваших личных данных. "
+                "Конечно, мы сообщили вам, почему нам нужны и собираем ваши личные данные и как мы будем их использовать.",
+        "en": "To provide you with our service, we need you to provide us with personal information and only when we really need it. "
+                "We ask you in a totally legal and correct way, and you have informed us in advance and have given us your consent to collect your personal data. "
+                "Of course, we have informed you of why we need and collect your personal data and how we will use it."
+
+    },
+    "privacypolicytext3": {
+        "bg": "запазва получената от Вас лична информация за толкова"
+              "време, което е необходимо да Ви предоставим услугата, която желаете от нас. Данните, които изискваме и запазваме"
+              "ще защитаваме с цел избягване на непозволен достъп, разкриване, използване или корекция, копиране. Целта е да не"
+              "се допускат загуби и кражби.",
+        "es": "guarda la información personal que nos proporciona durante el tiempo que sea necesario para proporcionarle el servicio que solicita. "
+                "Los datos que solicitamos y guardamos se protegerán para evitar el acceso no autorizado, divulgación, uso o modificación, copia. "
+                "El objetivo es evitar pérdidas y robos.",
+        "de": "speichert die von Ihnen bereitgestellten persönlichen Informationen für die Zeit, die für die Bereitstellung des von Ihnen gewünschten Services erforderlich ist. "
+                "Die von uns angeforderten und gespeicherten Daten werden geschützt, um einen unautorisierten Zugriff, eine Offenlegung, eine Verwendung oder eine Änderung, eine Kopie zu verhindern. "
+                "Das Ziel ist es, Verluste und Diebstähle zu vermeiden.",
+        "fr": "garde les informations personnelles que vous nous fournissez pendant le temps nécessaire pour vous fournir le service que vous demandez. "
+                "Les données que nous demandons et que nous stockons seront protégées pour éviter l'accès non autorisé, la divulgation, l'utilisation ou la modification, la copie. "
+                "L'objectif est d'éviter les pertes et les vols.",
+        "ru": "хранит полученную от вас личную информацию на столько времени, сколько необходимо, чтобы предоставить вам услугу, которую вы хотите от нас. "
+                "Данные, которые мы запрашиваем и храним, будут защищены для предотвращения неправомерного доступа, раскрытия, использования или изменения, копирования. "
+                "Цель - предотвратить потери и кражи.",
+        "en": "stores the personal information you provide us for as long as it is necessary to provide you with the service you request. "
+                "The data we request and store will be protected to prevent unauthorized access, disclosure, use or modification, copying. "
+                "The goal is to prevent losses and thefts."
+    },
+    "privacypolicytext4": {
+        "bg": "не допуска публично споделяне или споделяне с трети страни на"
+              "събраната от Вас информация, с изключение на случаите , в които законът го налага.",
+        "es": "no permite el acceso público o la divulgación a terceros de la información que nos proporciona, excepto en los casos en que la ley lo exija.",
+        "de": "erlaubt keinen öffentlichen Zugriff oder die Weitergabe an Dritte der von Ihnen bereitgestellten Informationen, es sei denn, dies ist gesetzlich vorgeschrieben.",
+        "fr": "n'autorise pas l'accès public ou la divulgation à des tiers des informations que vous nous fournissez, sauf dans les cas où la loi l'exige.",
+        "ru": "не позволяет публичный доступ или раскрытие третьим лицам информации, которую вы нам предоставляете, за исключением случаев, когда это требуется законом.",
+        "en": "does not allow public access or disclosure to third parties of the information you provide us, except in cases where the law requires it."
+    },
+    "privacypolicytext5": {
+        "bg": "осъществява връзка с външни сайтове. Над тях ние нямаме"
+              "управление и затова не можем да контролираме тяхното съдържание и действия и съответно нямаме отговорност за"
+              "техните политики за поверителност.",
+        "es": "está conectado a sitios web externos. No tenemos control sobre ellos y, por lo tanto, no podemos controlar su contenido y acciones y, por lo tanto, no somos responsables de sus políticas de privacidad.",
+        "de": "ist mit externen Websites verbunden. Wir haben keinen Einfluss auf sie und können daher ihren Inhalt und ihre Aktionen nicht kontrollieren und sind daher nicht für ihre Datenschutzrichtlinien verantwortlich.",
+        "fr": "est connecté à des sites Web externes. Nous n'avons pas de contrôle sur eux et ne pouvons donc pas contrôler leur contenu et leurs actions et ne sommes donc pas responsables de leurs politiques de confidentialité.",
+        "ru": "связан с внешними сайтами. Мы не контролируем их и, следовательно, не можем контролировать их содержимое и действия и, следовательно, не несем ответственности за их политики конфиденциальности.",
+        "en": "is connected to external websites. We have no control over them and therefore cannot control their content and actions and therefore are not responsible for their privacy policies."
+    },
+    "privacypolicytext6": {
+        "bg": ">Ние проявяваме разбиране ако не приемете нашата заявка за личните Ви данни и"
+              "лична информация, ако не можем да изпълним услугите, които желаете.",
+        "es": "entendemos si no acepta nuestra solicitud de sus datos personales y su información personal, si no podemos cumplir con los servicios que desea.",
+        "de": "wir verstehen, wenn Sie unsere Anfrage um Ihre persönlichen Daten und Ihre persönlichen Informationen nicht akzeptieren, wenn wir Ihre gewünschten Dienste nicht erfüllen können.",
+        "fr": "nous comprenons si vous n'acceptez pas notre demande de vos données personnelles et de vos informations personnelles, si nous ne pouvons pas fournir les services que vous souhaitez.",
+        "ru": "мы понимаем, если вы не примете наш запрос о ваших личных данных и личной информации, если мы не сможем предоставить услуги, которые вы хотите.",
+        "en": "we understand if you do not accept our request for your personal data and personal information, if we cannot provide the services you want."
+    },
+    "privacypolicytext7": {
+        "bg": "Ако Вие сте решили да използвате нашия уебсайт и продължите да го правите, това"
+              "ще означава, че сте възприели нашите действия и Политика за поверителност за личните данни и лична информация."
+              "Без колебание може да се свържете с нас, ако възникнат въпроси по отношение обработването на личните Ви данни и"
+              "информация",
+        "es": "Si ha decidido utilizar nuestro sitio web y continúa haciéndolo, esto significa que ha aceptado nuestras acciones y nuestra Política de privacidad para sus datos personales y su información personal. No dude en ponerse en contacto con nosotros si tiene alguna pregunta sobre el tratamiento de sus datos personales y su información personal",
+        "de": "Wenn Sie sich dazu entschieden haben, unsere Website zu verwenden und sie weiterhin verwenden, bedeutet dies, dass Sie unsere Aktionen und unsere Datenschutzrichtlinie für Ihre persönlichen Daten und Ihre persönlichen Informationen akzeptiert haben. Zögern Sie nicht, uns zu kontaktieren, wenn Sie Fragen zum Umgang mit Ihren persönlichen Daten und Ihren persönlichen Informationen haben",
+        "fr": "Si vous avez décidé d'utiliser notre site Web et de continuer à le faire, cela signifie que vous avez accepté nos actions et notre politique de confidentialité pour vos données personnelles et vos informations personnelles. N'hésitez pas à nous contacter si vous avez des questions sur le traitement de vos données personnelles et de vos informations personnelles",
+        "ru": "Если вы решили использовать наш веб-сайт и продолжить это делать, это означает, что вы приняли наши действия и нашу политику конфиденциальности по отношению к вашим личным данным и личной информации. Не стесняйтесь обращаться к нам, если у вас есть вопросы по обработке ваших личных данных и личной информации",
+        "en": "If you have decided to use our website and continue to do so, this means that you have accepted our actions and our Privacy Policy for your personal data and personal information. Do not hesitate to contact us if you have any questions about the processing of your personal data and personal information"
+    },
+    "privacypolicytext8": {
+        "bg": "Декларацията е валидна от 27 Ноември 2022 година",
+        "es": "La declaración es válida desde el 27 de noviembre de 2022",
+        "de": "Die Erklärung ist gültig ab dem 27. November 2022",
+        "fr": "La déclaration est valable à partir du 27 novembre 2022",
+        "ru": "Заявление действительно с 27 ноября 2022 года",
+        "en": "The statement is valid from November 27, 2022"
+    },
+
 }
 
 

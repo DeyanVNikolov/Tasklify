@@ -1,0 +1,111 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+<style>
+    .Home {
+        text-align: center;
+        margin: auto;
+    }
+    .Content {
+        text-align: center;
+        margin: auto;
+        width: 80%;
+        border: 2px solid #c9c9c9;
+        border-radius: 5px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        -webkit-box-shadow: 4px 5px #d1d1d1;
+                box-shadow: 4px 5px #d1d1d1;
+    }
+    .ContentParag {
+        text-align: left;
+        padding: 10px;
+        color: #516879;
+        display: block
+    }
+    
+    .ContentHeader {
+        text-align: center;
+        margin: auto;
+        width: 80%;
+        border-radius: 5px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        color: #485ec0;
+    }
+    .OrderButton {
+        background-color: rgb(130, 201, 140);
+        outline: none;
+        cursor: pointer;
+        border: 1px solid #777777;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 1.2em;
+        padding: 15px 60px;
+        -webkit-box-shadow: 2px 2px 2px #424242;
+                box-shadow: 2px 2px 2px #424242;
+        border-radius: 2rem;
+    }
+    
+    .OrderButton:hover, .OrderButton:active {
+        background-color:rgb(162, 247, 171);
+        border: 1px solid #7e7e7e;
+        color: #000000;
+    }
+    
+    .OrderButton:disabled {
+        background-color: rgb(196, 133, 133);
+        cursor: not-allowed;
+        border: 1px solid #ccc;
+        color: #333333;
+    }
+    
+    .OrderButton:not(:disabled) {
+        -webkit-animation: enable 0.6s linear;
+                animation: enable 0.6s linear;
+    }
+    
+    @-webkit-keyframes enable {
+        0% {
+            -webkit-transform: scale(1);
+                    transform: scale(1);
+        }
+        60% {
+            -webkit-transform: scale(1.1);
+                    transform: scale(1.1);
+        }
+        100% {
+            -webkit-transform: scale(1);
+                    transform: scale(1);
+        }
+    }
+    
+    @keyframes enable {
+        0% {
+            -webkit-transform: scale(1);
+                    transform: scale(1);
+        }
+        60% {
+            -webkit-transform: scale(1.1);
+                    transform: scale(1.1);
+        }
+        100% {
+            -webkit-transform: scale(1);
+                    transform: scale(1);
+        }
+    }
+</style>
+<br><br><br>
+
+<div class="Home__Content__1qM5u">
+    <div class="text-center"><h2 class="Home__ContentParag__EB_Vt">{{privacypolicytitle}}</h2></div>
+    <p class="Home__ContentParag__EB_Vt"><b>TASKLIFY</b> {{privacypolicytext1}}</p>
+    <p class="Home__ContentParag__EB_Vt">{{privacypolicytext2}}</p>
+    <p class="Home__ContentParag__EB_Vt"><b>TASKLIFY</b> {{privacypolicytext3}}</p>
+    <p class="Home__ContentParag__EB_Vt"><b>TASKLIFY</b> {{privacypolicytext4}}</p>
+    <p class="Home__ContentParag__EB_Vt"><b>TASKLIFY</b> {{privacypolicytext5}}</p>
+    <p class="Home__ContentParag__EB_Vt">{{privacypolicytext6}}</p>
+    <p class="Home__ContentParag__EB_Vt">{{privacypolicytext7}}</p>
+    <p class="Home__ContentParag__EB_Vt">{{privacypolicytext8}}</p>
+</div>
+
+<br><br><br>
+{% endblock %}
