@@ -24,7 +24,8 @@ if path.exists("./env"):
     load_dotenv("./env/.env")
 else:
     print("Server")
-    project_folder = os.path.expanduser('~/my-project-dir')
+    project_folder = os.path.expanduser('~/env/')
+    load_dotenv(os.path.join(project_folder, '.env'))
 
 
 
