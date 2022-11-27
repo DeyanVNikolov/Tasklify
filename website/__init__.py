@@ -26,6 +26,7 @@ else:
     print("Server")
     project_folder = os.path.expanduser('~/env/')
     load_dotenv(os.path.join(project_folder, '.env'))
+    print(os.path.join(project_folder, '.env'))
 
 
 
