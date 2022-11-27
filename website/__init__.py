@@ -19,12 +19,14 @@ from website.translator import getword
 from dotenv import load_dotenv
 
 # check if server or local
-if os.getcwd() == "/home/deyanvnikolov/TaskUsTest" or os.getcwd() == "/home/deyanvnikolov/TaskUsTest/website":
-    print("server")
-    load_dotenv("/home/deyanvnikolov/env/.env")
-else:
-    print("local")
-    load_dotenv("./env/.env")
+load_dotenv(".env")
+
+print("_____")
+print(os.getenv("SQL_PASSWORD"))
+print(os.getenv("SQL_USER"))
+print(os.getenv("SQL_HOST"))
+print(os.getenv("SQL_DBNAME"))
+print("_____")
 
 
 db = SQLAlchemy()
