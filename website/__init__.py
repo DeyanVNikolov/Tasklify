@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 
 
 load_dotenv(".env")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 db = SQLAlchemy()
@@ -38,7 +39,7 @@ def create_app():
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = "./translations"
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-    app.config['UPLOAD_FOLDER'] = 'website/static/uploads'
+    app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
     global CAPTCHA1
     CAPTCHA1 = CAPTCHA(config=app.config)
