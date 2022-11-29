@@ -135,7 +135,11 @@ def create_app():
 
     @app.errorhandler(429)
     def too_many_reqeusts(e):
-        return jsonify({"error": "Too many requests"}), 429
+        return """
+    
+    <center><b>TOO MANY REQUESTS -- 50 / PER MINUTE ALLOWED</b></center>
+    
+    """, 429
 
     @app.errorhandler(403)
     def forbidden(e):
