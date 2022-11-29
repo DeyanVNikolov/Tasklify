@@ -56,7 +56,7 @@ def create_app():
     app.jinja_env.globals.update(undonetasks=undonetasks)
     global limiter
 
-    limiter = Limiter(app, key_func=get_remote_address, default_limits=["100 per minute"], storage_uri="memory://", )
+    limiter = Limiter(app, key_func=get_remote_address, default_limits=["50 per minute"], storage_uri="memory://", )
 
 
 
