@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 import uuid
@@ -5,23 +6,20 @@ from os.path import join, dirname, realpath
 
 import requests
 from dateutil import parser
-from flask import abort
-from flask import current_app as app
-from werkzeug.utils import secure_filename, send_from_directory
-import datetime
-
 from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import abort
+from flask import current_app as app
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename, send_from_directory
 
 from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail
-from .models import Worker, Boss
-
-from .translator import getword
 from .models import Task
+from .models import Worker, Boss
+from .translator import getword
 
 views = Blueprint('views', __name__)
 
@@ -118,14 +116,16 @@ def boss():
         if current_user.boss_id is not None:
             return redirect(url_for(homepage))
 
+    link = "https://tasklify.me/a/" + current_user.registrationid
+
     return render_template("boss.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
                            user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
-                           id=getword("idemail", cookie))
-
+                           id=getword("idemail", cookie), idd=current_user.registrationid, link=link,
+                           copy=getword("copy", cookie))
 
 @views.route('/tasks', methods=['GET', 'POST'])
 @login_required
@@ -784,7 +784,6 @@ def docs():
     return "Hey"
 
 
-
 @views.route("/employ/sign-up", methods=["GET", "POST"])
 def employ_signup():
 
@@ -994,6 +993,7 @@ def cookies_disabled():
 def offline():
     abort(403)
 
+
 @views.route("/privacy", methods=["GET"])
 def privacy():
     if 'locale' in request.cookies:
@@ -1002,7 +1002,64 @@ def privacy():
         cookie = 'en'
 
     return render_template("privacy.html", user=current_user, privacypolicytitle=getword("privacypolicytitle", cookie),
-                            privacypolicytext1=getword("privacypolicytext1", cookie), privacypolicytext2=getword("privacypolicytext2", cookie),
-                            privacypolicytext3=getword("privacypolicytext3", cookie), privacypolicytext4=getword("privacypolicytext4", cookie),
-                            privacypolicytext5=getword("privacypolicytext5", cookie), privacypolicytext6=getword("privacypolicytext6", cookie),
-                            privacypolicytext7=getword("privacypolicytext7", cookie), privacypolicytext8=getword("privacypolicytext8", cookie))
+                           privacypolicytext1=getword("privacypolicytext1", cookie),
+                           privacypolicytext2=getword("privacypolicytext2", cookie),
+                           privacypolicytext3=getword("privacypolicytext3", cookie),
+                           privacypolicytext4=getword("privacypolicytext4", cookie),
+                           privacypolicytext5=getword("privacypolicytext5", cookie),
+                           privacypolicytext6=getword("privacypolicytext6", cookie),
+                           privacypolicytext7=getword("privacypolicytext7", cookie),
+                           privacypolicytext8=getword("privacypolicytext8", cookie))
+
+
+@views.route("/activate/<path:id>", methods=["GET", "POST"])
+def activate(id):
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if not current_user.is_authenticated:
+        return redirect(url_for(homepage))
+
+    if not current_user.accounttype == "boss":
+        return redirect(url_for(homepage))
+
+    worker = Worker.query.filter_by(registrationid=id).first()
+    if worker is None:
+        flash(getword("workernotfound", cookie), category="error")
+        return redirect(url_for(homepage))
+
+    if worker.boss_id is not None:
+        flash(getword("workernotfound", cookie), category="error")
+        return redirect(url_for(homepage))
+
+    if request.method == 'POST':
+        if request.form.get("typeform") == "activate":
+            try:
+                if worker is None:
+                    flash(getword("workernotfound", cookie), category="error")
+                    return redirect(url_for(homepage))
+
+                if worker.boss_id is None or worker.boss_id == "" or worker.boss_id == 0:
+                    worker.boss_id = current_user.id
+                    db.session.commit()
+                    flash(getword("workeradded", cookie), category="success")
+                    return redirect(url_for(workerspage))
+                else:
+                    flash(getword("workeralreadyadded", cookie), category="error")
+                    return redirect(url_for(homepage))
+            except Exception as e:
+                flash(str(e), category="error")
+                return redirect(url_for(workerspage))
+
+    return render_template("activate.html", user=current_user, activatetext=getword("activatetext", cookie), id=id,
+                           activatetext1=getword("activatetext1", cookie), nametext=getword("name", cookie),
+                           emailtext=getword("email", cookie), name=worker.first_name, email=worker.email,
+                           areyousure=getword("areyousure", cookie), makesuretext=getword("makesuretext1", cookie),
+                           submit=getword("submit", cookie))
+
+
+@views.route("/a/<path:id>", methods=["GET", "POST"])
+def a(id):
+    return redirect(url_for("views.activate", id=id))

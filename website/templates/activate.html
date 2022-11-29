@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+<br><br><br>
+<div class="container text-center">
+    <h1>{{activatetext}}</h1>
+
+    <h4>{{activatetext1}}<br> <b>{{id}}</b></h4>
+
+    <br><br>
+    <h4><i>{{nametext}}:</i> <b>{{name}}</b></h4>
+    <h4><i>{{emailtext}}:</i> <b>{{email}}</b></h4>
+    
+
+    <br><br>
+    <h4><u><b>{{makesuretext}}</b></u></h4>
+    <br><br>
+    <form method="POST">
+        <h6>{{areyousure}}</h6>
+        <input type="hidden" name="typeform" value="activate" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="worker_id" value="{{ id }}" />
+        <button type="submit" class="btn btn-primary">{{submit}}</button>
+    </form>
+
+</div>
+<br><br><br><br><br>
+{% endblock %}

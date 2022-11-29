@@ -11,7 +11,16 @@
   <h3>{{youridtext}}</h3>
   <br><br><br><br>
 
-  <h4><strong>{{id}}</strong></h4>
+  <h4><strong>{{idd}}</strong></h4>
+  <br><br>
+  <h4><strong>{{link}}</strong></h4>
+  <script>
+    function copyToClipboard(element) {
+        navigator.clipboard.writeText(element);
+    }
+</script>
+  <button type="button" class="btn btn-secondary"
+  onclick="copyToClipboard('{{ link }}');">{{ copy }}</button>
   <br><br><br><br>
 </div>
 

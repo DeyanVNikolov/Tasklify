@@ -1270,6 +1270,38 @@ words = {
         "ru": "Заявление действительно с 27 ноября 2022 года",
         "en": "The statement is valid from November 27, 2022"
     },
+    "activatetext": {
+        "bg": "Активиране на служител",
+        "es": "Activar empleado",
+        "de": "Mitarbeiter aktivieren",
+        "fr": "Activer l'employé",
+        "ru": "Активировать сотрудника",
+        "en": "Activate employee"
+    },
+    "activatetext1": {
+        "bg": "Вие сте на път да активирате служител с ID: ",
+        "es": "Estás a punto de activar al empleado con ID: ",
+        "de": "Sie sind dabei, den Mitarbeiter mit der ID: zu aktivieren",
+        "fr": "Vous êtes sur le point d'activer l'employé avec l'ID: ",
+        "ru": "Вы собираетесь активировать сотрудника с ID: ",
+        "en": "You are about to activate the employee with ID: "
+    },
+    "makesuretext1": {
+        "bg": "Бъдете сигурни, че активирате правилният човек!!",
+        "es": "¡Asegúrate de activar la persona correcta!",
+        "de": "Stellen Sie sicher, dass Sie die richtige Person aktivieren!",
+        "fr": "Assurez-vous d'activer la bonne personne!",
+        "ru": "Убедитесь, что вы активируете правильного человека!",
+        "en": "Make sure you activate the right person!"
+    },
+    "areyousure": {
+        "bg": "Сигурни ли сте?",
+        "es": "¿Estás seguro?",
+        "de": "Bist du sicher?",
+        "fr": "Es-tu sûr?",
+        "ru": "Ты уверен?",
+        "en": "Are you sure?"
+    }
 
 }
 
