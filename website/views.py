@@ -310,6 +310,13 @@ def worker(id):
     if request.method == "POST":
         typeform = request.form.get('typeform')
         taskid = request.form.get('task_id')
+
+        # check if task exists
+        task = Task.query.filter_by(id=taskid).first()
+        if task is None:
+            flash(getword("tasknotfound", cookie), category="error")
+            return redirect(url_for(worker, id=id))
+
         if Task.query.filter_by(id=taskid).first().boss_id != current_user.id:
             flash(getword("youcantedittask", cookie), category="error")
             return redirect(url_for(workerspage))
