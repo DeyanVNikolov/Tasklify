@@ -36,16 +36,20 @@ def checkmaintenance():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    checkmaintenance()
+    # Вземаме какъв е езика на потребителя
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
 
+    # Проверяваме дали потребителя е логнат
     if current_user.is_authenticated:
+        # Ако е логнат, го пренасочваме към началната страница
         return redirect(url_for('views.home'))
     else:
+        # Ако не е логнат, показваме формата за логване
         if request.method == 'POST':
+            # Вземаме данните от формата
             accounttype = request.form.get('accounttype')
             email = request.form.get('email')
             password = request.form.get('password')
@@ -54,10 +58,13 @@ def login():
                 user = Worker.query.filter_by(email=email).first()
             else:
                 user = Boss.query.filter_by(email=email).first()
-
+            # Проверяваме дали потребителя съществува
             if user:
+                # Проверяваме дали профила е ДЕМО
                 if user.id.split("-")[0] != "DEMO":
+                    # Проверяваме дали паролата е вярна
                     if check_password_hash(user.password, password):
+                        # Ако е вярна, логваме потребителя
                         flash(getword("loggedinsuccess", cookie), category='success')
                         login_user(user, remember=True)
                         if accounttype == 'worker':
@@ -65,12 +72,16 @@ def login():
                         else:
                             return redirect(url_for('views.home'))
                     else:
+                        # Ако не е вярна, показваме съобщение за грешка
                         flash(getword("incorrectpass", cookie), category='error')
                 else:
+                    # Ако е ДЕМО, показваме съобщение за грешка
                     flash(getword("demoaccount", cookie), category='error')
             else:
+                # Ако потребителя не съществува, показваме съобщение за грешка
                 flash(getword("emailnotfound", cookie), category='error')
 
+    # Показваме формата за логване
     return render_template("login.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
