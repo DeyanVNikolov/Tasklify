@@ -1301,6 +1301,14 @@ words = {
         "fr": "Es-tu sûr?",
         "ru": "Ты уверен?",
         "en": "Are you sure?"
+    },
+    "welcome": {
+        "bg": "Добре дошъл/а",
+        "es": "Bienvenido",
+        "de": "Willkommen",
+        "fr": "Bienvenue",
+        "ru": "Добро пожаловать",
+        "en": "Welcome"
     }
 
 }

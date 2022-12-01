@@ -53,7 +53,7 @@
             <div class="form">
                {% if user.is_authenticated %}
                {% if user.accounttype == "boss" %}
-                <h2>Welcome, {{ user.first_name }}</h2>
+                <h2>{{welcome}}, {{ user.first_name }}</h2>
                 <br><br>
                 <a href="/workers"><button class="btnn" style="width: 100% !important;">{{employees}}</button></a>
                 <br><br><br>
