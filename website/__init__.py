@@ -62,13 +62,9 @@ def create_app():
 
     from .views import views
     from .auth import auth
-    # from .payments import payments
-
-    # csrfg.exempt(payments)
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
-    # app.register_blueprint(payments, url_prefix='/')
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 
@@ -150,8 +146,14 @@ def create_app():
 
 
 def create_database(app):
-    db.create_all(app=app)
-    print('Created Database!')
+    print("Connecting to Database")
+    try: 
+        db.create_all(app=app)
+    except Exception as e:
+        print(e)
+        exit()
+    print("Connection Success")
+    
 
 def undonetasks():
     from .models import Task
