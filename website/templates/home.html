@@ -59,7 +59,7 @@
                 <br><br><br>
                 <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important;">{{logout}}</button></a>
                 {% else %}
-                <h2>Welcome, {{ user.first_name }}</h2>
+                <h2>{{welcome}}, {{ user.first_name }}</h2>
                 <br><br>
                 <a href="/tasks"><button class="btnn" style="width: 100% !important;">{{tasks}}</button></a>
                 <br><br><br>
