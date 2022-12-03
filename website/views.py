@@ -142,7 +142,7 @@ def tasks():
     if current_user.accounttype == 'boss':
         return redirect(url_for(workerspage))
 
-    if request.method == 'POST':
+    if request.method == 'POST':                                                                                                                                                                                                                                                                                                                                                  
         typeform = request.form.get('typeform')
         if typeform == 'done':
             taskid = request.form.get('task_id')
@@ -687,7 +687,8 @@ def contact():
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
                            homenav=getword("homenav", cookie), user=current_user,
                            contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie),
-                           contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie))
+                           contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie),
+                           contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie))	
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])

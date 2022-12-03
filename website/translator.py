@@ -475,6 +475,22 @@ words = {
         "fr": "deyannikolov25@itpg-varna.bg",
         "ru": "deyannikolov25@itpg-varna.bg",
     },
+    "contactname2": {
+        "bg": "Мартин Стоянов Анастасов",
+        "es": "Martin Stoyanov Anastasov",
+        "de": "Martin Stoyanov Anastasov",
+        "fr": "Martin Stoyanov Anastasov",
+        "ru": "Мартин Стоянов Анастасов",
+        "en": "Martin Stoyanov Anastasov"
+    },
+    "contactemail2": {
+        "bg": "martinanastasov@itpg-varna.bg",
+        "en": "martinanastasov@itpg-varna.bg",
+        "es": "martinanastasov@itpg-varna.bg",
+        "fr": "martinanastasov@itpg-varna.bg",
+        "ru": "martinanastasov@itpg-varna.bg",
+        "de": "martinanastasov@itpg-varna.bg",
+    },
     "databeingproccessed": {
         "en": "Your data is being processed. Please wait and do not refresh the page.",
         "bg": "Вашите данни се обработват. Моля, изчакайте и не актуализирайте страницата.",
