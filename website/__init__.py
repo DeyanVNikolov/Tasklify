@@ -62,9 +62,15 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .addtabs import addtabs
+    from .fileshandler import fileshandler
+    from .activationhandler import activationhandler
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(addtabs, url_prefix='/')
+    app.register_blueprint(fileshandler, url_prefix='/')
+    app.register_blueprint(activationhandler, url_prefix='/')
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 
