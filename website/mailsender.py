@@ -1,3 +1,9 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv(".env")
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 def sendregisterationemail(emailaddr, accname, regid):
     import os
     import smtplib
@@ -5,7 +11,7 @@ def sendregisterationemail(emailaddr, accname, regid):
     from email.message import EmailMessage
 
     EMAIL_ADDRESS = "hello@tasklify.me"
-    EMAIL_PASSWORD = "GaLEYeHqNa3kH@St"
+    EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
     msg = EmailMessage()
     msg['Subject'] = 'Registration Successful | Регистрацията е успешна'
@@ -73,7 +79,7 @@ def sendregisterationemailboss(emailaddr, accname):
     from email.message import EmailMessage
 
     EMAIL_ADDRESS = "hello@tasklify.me"
-    EMAIL_PASSWORD = "GaLEYeHqNa3kH@St"
+    EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
     msg = EmailMessage()
     msg['Subject'] = 'Registration Successful | Регистрацията е успешна'
