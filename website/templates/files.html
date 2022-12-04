@@ -24,7 +24,7 @@
     <input type="hidden" name="file" value="{{file}}" />
     <div class="container containertobesized text-center" style="max-width:50%">
         <h3>{{split}}</h3>
-        <a href="{{ url_for('views.uploaded_file', filename=file) }}">
+        <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}">
             <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
                 class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
                 src="{{ url_for('views.uploaded_file', filename=file) }}"></a>
