@@ -180,9 +180,11 @@ def tasks():
                            due=getword("due", cookie))
 
 
-@views.route('/workers', methods=["GET", "POST"])
+@views.route('/workers/', defaults={'sort': None})
+@views.route('/workers/<path:sort>', methods=['GET', 'POST'])
 @login_required
-def workers():
+def workers(sort):
+    allowed_sorts = ['name', 'email', 'tasks']
     checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
@@ -267,6 +269,30 @@ def workers():
         if task["ordernumber"] != 1:
             taskstodisplay.remove(task)
 
+    workerslist = []
+
+    for worker in Worker.query.filter_by(boss_id=current_user.id).all():
+        workerslist.append({"id": worker.id, "name": worker.first_name, "email": worker.email, "tasks": worker.tasks})
+
+    print(workerslist)
+
+    print("_" * 50)
+
+
+    if sort is not None:
+        if sort in allowed_sorts:
+            if sort == "name":
+                workerslist = sorted(workerslist, key=lambda k: k['name'])
+            elif sort == "email":
+                workerslist = sorted(workerslist, key=lambda k: k['email'])
+            elif sort == "tasks":
+                undonetasksl = {}
+                for worker in workerslist:
+                    from . import undonetasks
+                    undonetasksl[worker["id"]] = undonetasks(worker["id"])
+                workerslist = sorted(workerslist, key=lambda k: undonetasksl[k['id']], reverse=True)
+
+
     return render_template("workers.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
@@ -282,7 +308,11 @@ def workers():
                            myfiles=getword("empmyfiles", cookie), adminpaneltext=getword("adminpaneltext", cookie),
                            addemployeebutton=getword("addemployeebutton", cookie),
                            registeryouremployee=getword("registeryouremployee", cookie),
-                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie))
+                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie), workerslist=workerslist,
+                           sorttype=sort, sorttext=getword("sorttext", cookie), sortnametext=getword("sortnametext", cookie),
+                           sortemailtext=getword("sortemailtext", cookie), sorttaskstext=getword("sorttaskstext", cookie),
+                           currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
+                           taskstext=getword("tasksnav", cookie))
 
 
 @views.route('/worker/<path:id>', methods=["GET", "POST"])

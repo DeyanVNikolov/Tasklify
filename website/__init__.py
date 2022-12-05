@@ -161,12 +161,16 @@ def create_database(app):
     print("Connection Success")
     
 
-def undonetasks():
+def undonetasks(id=None):
     from .models import Task
-    if current_user.accounttype == "worker":
-        print(current_user.first_name)
-        print(current_user.id)
-        total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0").count() + Task.query.filter_by(worker_id=current_user.id).filter_by(complete="1").count()
+    if not id or id is None or id == "":
+        if current_user.accounttype == "worker":
+            print(current_user.first_name)
+            print(current_user.id)
+            total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0").count() + Task.query.filter_by(worker_id=current_user.id).filter_by(complete="1").count()
+            return total
+    else:
+        total = Task.query.filter_by(worker_id=id).filter_by(complete="0").count() + Task.query.filter_by(worker_id=id).filter_by(complete="1").count()
         return total
 
 

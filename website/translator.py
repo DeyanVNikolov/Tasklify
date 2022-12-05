@@ -1319,12 +1319,60 @@ words = {
         "en": "Are you sure?"
     },
     "welcome": {
-        "bg": "Добре дошъл/а",
+        "bg": "Добре дошъл/дошла",
         "es": "Bienvenido",
         "de": "Willkommen",
         "fr": "Bienvenue",
         "ru": "Добро пожаловать",
         "en": "Welcome"
+    },
+    "sorttext": {
+        "bg": "Сортиране",
+        "es": "Clasificación",
+        "de": "Sortierung",
+        "fr": "Trier",
+        "ru": "Сортировка",
+        "en": "Sorting"
+    },
+    "sortnametext": {
+        "bg": "По Име",
+        "es": "Por nombre",
+        "de": "Nach Name",
+        "fr": "Par nom",
+        "ru": "По имени",
+        "en": "By Name"
+    },
+    "sortemailtext": {
+        "bg": "По Имейл",
+        "es": "Por correo electrónico",
+        "de": "Nach E-Mail",
+        "fr": "Par courriel",
+        "ru": "По электронной почте",
+        "en": "By Email"
+    },
+    "sorttaskstext": {
+        "bg": "По Незавършени Задачи",
+        "es": "Por tareas pendientes",
+        "de": "Nach offenen Aufgaben",
+        "fr": "Par tâches en attente",
+        "ru": "По незавершенным задачам",
+        "en": "By Pending Tasks"
+    },
+    "currentlysorting": {
+        "bg": "Текущо сортиране: ",
+        "es": "Clasificación actual: ",
+        "de": "Aktuelle Sortierung: ",
+        "fr": "Tri actuel: ",
+        "ru": "Текущая сортировка: ",
+        "en": "Current sorting: "
+    },
+    "nonetext": {
+        "bg": "Няма",
+        "es": "Ninguno",
+        "de": "Keine",
+        "fr": "Aucun",
+        "ru": "Нет",
+        "en": "None"
     }
 
 }

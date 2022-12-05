@@ -1,5 +1,8 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 
+<style>
+
+</style>
 <br><br>
 <link rel="stylesheet" href="/static/admin.css">
 
@@ -7,8 +10,8 @@
 
     <h1>{{nowtime}}</h1>
 
-    <div class="last-appointments container-fluid text-truncate" style="width: 100%; height: fit-content;" style="overflow-x:auto">
-        <div class="heading text-truncate" style="overflow: auto">
+    <div class="last-appointments container-fluid" style="width: 100%; height: fit-content; overflow:auto">
+        <div class="heading text-truncate" style="width:100%; overflow:auto">
             <h2>{{adminpaneltext}}</h2>&nbsp;
             <div class="justify-content-right" >
                 <a href="/add/employee" class="btn1">{{addemployeebutton}}</a>
@@ -16,18 +19,47 @@
                 <a style="background-color:lightgreen; border-style:solid;border-width:2px; color:black;" href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
+        <br>
         <table class="appointments text-truncate">
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{sorttext}}
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/workers">{{nonetext}}</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/workers/name">{{sortnametext}}</a>
+                  <a class="dropdown-item" href="/workers/email">{{sortemailtext}}</a>
+                  <a class="dropdown-item" href="/workers/tasks">{{sorttaskstext}}</a>
+                </div>
+              </div>
+              <br><h5 style="margin-top:15px">{{currentlysorting}}
+                
+                {% if sorttype == "tasks" %}
+                {{sorttaskstext}}
+                {% elif sorttype == "name" %}
+                {{sortnametext}}
+                {% elif sorttype == "email" %}
+                {{sortemailtext}}
+                {% else %}
+                {{nonetext}}
+                {% endif %}
+            
+            
+            </h5>
             <thead>
                 <td>{{name}}</td>
                 <td>{{email}}</td>
+                <td>{{taskstext}}</td>
                 <td>{{actiontext}}</td>
             </thead>
             <tbody>
-                {% for worker in current_user.workers %}
+                {% for worker in workerslist %}
                 <div class="text-truncate">
                     <tr class="text-truncate trr">
-                        <td>{{ worker.first_name }}</td>
+                        <td>{{ worker.name }}</td>
                         <td style="max-width: fit-content;">{{worker.email}}</td>
+                        <td>{{ undonetasks(worker.id) }}</td>
                         <td>
                             <form method="POST">
                                 <a href="/worker/{{worker.id}}"><i class="far fa-eye"></i></a>
