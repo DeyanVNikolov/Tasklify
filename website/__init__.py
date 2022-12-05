@@ -170,7 +170,7 @@ def undonetasks(id=None):
             total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0", archive="0").count() + Task.query.filter_by(worker_id=current_user.id).filter_by(complete="1", archive="0").count()
             return total
     else:
-        total = Task.query.filter_by(worker_id=id).filter_by(complete="0").count() + Task.query.filter_by(worker_id=id).filter_by(complete="1").count()
+        total = Task.query.filter_by(worker_id=id).filter_by(complete="0", archive="0").count() + Task.query.filter_by(worker_id=id).filter_by(complete="1", archive="0").count()
         return total
 
 
