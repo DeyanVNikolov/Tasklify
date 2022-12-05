@@ -400,6 +400,14 @@ def worker(id):
             task.archive = False
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
+        elif typeform == 'fullydelete':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task_actual_id = task.actual_id
+            for task in Task.query.filter_by(actual_id=task_actual_id).all():
+                db.session.delete(task)
+            db.session.commit()
+            return redirect(url_for(oneworkerpage, id=id))
 
     return render_template("worker.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -412,7 +420,8 @@ def worker(id):
                            done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
-                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie))
+                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie),
+                           fullydelete=getword("fullydelete", cookie))
 
 
 

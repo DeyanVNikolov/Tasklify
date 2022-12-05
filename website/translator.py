@@ -1381,6 +1381,14 @@ words = {
         "fr": "Désarchiver",
         "ru": "Восстановление",
         "en": "Unarchive"
+    },
+    "fullydelete": {
+        "bg": "Пълно изтриване",
+        "es": "Eliminar completamente",
+        "de": "Vollständiges Löschen",
+        "fr": "Supprimer complètement",
+        "ru": "Полное удаление",
+        "en": "Fully delete"
     }
 
 }
