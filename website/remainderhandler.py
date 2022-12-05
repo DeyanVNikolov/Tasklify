@@ -120,28 +120,24 @@ def prepareemail(tasksandworkers, taskcount):
 
 
 
-if __name__ == "__main__":
-    tasks = get_tasks()
-    tasksandworkers = {}
-    taskcount = {}
-    for task in tasks:
-        completed = task[3]
-        completed = str(completed)
-        if completed != "2":
-            workerid = task[4]
-            worker = get_worker(workerid)
-            emailaddr = worker[1]
-            accname = worker[3]
-            if emailaddr not in tasksandworkers:
-                tasksandworkers[emailaddr+"  "+accname] = 1
-
-            if emailaddr in taskcount:
-                taskcount[emailaddr] += 1
-            else:
-                taskcount[emailaddr] = 1
-
-
-    prepareemail(tasksandworkers, taskcount)
+tasks = get_tasks()
+tasksandworkers = {}
+taskcount = {}
+for task in tasks:
+    completed = task[3]
+    completed = str(completed)
+    if completed != "2":
+        workerid = task[4]
+        worker = get_worker(workerid)
+        emailaddr = worker[1]
+        accname = worker[3]
+        if emailaddr not in tasksandworkers:
+            tasksandworkers[emailaddr+"  "+accname] = 1
+        if emailaddr in taskcount:
+            taskcount[emailaddr] += 1
+        else:
+            taskcount[emailaddr] = 1
+prepareemail(tasksandworkers, taskcount)
 
 
 
