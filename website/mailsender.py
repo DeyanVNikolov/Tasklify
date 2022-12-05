@@ -136,3 +136,67 @@ def sendregisterationemailboss(emailaddr, accname):
     with smtplib.SMTP_SSL('smtppro.zoho.eu', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         smtp.send_message(msg)
+
+
+def sendremainder(emailaddr, accname, taskcount):
+    import os
+    import smtplib
+    import imghdr
+    from email.message import EmailMessage
+
+    EMAIL_ADDRESS = "hello@tasklify.me"
+    EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Task Reminder | Напомняне за задача'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = emailaddr
+
+    msg.set_content('Task Reminder Email')
+
+    msg.add_alternative(f"""\
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <center>
+                <br><br>
+                <img style="width: 300px; height: auto;" src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.png">
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h1 style="color:rgb(0, 0, 0); font-family: sans-serif;">{accname}, you have {taskcount} uncompleted tasks!</h1>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Check their progress and due date at: <a href="https://tasklify.me/tasks">https://tasklify.me/tasks</h2>
+                <p>This email is sent to {emailaddr} because you have uncompleted tasks. If you have completed them, please ignore this email.</p>
+                <p>Thank you for using Tasklify!</p>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h1 style="color:rgb(0, 0, 0); font-family: sans-serif;">{accname}, имате {taskcount} незавършени задачи!</h1>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Проверете напредъка им и крайния срок на: <a href="https://tasklify.me/tasks">https://tasklify.me/tasks</h2>
+                <p>Този имейл е изпратен на {emailaddr}, защото имате незавършени задачи. Ако сте ги завършили, моля, игнорирайте този имейл.</p>
+                <p>Благодарим ви, че използвате Tasklify!</p>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Best regards,<br>Tasklify Team</h2>
+                <br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">С най-добри пожелания,<br>Екипът на Tasklify</h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h5>Tasklify, "Studentska" Str. 1, 9000 Varna, Bulgaria <br>
+                All rights reserved. © 2022</h5>
+                <h5>Available on <a href="https://tasklify.me">https://tasklify.me</a></h5>
+
+
+
+            </center>
+        </body>
+    </html>
+    """, subtype='html')
+
+    with smtplib.SMTP_SSL('smtppro.zoho.eu', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
