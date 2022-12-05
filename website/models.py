@@ -20,6 +20,7 @@ class Task(db.Model):
     actual_id = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.String(100))
     datedue = db.Column(db.DateTime, default=datetime.datetime.now())
+    archive = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Task %r>' % self.id

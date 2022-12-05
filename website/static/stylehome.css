@@ -233,71 +233,6 @@ body {
     }
 }
 
-@media screen and (max-width: 830px){
-    /*For tablet*/
-   
-    .content{
-        margin-top: 120px;
-        width: 80%;   
-        margin-left: 40px;  
-    }
-    .content h1, .content span{
-        font-size: 6vw; 
-    }
-    .content .par{
-        width: 90%;
-        font-size: 2.5vw;
-    }
-    .content .cn{
-        width: 15%;
-        height: 4.5vw;
-        font-size: 2vw;
-    }
-    .content a{
-        font-size: 2vw
-    }
-    .menu{
-        width: 100%;
-    }
-    ul{
-        margin-top: -5px;
-        margin-left: 5px;
-    }
-    ul li{
-        margin-left: 60px;
-    }
-    ul li a{
-       font-size: 2vw; 
-    }
-    .btn{
-        height:30px;
-        width: 70px;
-    }
-    .main{
-        padding-left: 20px;
-        margin-left: 30px;
-        height: 180vh;
-    }
-    .form{
-        margin-top: 70px;
-        margin-left: 90px;
-        width: 250px;
-        height: 370px;
-        background: linear-gradient(to top, rgba(255, 255, 255, 0.8)50%,rgba(254, 254, 254, 0.8)50%);
-        position: absolute;
-        top: 430px;
-        left: 50px;
-        transform: translate(0%,-5%);
-        border-radius: 10px;
-        padding: 25px;
-    }
-    .btnn a{
-        font-size: 16px;
-    }
-    .form .link a{
-        font-size: 16px;
-    }
-}
 
 @media screen and (max-width: 600px){
     /*IPAD*/
@@ -335,6 +270,11 @@ body {
     }
     .text-home {
         font-size:larger
+    }
+
+    .afterlogin {
+        width: 100%;
+        padding-right: 50px;
     }
 
 }

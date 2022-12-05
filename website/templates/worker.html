@@ -10,6 +10,12 @@
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 
 <link rel="stylesheet" href="static/custom-style/ionicons.min.css">
+<style>
+    .archived {
+        background:url("https://as2.ftcdn.net/v2/jpg/04/38/37/75/1000_F_438377503_F3CXt4GVUOkAKT03GLDgPY0Yi4xD7JOC.jpg");
+        opacity:50%;
+    } 
+</style>
 <link rel="stylesheet" href="static/custom-style/style.css">
 
 <div class="container text-center text-truncate">
@@ -27,12 +33,13 @@
 {% set status = "Done" %}
 {% endif %}
 
-<div style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);"  id="{{task.task_id}}" class="col mb-4 text-center">
+<div id="{{task.task_id}}" class="col mb-4  {%if task.archive == True %} archived {%endif%}" style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);"> 
 <br>
     <h4>{{tasktext}} #{{ loop.index }}</h4>
     <h4 style="">{{ task.title }}</h4>
+    {%if task.archive == False%}
     <h4><a href="/task/{{task.task_id}}"><button class="btn btn-success">{{moreinfo}}</button></a></h4>
-    <br>
+    {%endif%}
     <h4>{{statustext}}: 
         {% if status == "Done" %}
             <span style="color:green">{{completed}}</span>
@@ -43,6 +50,7 @@
         {% endif %}
     </h4>
     <h4 style=" overflow: auto">{{workertext}}: {{worker.first_name}}</h4>
+    {%if task.archive == False%}
     <form method="POST" style="padding-top: 5px;">
         <input type="hidden" name="typeform" value="delete"/>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -55,6 +63,17 @@
       <input type="hidden" name="task_id" value="{{task.task_id}}"/>
       <button type="submit" class="btn btn-success">{{deletefromall}}</button>
   </form>
+  {%else%}
+<div style="opacity: 100% !important;">
+      <form method="POST" style="opacity: 100% !important;">
+        <input type="hidden" name="typeform" value="unarchive"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="task_id" value="{{task.task_id}}"/>
+        <button type="submit" style="opacity: 100% !important;" class="btn btn-success">{{unarchive}}</button>
+      </form>
+</div>
+
+  {%endif%}
     <br>
 </div>
 <br>

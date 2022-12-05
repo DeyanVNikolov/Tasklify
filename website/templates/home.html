@@ -18,7 +18,7 @@
 
         <!----Form---->
         {% if not user.is_authenticated %}
-        <div class="form">
+        <div class="form" style="min-height:200px; height:fit-content">
             <h2 style="width:100%">{{login}}</h2>
             <br>
             <form action="/auth/login" method="POST">
@@ -50,7 +50,7 @@
                 </div>
             </form>
             {% else %}
-            <div class="form">
+            <div class="form" style="min-height:200px; height:fit-content">
                {% if user.is_authenticated %}
                {% if user.accounttype == "boss" %}
                 <h2>{{welcome}}, {{ user.first_name }}</h2>

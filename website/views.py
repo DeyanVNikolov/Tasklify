@@ -144,7 +144,7 @@ def tasks():
     if current_user.accounttype == 'boss':
         return redirect(url_for(workerspage))
 
-    if request.method == 'POST':                                                                                                                                                                                                                                                                                                                                                  
+    if request.method == 'POST':
         typeform = request.form.get('typeform')
         if typeform == 'done':
             taskid = request.form.get('task_id')
@@ -165,7 +165,11 @@ def tasks():
         dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
         taskstodisplay.append(
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
-             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat})
+             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
+
+
+    # sort taskstodisplay by archive
+    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -229,7 +233,7 @@ def workers(sort):
                     try:
                         worker.boss_id = None
                         for task in Task.query.filter_by(worker_id=worker.id).all():
-                            db.session.delete(task)
+                            task.archive = True
                         db.session.commit()
                         flash(getword("workerremoved", cookie), category="success")
                     except Exception as e:
@@ -262,8 +266,15 @@ def workers(sort):
             workerid = request.form.get('worker_id')
             return redirect(url_for(oneworkerpage, id=workerid))
 
+
     for task in Task.query.filter_by(boss_id=current_user.id).all():
-        taskstodisplay.append({"task": task.task, "actual_id": task.actual_id, "ordernumber": task.ordernumber})
+        datedue = task.datedue
+        dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
+        taskstodisplay.append(
+            {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
+             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
+
+    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
 
     for task in taskstodisplay:
         if task["ordernumber"] != 1:
@@ -315,7 +326,7 @@ def workers(sort):
                            taskstext=getword("tasksnav", cookie))
 
 
-@views.route('/worker/<path:id>', methods=["GET", "POST"])
+@views.route('/worker/<string:id>', methods=["GET", "POST"])
 @login_required
 def worker(id):
     checkmaintenance()
@@ -336,9 +347,14 @@ def worker(id):
     taskstodisplay = []
 
     for task in Task.query.filter_by(worker_id=worker.id).all():
+        print(task.archive)
+        datedue = task.datedue
+        dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
         taskstodisplay.append(
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
-             "ordernumber": task.ordernumber, "title": task.title, "comment": task.comment})
+             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
+
+    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
     if request.method == "POST":
         typeform = request.form.get('typeform')
         taskid = request.form.get('task_id')
@@ -361,7 +377,7 @@ def worker(id):
         elif typeform == 'delete':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
-            db.session.delete(task)
+            task.archive = True
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'notdone':
@@ -375,7 +391,13 @@ def worker(id):
             task = Task.query.get(taskid)
             task_actual_id = task.actual_id
             for task in Task.query.filter_by(actual_id=task_actual_id).all():
-                db.session.delete(task)
+                task.archive = True
+            db.session.commit()
+            return redirect(url_for(oneworkerpage, id=id))
+        elif typeform == 'unarchive':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task.archive = False
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
@@ -390,11 +412,11 @@ def worker(id):
                            done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
-                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie))
+                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie))
 
 
 
-@views.route('/task/<int:id>', methods=["GET", "POST"])
+@views.route('/task/<string:id>', methods=["GET", "POST"])
 @login_required
 def task(id):
     checkmaintenance()
@@ -405,6 +427,10 @@ def task(id):
 
     taskdata = Task.query.filter_by(id=id).first()
     if taskdata is None:
+        flash(getword("tasknotfound", cookie), category="error")
+        return redirect(url_for(homepage))
+
+    if taskdata.archive:
         flash(getword("tasknotfound", cookie), category="error")
         return redirect(url_for(homepage))
 
@@ -664,7 +690,7 @@ def contact():
                            homenav=getword("homenav", cookie), user=current_user,
                            contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie),
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie),
-                           contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie))	
+                           contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie))
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])

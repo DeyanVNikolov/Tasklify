@@ -1373,6 +1373,14 @@ words = {
         "fr": "Aucun",
         "ru": "Нет",
         "en": "None"
+    },
+    "unarchive": {
+        "bg": "Въстановяване",
+        "es": "Desarchivar",
+        "de": "Wiederherstellen",
+        "fr": "Désarchiver",
+        "ru": "Восстановление",
+        "en": "Unarchive"
     }
 
 }
