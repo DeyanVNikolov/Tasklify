@@ -8,7 +8,7 @@ from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
 from flask_login import LoginManager, current_user
-from .captchahandler import CAPTCHA
+from .captchahandler.captchahandler import CAPTCHA
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_debugtoolbar import DebugToolbarExtension
