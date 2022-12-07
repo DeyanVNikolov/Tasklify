@@ -27,7 +27,7 @@
         <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}">
             <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
                 class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
-                src="{{ url_for('views.uploaded_file', filename=file) }}"></a>
+                src="{{ url_for('fileshandler.uploaded_file', filename=file) }}"></a>
         <button class="btn btn-danger" type="submit">{{delete}}</button>
     </div>
 </form>
