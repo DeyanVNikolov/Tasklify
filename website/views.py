@@ -184,10 +184,9 @@ def tasks():
                            due=getword("due", cookie))
 
 
-@views.route('/workers/', defaults={'sort': None})
-@views.route('/workers/<path:sort>', methods=['GET', 'POST'])
+@views.route('/workers/', methods=['GET', 'POST'])
 @login_required
-def workers(sort):
+def workers():
     allowed_sorts = ['name', 'email', 'tasks']
     checkmaintenance()
     if 'locale' in request.cookies:
@@ -228,7 +227,7 @@ def workers(sort):
                 flash(getword("noworkerwithid", cookie), category="error")
             else:
                 if worker.boss_id is None:
-                    flash(geword("workeralreadyremoved", cookie), category="error")
+                    flash(getword("workeralreadyremoved", cookie), category="error")
                 else:
                     try:
                         worker.boss_id = None
@@ -289,6 +288,9 @@ def workers(sort):
 
     print("_" * 50)
 
+    sort = request.args.get('sort')
+    search = request.args.get('search')
+
 
     if sort is not None:
         if sort in allowed_sorts:
@@ -302,6 +304,12 @@ def workers(sort):
                     from . import undonetasks
                     undonetasksl[worker["id"]] = undonetasks(worker["id"])
                 workerslist = sorted(workerslist, key=lambda k: undonetasksl[k['id']], reverse=True)
+
+    if search is not None:
+        workerslist = [worker for worker in workerslist if search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
+
+
+
 
 
     return render_template("workers.html", profilenav=getword("profilenav", cookie),
@@ -404,8 +412,7 @@ def worker(id):
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             task_actual_id = task.actual_id
-            for task in Task.query.filter_by(actual_id=task_actual_id).all():
-                db.session.delete(task)
+            db.session.delete(task)
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
