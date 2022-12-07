@@ -4,8 +4,8 @@
 <div class="container-fluid text-center">
   <h1>{{ profiletext }}</h1>
   <br><br><br><br>
-  <h1>{{emailtext}}: {{ user.email }}</h1>
-  <h1>{{nametext}}: {{ user.first_name }}</h1>
+  <h1>{{emailtext}}:<div style="overflow:auto"> {{ user.email }}</div></h1>
+  <h1>{{nametext}}: <div style="overflow:auto"> {{ user.first_name }}</div></h1>
   <br><br><br><br>
     <a href="/files/{{ user.id }}"><button type="button" class="btn btn-success">{{ myfiles }}</button></a>
     <br><br><br>
