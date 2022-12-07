@@ -552,7 +552,7 @@ def task(id):
                 UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
                 path = join(UPLOADS_PATH, finalfilename)
                 file.save(path)
-                imageurl = url_for('views.uploaded_file', filename=finalfilename)
+                imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)
 
                 datedue = taskdata.datedue
                 dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
@@ -620,7 +620,7 @@ def task(id):
                 UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
                 path = join(UPLOADS_PATH, finalfilename)
                 file.save(path)
-                imageurl = url_for('views.uploaded_file', filename=finalfilename)
+                imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)
                 datedue = taskdata.datedue
                 dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
                 return render_template("task.html", profilenav=getword("profilenav", cookie),
