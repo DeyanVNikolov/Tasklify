@@ -15,6 +15,18 @@
         background: url("https://as2.ftcdn.net/v2/jpg/04/38/37/75/1000_F_438377503_F3CXt4GVUOkAKT03GLDgPY0Yi4xD7JOC.jpg");
         opacity: 50%;
     }
+    .taskdiv {
+        white-space: initial; 
+        border-style: dashed;
+        width: 50%; 
+        transform: translateX(50%);
+    }
+    @media only screen and (max-width: 991px) {
+        .taskdiv {
+            width: 100%;
+            transform: translateX(0%);
+        }
+    }
 </style>
 <link rel="stylesheet" href="static/custom-style/style.css">
 
@@ -33,13 +45,14 @@
     {% set status = "Done" %}
     {% endif %}
 
-    <div id="{{task.task_id}}" class="col mb-4  {%if task.archive == True %} archived {%endif%}"
-        style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%);">
+    <div id="{{task.task_id}}" class="col mb-4 taskdiv{%if task.archive == True %} archived {%endif%}">
         <br>
         <h4>{{tasktext}} #{{ loop.index }}</h4>
-        <h4 style="">{{ task.title }}</h4>
+        <h4 style="font-weight: bold;">{{ task.title }}</h4>
         {%if task.archive == False%}
+        <br>
         <h4><a href="/task/{{task.task_id}}"><button class="btn btn-success">{{moreinfo}}</button></a></h4>
+        <br>
         {%endif%}
         <h4>{{statustext}}:
             {% if status == "Done" %}
@@ -51,6 +64,7 @@
             {% endif %}
         </h4>
         <h4 style=" overflow: auto">{{workertext}}: {{worker.first_name}}</h4>
+        <br><br>
         {%if task.archive == False%}
         <form method="POST" style="padding-top: 5px;">
             <input type="hidden" name="typeform" value="delete" />

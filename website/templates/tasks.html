@@ -1,5 +1,21 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
 
+
+<style>
+    .taskdiv {
+        white-space: initial; 
+        border-style: dashed;
+        width: 50%; 
+        transform: translateX(50%);
+    }
+    @media only screen and (max-width: 991px) {
+        .taskdiv {
+            width: 100%;
+            transform: translateX(0%);
+        }
+
+    }
+</style>
 <br><br>
 
 <div class="container-fluid text-center text-truncate" style="max-width:100%; overflow: auto">
@@ -16,7 +32,7 @@
     {% set status = "Done" %}
     {% endif %}
     
-    <div id="{{task.task_id}}" class="col mb-4" style="white-space: initial; border-style: dashed; width: 50%; transform: translateX(50%); {%if task.archive == True %} background:url(https://as2.ftcdn.net/v2/jpg/04/38/37/75/1000_F_438377503_F3CXt4GVUOkAKT03GLDgPY0Yi4xD7JOC.jpg); opacity:50%" {%else%}" {%endif%}> 
+    <div id="{{task.task_id}}" class="col mb-4 taskdiv" style=" {%if task.archive == True %} background:url(https://as2.ftcdn.net/v2/jpg/04/38/37/75/1000_F_438377503_F3CXt4GVUOkAKT03GLDgPY0Yi4xD7JOC.jpg); opacity:50%" {%else%}" {%endif%}> 
     <br>
         <h4>{{tasktext}} #{{ loop.index }}</h4>
         <h4>{{task.title}}</h4>
