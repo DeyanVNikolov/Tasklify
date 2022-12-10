@@ -331,7 +331,7 @@ def workers():
                            sorttype=sort, sorttext=getword("sorttext", cookie), sortnametext=getword("sortnametext", cookie),
                            sortemailtext=getword("sortemailtext", cookie), sorttaskstext=getword("sorttaskstext", cookie),
                            currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
-                           taskstext=getword("tasksnav", cookie))
+                           taskstext=getword("tasksnav", cookie), search=getword("search", cookie))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])

@@ -1389,7 +1389,16 @@ words = {
         "fr": "Supprimer complètement",
         "ru": "Полное удаление",
         "en": "Fully delete"
+    },
+    "search": {
+        "bg": "Търсене",
+        "es": "Buscar",
+        "de": "Suche",
+        "fr": "Chercher",
+        "ru": "Поиск",
+        "en": "Search"
     }
+
 
 }
 
