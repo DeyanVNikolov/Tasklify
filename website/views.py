@@ -168,8 +168,10 @@ def tasks():
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
 
-    # sort taskstodisplay by archive
+    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
     taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
+
+
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -362,6 +364,7 @@ def worker(id):
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
+    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
     taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
     if request.method == "POST":
         typeform = request.form.get('typeform')
