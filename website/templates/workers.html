@@ -2,6 +2,13 @@
 
 <style>
 
+    @media screen and (max-width: 575px) {
+        .makesmallwhenscreengoesbrrr {
+            width: 100% !important;
+            transform: translateX(0%) !important;
+        }
+    }
+    
 </style>
 <br><br>
 <link rel="stylesheet" href="/static/admin.css">
@@ -13,25 +20,30 @@
     <div class="last-appointments container-fluid" style="width: 100%; height: fit-content; overflow:auto">
         <div class="heading text-truncate" style="width:100%; overflow:auto">
             <h2>{{adminpaneltext}}</h2>&nbsp;
-            <div class="justify-content-right" >
+            <div class="justify-content-right">
                 <a href="/add/employee" class="btn1">{{addemployeebutton}}</a>
                 <a href="/employ/sign-up" class="btn1">{{registeryouremployee}}</a>
-                <a style="background-color:lightgreen; border-style:solid;border-width:2px; color:black;" href="/add/task" class="btn1">{{addtasktext}}</a>
+                <a style="background-color:lightgreen; border-style:solid;border-width:2px; color:black;"
+                    href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
         <br>
         <table class="appointments text-truncate">
             <div class="btn-group">
-                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{sorttext}}
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{sorttext}}
                 </button>
                 <script>
                     // on load if search is in url, set the search input to the search value
-                    window.onload = function() {
+                    window.onload = function () {
                         if (window.location.href.includes("search")) {
-                            document.getElementById("SearchInputT").value = window.location.href.split("search=")[1].split("&")[0];
+                            document.getElementById("SearchInputT").value = window.location.href.split("search=")[1]
+                                .split("&")[0];
                         }
                     }
+
+
                     function myFunction() {
                         // redirect to /workers/?search=SearchInputT and keep the current sorting
                         var search = document.getElementById("SearchInputT").value;
@@ -46,23 +58,34 @@
                         }
                         window.location.href = url;
                     }
+
+                    function enterkey() {
+                        if(event.key === 'Enter') {
+                            myFunction();   
+                        }
+                    }
                 </script>
 
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="/workers">{{nonetext}}</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/workers/?sort=name">{{sortnametext}}</a>
-                  <a class="dropdown-item" href="/workers/?sort=email">{{sortemailtext}}</a>
-                  <a class="dropdown-item" href="/workers/?sort=tasks">{{sorttaskstext}}</a>
+                    <a class="dropdown-item" href="/workers">{{nonetext}}</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/workers/?sort=name">{{sortnametext}}</a>
+                    <a class="dropdown-item" href="/workers/?sort=email">{{sortemailtext}}</a>
+                    <a class="dropdown-item" href="/workers/?sort=tasks">{{sorttaskstext}}</a>
                 </div>
-              </div>
-              <br><br>
-              <div>
-                <input class="input" type="text" id="SearchInputT" placeholder="{{search}}" title="Type in a name">
-                <input type="button" class="btn btn-success" onclick="myFunction()" value="{{search}}">
             </div>
-              <br><h5 style="margin-top:15px">{{currentlysorting}}
-                
+            <br><br>
+            <div class="input-group mb-4 makesmallwhenscreengoesbrrr" style="width:50%; transform: translateX(50%);">  
+                <input id="SearchInputT" onkeydown="enterkey()" type="search" placeholder="{{search}}" aria-describedby="button-addon5" class="form-control" style="display:table">  
+                <div class="input-group-append">  
+                  <button onclick="myFunction()" onkeydown="enterkey()" id="button-addon5" type="submit" class="btn btn-primary"> <i class="fa fa-search"> </i> </button>  
+                </div>  
+              </div>    
+
+
+            <br>
+            <h5 style="margin-top:15px">{{currentlysorting}}
+
                 {% if sorttype == "tasks" %}
                 {{sorttaskstext}}
                 {% elif sorttype == "name" %}
@@ -72,8 +95,8 @@
                 {% else %}
                 {{nonetext}}
                 {% endif %}
-            
-            
+
+
             </h5>
             <thead>
                 <td>{{name}}</td>
@@ -91,8 +114,8 @@
                         <td>
                             <form method="POST">
                                 <a href="/worker/{{worker.id}}"><i class="far fa-eye"></i></a>
-    
-    
+
+
                                 <input type="hidden" name="typeform" value="delete" />
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                                 <input type="hidden" name="worker_id" value="{{ worker.registrationid }}" />
