@@ -221,7 +221,7 @@ def workers():
                         flash(getword("workeralreadyadded", cookie), category="error")
         elif request.form.get("typeform") == "delete":
             id = request.form.get('worker_id')
-            worker = Worker.query.filter_by(registrationid=id).first()
+            worker = Worker.query.filter_by(id=id).first()
             if worker.boss_id is not None and worker.boss_id != current_user.id:
                 flash(getword("workernotfound", cookie), category="error")
 
@@ -232,9 +232,12 @@ def workers():
                     flash(getword("workeralreadyremoved", cookie), category="error")
                 else:
                     try:
+                        if worker.id.startswith("TEST") or worker.id.startswith("TEST-"):
+                            flash("Работника беше премахнат успешно, но тъй като е тестов акаунт, той остава активен!", category="success")
+                            return redirect(url_for('views.workers'))
                         worker.boss_id = None
                         for task in Task.query.filter_by(worker_id=worker.id).all():
-                            task.archive = True
+                            db.session.delete(task)
                         db.session.commit()
                         flash(getword("workerremoved", cookie), category="success")
                     except Exception as e:
@@ -286,9 +289,6 @@ def workers():
     for worker in Worker.query.filter_by(boss_id=current_user.id).all():
         workerslist.append({"id": worker.id, "name": worker.first_name, "email": worker.email, "tasks": worker.tasks})
 
-    print(workerslist)
-
-    print("_" * 50)
 
     sort = request.args.get('sort')
     search = request.args.get('search')

@@ -118,7 +118,7 @@
 
                                 <input type="hidden" name="typeform" value="delete" />
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                                <input type="hidden" name="worker_id" value="{{ worker.registrationid }}" />
+                                <input type="hidden" name="worker_id" value="{{ worker.id }}" />
                                 <a href="#" onclick="this.parentNode.submit()"><i class="far fa-trash-alt"></i></a>
                             </form>
                         </td>
