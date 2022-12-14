@@ -1,14 +1,16 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 
 <style>
-
     @media screen and (max-width: 575px) {
         .makesmallwhenscreengoesbrrr {
             width: 100% !important;
             transform: translateX(0%) !important;
         }
     }
-    
+
+    .btn1 {
+        border-radius: 20px;
+    }
 </style>
 <br><br>
 <link rel="stylesheet" href="/static/admin.css">
@@ -21,17 +23,19 @@
         <div class="heading text-truncate" style="width:100%; overflow:auto">
             <h2>{{adminpaneltext}}</h2>&nbsp;
             <div class="justify-content-right">
-                <a href="/add/employee" class="btn1">{{addemployeebutton}}</a>
-                <a href="/employ/sign-up" class="btn1">{{registeryouremployee}}</a>
-                <a style="background-color:lightgreen; border-style:solid;border-width:2px; color:black;"
+                <a href="/add/employee" style="border-style:solid;border-width:2px; color:white; border-color:black;"
+                    class="btn1">{{addemployeebutton}}</a>
+                <a href="/employ/sign-up" style="border-style:solid;border-width:2px; color:white; border-color:black;"
+                    class="btn1">{{registeryouremployee}}</a>
+                <a style="background-color:#32bea6; border-style:solid;border-width:2px; color:white; border-color:black;"
                     href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
         <br>
         <table class="appointments text-truncate">
             <div class="btn-group">
-                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{sorttext}}
                 </button>
                 <script>
@@ -60,8 +64,8 @@
                     }
 
                     function enterkey() {
-                        if(event.key === 'Enter') {
-                            myFunction();   
+                        if (event.key === 'Enter') {
+                            myFunction();
                         }
                     }
                 </script>
@@ -75,12 +79,14 @@
                 </div>
             </div>
             <br><br>
-            <div class="input-group mb-4 makesmallwhenscreengoesbrrr" style="width:50%; transform: translateX(50%);">  
-                <input id="SearchInputT" onkeydown="enterkey()" type="search" placeholder="{{search}}" aria-describedby="button-addon5" class="form-control" style="display:table">  
-                <div class="input-group-append">  
-                  <button onclick="myFunction()" onkeydown="enterkey()" id="button-addon5" type="submit" class="btn btn-primary"> <i class="fa fa-search"> </i> </button>  
-                </div>  
-              </div>    
+            <div class="input-group mb-4 makesmallwhenscreengoesbrrr" style="width:50%; transform: translateX(50%);">
+                <input id="SearchInputT" onkeydown="enterkey()" type="search" placeholder="{{search}}"
+                    aria-describedby="button-addon5" class="form-control" style="display:table">
+                <div class="input-group-append">
+                    <button onclick="myFunction()" onkeydown="enterkey()" id="button-addon5" type="submit"
+                        class="btn btn-primary"> <i class="fa fa-search"> </i> </button>
+                </div>
+            </div>
 
 
             <br>
