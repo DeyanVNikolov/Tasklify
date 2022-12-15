@@ -1,17 +1,49 @@
 {% extends "base.html" %} {% block title %} {{ profiletext }} {% endblock %} {% block content
 %}
+<link rel="stylesheet" href="/static/profile.css">
 <br><br><br>
 <div class="container-fluid text-center">
-  <h1>{{ profiletext }}</h1>
   <br><br><br><br>
-  <h1>{{emailtext}}:<div style="overflow:auto"> {{ user.email }}</div></h1>
-  <h1>{{nametext}}: <div style="overflow:auto"> {{ user.first_name }}</div></h1>
-  <br><br><br><br>
-    <a href="/files/{{ user.id }}"><button type="button" class="btn btn-success">{{ myfiles }}</button></a>
-    <br><br><br>
-  <a href="/auth/change-password" class="btn btn-success"> {{ changepassword }}</a>
-  <a href="/auth/delete-account" class="btn btn-danger">{{ deleteaccount }}</a>
-  <br><br><br><br>
+
+  <center>
+    <div class="containerd container text-center">
+      <h1 class="form-title">{{ profiletext }}</h1>
+      <form action="#">
+        <div class="main-user-info">
+
+          <div class="user-input-box">
+            <span class="gender-title">{{nametext}}</span>
+            <label><strong>{{ user.first_name }}</strong></label>
+          </div>
+
+          <br>
+
+          <div class="user-input-box">
+            <span class="gender-title">{{emailtext}}</span>
+            <label><strong>{{ user.email }}</strong></label>
+          </div>
+
+
+
+        </div>
+        <div class="gender-details-box">
+          <hr style="color:white">
+          <div class="gender-category">
+            <a href="/files/{{ user.id }}"><button type="button">{{ myfiles }}</button></a>
+
+            <a href="/auth/change-password"><button type="button">{{ changepassword }}</button></a>
+
+            <br>
+            <br>
+
+
+            <a href="/auth/delete-account"><button type="button" class="buttonred">{{ deleteaccount }}</button></a>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </center>
 
   <br><br><br><br>
 
