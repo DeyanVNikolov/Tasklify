@@ -40,6 +40,7 @@ def create_app():
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
     app.config['UPLOAD_FOLDER'] = 'static/uploads'
+    app.config['GOOGLE_CLIENT_ID'] = "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
 
     global CAPTCHA1
     CAPTCHA1 = CAPTCHA(config=app.config)
@@ -65,12 +66,15 @@ def create_app():
     from .addtabs import addtabs
     from .fileshandler import fileshandler
     from .activationhandler import activationhandler
+    from .externalcallback import externalcallback
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(addtabs, url_prefix='/')
     app.register_blueprint(fileshandler, url_prefix='/')
     app.register_blueprint(activationhandler, url_prefix='/')
+    app.register_blueprint(externalcallback, url_prefix='/')
+    csrfg.exempt(externalcallback)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 

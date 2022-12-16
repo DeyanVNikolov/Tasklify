@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
 <link rel="stylesheet" href="/static/signup.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
   function showModal() {
     const inpObj = document.getElementById("email");
@@ -62,7 +63,21 @@ content %}
     <button type="submit" class="btn btn-success" onclick="showModal()">{{submit}}</button>
     </div>
   </form>
+  <br>
+  <hr style="color:white">
+  <h4 style="color:white">{{signupwith}}</h4>
+  <center>
+    <h1>  <div id="g_id_onload" data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
+      data-context="signin" data-ux_mode="redirect" data-login_uri="https://127.0.0.1:5000/googlecallback"
+      data-auto_prompt="false">
+    </div>
+  
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"
+      data-size="large" data-logo_alignment="center">
+    </div></h1>
+  </center>
 </div>
+
 <br><br><br>
 
 

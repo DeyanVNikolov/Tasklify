@@ -31,7 +31,7 @@ def redirect_on_status_denied1(error):
 
 
 def checkmaintenance():
-    pass  # try:  #     r = requests.get("https://api.npoint.io/fdd18b346a9f50481a65")  #     if r.json()["status"] == "maintain":  #         print("maintenance 1")  #         raise StatusDenied()  #     else:  #         pass  # except Exception as e:  #     print(e)  #     raise StatusDenied()
+    pass
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -50,14 +50,16 @@ def login():
         # Ако не е логнат, показваме формата за логване
         if request.method == 'POST':
             # Вземаме данните от формата
-            accounttype = request.form.get('accounttype')
             email = request.form.get('email')
             password = request.form.get('password')
 
-            if accounttype == 'worker':
-                user = Worker.query.filter_by(email=email).first()
-            else:
+            # search for email in database
+            user = Worker.query.filter_by(email=email).first()
+            if not user:
                 user = Boss.query.filter_by(email=email).first()
+            if not user:
+                flash(getword("emailnotfound", cookie), category='error')
+                return redirect(url_for('auth.login'))
             # Проверяваме дали потребителя съществува
             if user:
                 # Проверяваме дали профила е ДЕМО
@@ -67,7 +69,7 @@ def login():
                         # Ако е вярна, логваме потребителя
                         flash(getword("loggedinsuccess", cookie), category='success')
                         login_user(user, remember=True)
-                        if accounttype == 'worker':
+                        if user.accounttype == 'worker':
                             return redirect(url_for('views.boss'))
                         else:
                             return redirect(url_for('views.home'))
@@ -90,7 +92,7 @@ def login():
                            passwordtext=getword("password", cookie), logintext=getword("login", cookie),
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie))
+                           worker=getword("worker", cookie), boss=getword("boss", cookie), loginwith=getword("loginwith", cookie))
 
 
 @auth.route('/logout')
@@ -208,7 +210,7 @@ def sign_up():
                            alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
                            loginhere=getword("loginhere", cookie),
                            databeingproccessed=getword("databeingproccessed", cookie), signupas=getword("signupas", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie))
+                           worker=getword("worker", cookie), boss=getword("boss", cookie), signupwith=getword("signupwith", cookie))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])

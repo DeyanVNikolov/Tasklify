@@ -1397,6 +1397,22 @@ words = {
         "fr": "Chercher",
         "ru": "Поиск",
         "en": "Search"
+    },
+    "loginwith": {
+        "en": "LOGIN WITH",
+        "bg": "ВХОД С",
+        "es": "INICIAR SESIÓN CON",
+        "de": "ANMELDEN MIT",
+        "fr": "SE CONNECTER AVEC",
+        "ru": "ВОЙТИ С"
+    },
+    "signupwith": {
+        "en": "SIGN UP WITH",
+        "bg": "РЕГИСТРАЦИЯ С",
+        "es": "REGÍSTRATE CON",
+        "de": "REGISTRIEREN MIT",
+        "fr": "S'INSCRIRE AVEC",
+        "ru": "ЗАРЕГИСТРИРОВАТЬСЯ С"
     }
 
 
