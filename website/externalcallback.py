@@ -179,6 +179,16 @@ def googlesignup():
     if not name:
         abort(403)
 
+    # check email is not already in use
+    user = Worker.query.filter_by(email=email).first()
+    if user:
+        flash(getword("emailalreadyexists", cookie), category='error')
+        return redirect(url_for('auth.sign_up'))
+    user = Boss.query.filter_by(email=email).first()
+    if user:
+        flash(getword("emailalreadyexists", cookie), category='error')
+        return redirect(url_for('auth.sign_up'))
+
 
     return render_template("googlesignup.html", user=current_user, worker=getword("worker", cookie), boss=getword("boss", cookie), emailrequest=email, namerequest=name, enterpassword=getword("enterpassword", cookie))
 
