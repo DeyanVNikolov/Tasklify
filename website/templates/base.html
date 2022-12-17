@@ -23,6 +23,40 @@ Created under regulation of ITPG-Varna.
 
 
 <head>
+
+    <meta name="title" content="Tasklify">
+    <meta name="description"
+        content="Tasklify is a company task allocation tool! It's a very good tool for your company! If you are interested, sign-up today!">
+    <meta name="keywords"
+        content="tasks, tasklify, company, hr, human resources, tool, best tool, tasklify.me, itpg-varna, varna, pgkmks, pgkmks-varna, PGKMKS, ITPG">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Deyan Nikolov & Martin Anastasov">
+    <meta name="revisit-after" content="1 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+
+    <meta name="title" content="Tasklify">
+    <meta name="description"
+        content="Tasklify is a company task allocation tool! It's a very good tool for your company! If you are interested, sign-up today!">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tasklify.me/">
+    <meta property="og:title" content="Tasklify">
+    <meta property="og:description"
+        content="Tasklify is a company task allocation tool! It's a very good tool for your company! If you are interested, sign-up today!">
+    <meta property="og:image" content="https://cdn.tasklify.me/content-delivery-network/secure/image/cover-big.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tasklify.me/">
+    <meta property="twitter:title" content="Tasklify">
+    <meta property="twitter:description"
+        content="Tasklify is a company task allocation tool! It's a very good tool for your company! If you are interested, sign-up today!">
+    <meta property="twitter:image" content="https://cdn.tasklify.me/content-delivery-network/secure/image/cover-big.png">
+
+
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -107,6 +141,7 @@ Created under regulation of ITPG-Varna.
             max-width: 100%;
             max-height: 100%;
         }
+
         i {
             font-size: 1.4rem;
         }
@@ -134,7 +169,7 @@ Created under regulation of ITPG-Varna.
                 {% endif %}
                 {% if user.accounttype == "worker" %}
                 <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> <span
-                    style="font-size:1.2em" class="badge badge-light">{{ undonetasks() }}</span></a>
+                        style="font-size:1.2em" class="badge badge-light">{{ undonetasks() }}</span></a>
 
                 {% endif %}
                 {% if user.accounttype == "boss" %}
