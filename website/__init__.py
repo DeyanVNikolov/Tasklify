@@ -154,15 +154,20 @@ def create_app():
 
     return app
 
+global first_time
+first_time = False
 
 def create_database(app):
-    print("Connecting to Database")
-    try: 
-        db.create_all(app=app)
-    except Exception as e:
-        print(e)
-        exit()
-    print("Connection Success")
+    global first_time
+    if not first_time:
+        first_time = True
+        print("Connecting to Database")
+        try:
+            db.create_all(app=app)
+        except Exception as e:
+            print(e)
+            exit()
+        print("Connection Success")
     
 
 def undonetasks(id=None):
