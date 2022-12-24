@@ -22,9 +22,9 @@ class Task(db.Model):
     datedue = db.Column(db.DateTime, default=datetime.datetime.now())
     notified = db.Column(db.Boolean, default=False)
     archive = db.Column(db.Boolean, default=False)
+
     def __repr__(self):
         return '<Task %r>' % self.id
-
 
 
 class Worker(db.Model, UserMixin):
@@ -38,6 +38,10 @@ class Worker(db.Model, UserMixin):
     boss_id = db.Column(db.String(150), db.ForeignKey('boss.id'))
     tasks = db.relationship('Task')
     plan = db.Column(db.String(150))
+    token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password"}
 
 
 class Boss(db.Model, UserMixin):
@@ -50,3 +54,28 @@ class Boss(db.Model, UserMixin):
     workers = db.relationship('Worker')
     tasks = db.relationship('Task')
     plan = db.Column(db.String(150))
+    token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password"}
+
+
+
+class Message(db.Model):
+    idmessage = db.Column(db.Integer, primary_key=True)
+    chat = db.Column(db.Integer, db.ForeignKey('chat.id'))
+    id_sender = db.Column(db.String(150))
+    id_receiver = db.Column(db.String(150))
+    message = db.Column(db.String(300))
+    date = db.Column(db.DateTime, default=datetime.datetime.now())
+    readdate = db.Column(db.DateTime)
+    deleted = db.Column(db.Boolean, default=False)
+
+class Chat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_creator = db.Column(db.String(150))
+    id_participant = db.Column(db.String(150))
+    messages = db.relationship('Message')
+
+
+
