@@ -23,6 +23,8 @@ from .translator import getword
 from .addtabs import addtabs
 from .fileshandler import fileshandler
 
+from .translator import getword
+
 views = Blueprint('views', __name__)
 
 homepage = "views.home"
@@ -69,7 +71,8 @@ def home():
                            boss=getword("boss", cookie), worker=getword("worker", cookie),
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
-                           logout=getword("logout", cookie), profile=getword("profile", cookie), welcome=getword("welcome", cookie))
+                           logout=getword("logout", cookie), profile=getword("profile", cookie),
+                           welcome=getword("welcome", cookie))
 
 
 @views.route("/home", methods=['GET'])
@@ -129,6 +132,7 @@ def boss():
                            id=getword("idemail", cookie), idd=current_user.registrationid, link=link,
                            copy=getword("copy", cookie))
 
+
 @views.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
@@ -167,11 +171,8 @@ def tasks():
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
-
     taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
     taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
-
-
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -183,7 +184,7 @@ def tasks():
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
-                           due=getword("due", cookie))
+                           due=getword("due", cookie), titletext=getword("titletext", cookie))
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
@@ -233,7 +234,8 @@ def workers():
                 else:
                     try:
                         if worker.id.startswith("TEST") or worker.id.startswith("TEST-"):
-                            flash("Работника беше премахнат успешно, но тъй като е тестов акаунт, той остава активен!", category="success")
+                            flash("Работника беше премахнат успешно, но тъй като е тестов акаунт, той остава активен!",
+                                  category="success")
                             return redirect(url_for('views.workers'))
                         worker.boss_id = None
                         for task in Task.query.filter_by(worker_id=worker.id).all():
@@ -270,7 +272,6 @@ def workers():
             workerid = request.form.get('worker_id')
             return redirect(url_for(oneworkerpage, id=workerid))
 
-
     for task in Task.query.filter_by(boss_id=current_user.id).all():
         datedue = task.datedue
         dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
@@ -289,10 +290,8 @@ def workers():
     for worker in Worker.query.filter_by(boss_id=current_user.id).all():
         workerslist.append({"id": worker.id, "name": worker.first_name, "email": worker.email, "tasks": worker.tasks})
 
-
     sort = request.args.get('sort')
     search = request.args.get('search')
-
 
     if sort is not None:
         if sort in allowed_sorts:
@@ -308,11 +307,8 @@ def workers():
                 workerslist = sorted(workerslist, key=lambda k: undonetasksl[k['id']], reverse=True)
 
     if search is not None:
-        workerslist = [worker for worker in workerslist if search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
-
-
-
-
+        workerslist = [worker for worker in workerslist if
+                       search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
 
     return render_template("workers.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -329,11 +325,13 @@ def workers():
                            myfiles=getword("empmyfiles", cookie), adminpaneltext=getword("adminpaneltext", cookie),
                            addemployeebutton=getword("addemployeebutton", cookie),
                            registeryouremployee=getword("registeryouremployee", cookie),
-                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie), workerslist=workerslist,
-                           sorttype=sort, sorttext=getword("sorttext", cookie), sortnametext=getword("sortnametext", cookie),
-                           sortemailtext=getword("sortemailtext", cookie), sorttaskstext=getword("sorttaskstext", cookie),
+                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie),
+                           workerslist=workerslist, sorttype=sort, sorttext=getword("sorttext", cookie),
+                           sortnametext=getword("sortnametext", cookie), sortemailtext=getword("sortemailtext", cookie),
+                           sorttaskstext=getword("sorttaskstext", cookie),
                            currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
-                           taskstext=getword("tasksnav", cookie), search=getword("search", cookie), areyousure=getword("areyousure", cookie))
+                           taskstext=getword("tasksnav", cookie), search=getword("search", cookie),
+                           areyousure=getword("areyousure", cookie))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
@@ -430,9 +428,8 @@ def worker(id):
                            done=getword("done", cookie), tasktextplural=getword("tasktextplural", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
-                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie),
-                           fullydelete=getword("fullydelete", cookie))
-
+                           deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie),
+                           unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie))
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
@@ -522,7 +519,7 @@ def task(id):
                                    delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                                    started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                    datedue=dateformat, due=getword("due", cookie),
-                                   fileuploader=getword("fileuploader", cookie))
+                                   fileuploader=getword("fileuploader", cookie), titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -580,7 +577,8 @@ def task(id):
                                        delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
-                                       fileuploader=getword("fileuploader", cookie))
+                                       fileuploader=getword("fileuploader", cookie),
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
             else:
                 flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -646,7 +644,8 @@ def task(id):
                                        delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
-                                       fileuploader=getword("fileuploader", cookie))
+                                       fileuploader=getword("fileuploader", cookie),
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
 
             else:
                 flash(getword("invalidtype", cookie), category="error")
@@ -672,7 +671,8 @@ def task(id):
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                            started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
-                           datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie))
+                           datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
+                           titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -795,4 +795,3 @@ def privacy():
                            privacypolicytext6=getword("privacypolicytext6", cookie),
                            privacypolicytext7=getword("privacypolicytext7", cookie),
                            privacypolicytext8=getword("privacypolicytext8", cookie))
-

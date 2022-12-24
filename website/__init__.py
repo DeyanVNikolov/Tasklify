@@ -68,6 +68,7 @@ def create_app():
     from .activationhandler import activationhandler
     from .externalcallback import externalcallback
     from .chathandler import chathandler
+    from .api.apihandler import api
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
@@ -76,6 +77,7 @@ def create_app():
     app.register_blueprint(activationhandler, url_prefix='/')
     app.register_blueprint(externalcallback, url_prefix='/')
     app.register_blueprint(chathandler, url_prefix='/')
+    app.register_blueprint(api, url_prefix='/')
     csrfg.exempt(externalcallback)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
