@@ -145,6 +145,12 @@ Created under regulation of ITPG-Varna.
         i {
             font-size: 1.4rem;
         }
+        .nav-item {
+            border-style: solid;
+            margin-right: 10px;
+            border-radius: 25px;
+            font-size: 18px
+     }
     </style>
 
 
@@ -159,21 +165,20 @@ Created under regulation of ITPG-Varna.
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
-                <a class="nav-item nav-link" id="profile" href="/profile"><i class="fa-sharp fa-solid fa-user"></i></a>
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i> {{homenav}}</a>
+                <a class="nav-item nav-link" id="profile" href="/profile"><i class="fa-sharp fa-solid fa-user"></i> {{profilenav}}</a>
                 {% else %}
-                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i></a>
+                <a class="nav-item nav-link" id="home" href="/"><i class="fa-solid fa-house"></i> {{homenav}}</a>
                 <a class="nav-item nav-link" id="login" href="/auth/login"><i
-                        class="fa-solid fa-right-to-bracket"></i></a>
-                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up"><i class="fa-solid fa-user-plus"></i></a>
+                        class="fa-solid fa-right-to-bracket"></i> {{loginnav}}</a>
+                <a class="nav-item nav-link" id="signUp" href="/auth/sign-up"><i class="fa-solid fa-user-plus"></i> {{signupnav}}</a>
                 {% endif %}
                 {% if user.accounttype == "worker" %}
-                <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> <span
-                        style="font-size:1.2em" class="badge badge-light">{{ undonetasks() }}</span></a>
-
+                <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i> {{tasksnav}} <span
+                    style="font-size:1.2em" class="badge badge-light">{{ undonetasks() }}</span> </a>
                 {% endif %}
                 {% if user.accounttype == "boss" %}
-                <a class="nav-item nav-link" id="workers" href="/workers"><i class="fa-sharp fa-solid fa-users"></i></a>
+                <a class="nav-item nav-link" id="workers" href="/workers"><i class="fa-sharp fa-solid fa-users"></i> {{workersnav}}</a>
                 {% endif %}
             </div>
         </div>
