@@ -1413,7 +1413,15 @@ words = {
         "de": "REGISTRIEREN MIT",
         "fr": "S'INSCRIRE AVEC",
         "ru": "ЗАРЕГИСТРИРОВАТЬСЯ С"
-    }
+    },
+    "desctext": {
+        "bg": "Описание",
+        "es": "Descripción",
+        "de": "Beschreibung",
+        "fr": "La description",
+        "ru": "Описание",
+        "en": "Description"
+    },
 
 
 }
