@@ -26,6 +26,7 @@ global csrfg
 @chathandler.route('/messageget/<id>/<otherid>', methods=['GET', 'POST'])
 @login_required
 def messageget(id, otherid):
+    abort(403)
     id = current_user.id
     if not current_user.is_authenticated:
         return "not authenticated", 401
@@ -78,6 +79,7 @@ def messageget(id, otherid):
 
 @chathandler.route('/chat', methods=['GET', 'POST'])
 def chat():
+    abort(403)
     id = current_user.id
 
     chats=[]
@@ -94,7 +96,7 @@ def chat():
 @chathandler.route('/chat/<workerid>', methods=['GET', 'POST'])
 @login_required
 def chatwithworker(workerid):
-
+    abort(403)
     chat = Chat.query.filter_by(id=workerid).first()
 
     if chat is None:
@@ -135,6 +137,7 @@ def chatwithworker(workerid):
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])
 @login_required
 def chatapi(id, otherid):
+    abort(403)
 
     if not current_user.is_authenticated:
         return "not authenticated", 401
