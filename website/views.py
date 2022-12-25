@@ -794,4 +794,7 @@ def privacy():
                            privacypolicytext5=getword("privacypolicytext5", cookie),
                            privacypolicytext6=getword("privacypolicytext6", cookie),
                            privacypolicytext7=getword("privacypolicytext7", cookie),
-                           privacypolicytext8=getword("privacypolicytext8", cookie))
+                           privacypolicytext8=getword("privacypolicytext8", cookie),
+                           privacypolicytext9=getword("privacypolicytext9", cookie),
+                           privacypolicytext10=getword("privacypolicytext10", cookie),
+                           privacypolicytext11=getword("privacypolicytext11", cookie))

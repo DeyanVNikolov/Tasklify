@@ -1279,12 +1279,74 @@ words = {
         "en": "If you have decided to use our website and continue to do so, this means that you have accepted our actions and our Privacy Policy for your personal data and personal information. Do not hesitate to contact us if you have any questions about the processing of your personal data and personal information"
     },
     "privacypolicytext8": {
-        "bg": "Декларацията е валидна от 27 Ноември 2022 година",
-        "es": "La declaración es válida desde el 27 de noviembre de 2022",
-        "de": "Die Erklärung ist gültig ab dem 27. November 2022",
-        "fr": "La déclaration est valable à partir du 27 novembre 2022",
-        "ru": "Заявление действительно с 27 ноября 2022 года",
-        "en": "The statement is valid from November 27, 2022"
+        "bg": "Декларацията е актуализирана на 25 декември 2022 г.",
+        "es": "La declaración se actualizó el 25 de diciembre de 2022",
+        "de": "Die Erklärung wurde am 25. Dezember 2022 aktualisiert",
+        "fr": "La déclaration a été mise à jour le 25 décembre 2022",
+        "ru": "Декларация обновлена 25 декабря 2022 г.",
+        "en": "The statement was updated on December 25, 2022"
+    },
+    "privacypolicytext9": {
+        "bg": "използва услугите на Google OAuth2 за да ви предостави възможност да влезете в профила си чрез вашия Google профил."
+              " Ние съхраняваме вашите данни по същия начин както и с обикновената регистрация. Безопасността на вашите данни,"
+              " идващи от Google, се контролира от самите Google. Ние не имаме достъп до вашите данни, които са в Google."
+              " Можете да прочетете повече за това как Google съхранява вашите данни на следната страница: https://policies.google.com/privacy",
+        "es": "utiliza los servicios de Google OAuth2 para proporcionarle la posibilidad de iniciar sesión en su cuenta a través de su perfil de Google."
+              " Guardamos sus datos de la misma manera que con el registro normal. La seguridad de sus datos, provenientes de Google,"
+              " es controlada por Google. No tenemos acceso a sus datos que están en Google."
+              " Puede leer más sobre cómo Google almacena sus datos en la siguiente página: https://policies.google.com/privacy",
+        "de": "nutzt die Dienste von Google OAuth2, um Ihnen die Möglichkeit zu geben, sich über Ihr Google-Profil in Ihr Konto einzuloggen."
+              " Wir speichern Ihre Daten auf die gleiche Weise wie bei der normalen Registrierung. Die Sicherheit Ihrer Daten, die von Google stammen, wird von Google selbst kontrolliert. Wir haben keinen Zugriff auf Ihre Daten, die in Google sind."
+              " Sie können mehr darüber lesen, wie Google Ihre Daten speichert, auf der folgenden Seite: https://policies.google.com/privacy",
+        "fr": "utilise les services de Google OAuth2 pour vous permettre de vous connecter à votre compte via votre profil Google."
+              " Nous stockons vos données de la même manière que pour l'enregistrement normal. La sécurité de vos données provenant de Google est contrôlée par Google. Nous n'avons pas accès à vos données qui sont dans Google."
+              " Vous pouvez en savoir plus sur la façon dont Google stocke vos données sur la page suivante: https://policies.google.com/privacy",
+        "ru": "использует услуги Google OAuth2, чтобы предоставить вам возможность войти в свою учетную запись через свой профиль Google."
+              " Мы храним ваши данные так же, как и при обычной регистрации. Безопасность ваших данных, поступающих из Google, контролируется самим Google. У нас нет доступа к вашим данным, которые находятся в Google."
+              " Вы можете узнать больше о том, как Google хранит ваши данные на следующей странице: https://policies.google.com/privacy",
+        "en": "uses the services of Google OAuth2 to provide you with the opportunity to log in to your account via your Google profile."
+              " We store your data in the same way as with normal registration. The security of your data coming from Google is controlled by Google. We do not have access to your data that are in Google."
+              " You can read more about how Google stores your data on the following page: https://policies.google.com/privacy"
+    },
+    "privacypolicytext10": {
+        "bg": " използва cookies (бисквитки), за да ви предостави използването на сайта. Без тях, сайтът няма да работи правилно."
+               " Ако вашите бисквитки са изключени, няма да можете да използвате сайта. Информацията, събирана от бисквитките съдържа вашият уникален идентификатор, вашият предпочитан език и други данни, които са необходими за сайта да работи."
+               " Можете да прочетете повече за това как работят бисквитките на следната страница: https://www.aboutcookies.org/",
+        "es": " utiliza cookies para que pueda utilizar el sitio web. Sin ellas, el sitio web no funcionará correctamente."
+                " Si tiene las cookies deshabilitadas, no podrá utilizar el sitio web. La información recopilada por las cookies contiene su identificador único, su idioma preferido y otros datos necesarios para que el sitio web funcione."
+                " Puede leer más sobre cómo funcionan las cookies en la siguiente página: https://www.aboutcookies.org/",
+        "de": " verwendet Cookies, damit Sie die Website nutzen können. Ohne sie funktioniert die Website nicht richtig."
+                " Wenn Sie die Cookies deaktiviert haben, können Sie die Website nicht nutzen. Die von den Cookies gesammelten Informationen enthalten Ihre eindeutige Kennung, Ihre bevorzugte Sprache und andere Daten, die für die ordnungsgemäße Funktion der Website erforderlich sind."
+                " Sie können mehr darüber lesen, wie Cookies funktionieren, auf der folgenden Seite: https://www.aboutcookies.org/",
+        "fr": " utilise des cookies pour vous permettre d'utiliser le site Web. Sans eux, le site Web ne fonctionnera pas correctement."
+                " Si vous avez désactivé les cookies, vous ne pourrez pas utiliser le site Web. Les informations recueillies par les cookies contiennent votre identifiant unique, votre langue préférée et d'autres données nécessaires au bon fonctionnement du site Web."
+                " Vous pouvez en savoir plus sur le fonctionnement des cookies sur la page suivante: https://www.aboutcookies.org/",
+        "ru": " использует cookies (куки), чтобы вы могли использовать веб-сайт. Без них веб-сайт не будет работать правильно."
+                " Если ваши куки отключены, вы не сможете использовать веб-сайт. Информация, собираемая куками, содержит ваш уникальный идентификатор, ваш предпочитаемый язык и другие данные, необходимые для работы веб-сайта."
+                " Вы можете узнать больше о том, как работают куки на следующей странице: https://www.aboutcookies.org/",
+        "en": " uses cookies to allow you to use the website. Without them, the website will not work correctly."
+                " If you have disabled cookies, you will not be able to use the website. The information collected by the cookies contains your unique identifier, your preferred language and other data necessary for the website to work."
+                " You can read more about how cookies work on the following page: https://www.aboutcookies.org/",
+    },
+    "privacypolicytext11": {
+        "bg": " съхранява вашата чувствителна информация, като например вашите пароли, в защитени бази данни. Никой няма достъп до вашата чувствителна информация, освен администраторите на сайта."
+              " Тя се съхранява под формата на хеширани пароли, които не могат да бъдат декодирани. Всички пароли са хеширани с SHA-256 алгоритъм."
+              " Това осигурява, че вашата парола ще бъде много трудна за прочитане, дори ако някой се опита да я декодира.",
+        "es": " guarda su información sensible, como sus contraseñas, en bases de datos protegidas. Nadie tiene acceso a su información sensible, excepto los administradores del sitio."
+                " Se almacena en forma de contraseñas cifradas que no se pueden descifrar. Todas las contraseñas están saladas y cifradas con el algoritmo SHA-256."
+                " Esto garantiza que su contraseña será muy difícil de leer, incluso si alguien intenta descifrarla.",
+        "de": " speichert Ihre sensible Information, wie z. B. Ihr Passwort, in geschützten Datenbanken. Niemand hat Zugriff auf Ihre sensible Information, außer den Administratoren der Website."
+                " Es wird in Form von verschlüsselten Passwörtern gespeichert, die nicht entschlüsselt werden können. Alle Passwörter sind gesalzen und verschlüsselt mit dem SHA-256-Algorithmus."
+                " Dies garantiert, dass Ihr Passwort sehr schwer zu lesen ist, selbst wenn jemand versucht, es zu entschlüsseln.",
+        "fr": " stocke vos informations sensibles, telles que vos mots de passe, dans des bases de données protégées. Personne n'a accès à vos informations sensibles, à l'exception des administrateurs du site."
+                " Il est stocké sous forme de mots de passe chiffrés qui ne peuvent pas être déchiffrés. Tous les mots de passe sont salés et chiffrés avec l'algorithme SHA-256."
+                " Cela garantit que votre mot de passe sera très difficile à lire, même si quelqu'un essaie de le déchiffrer.",
+        "еn": " stores your sensitive information, such as your passwords, in protected databases. No one has access to your sensitive information, except the site administrators."
+                " It is stored in the form of encrypted passwords that cannot be decrypted. All passwords are encrypted with the SHA-256 algorithm."
+                " This ensures that your password will be very difficult to read, even if someone tries to decrypt it.",
+        "ru": " хранит вашу чувствительную информацию, такую как ваши пароли, в защищенных базах данных. Никто не имеет доступа к вашей чувствительной информации, кроме администраторов сайта."
+                " Он хранится в виде зашифрованных паролей, которые не могут быть расшифрованы. Все пароли зашифрованы алгоритмом SHA-256."
+                " Это гарантирует, что ваш пароль будет очень трудно прочитать, даже если кто-то попытается его расшифровать.",
     },
     "activatetext": {
         "bg": "Активиране на служител",
@@ -1422,7 +1484,6 @@ words = {
         "ru": "Описание",
         "en": "Description"
     },
-
 
 }
 
