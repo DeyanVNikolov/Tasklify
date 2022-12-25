@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_limiter import Limiter
-from flask import jsonify
+from flask import jsonify, request
 from flask_limiter.util import get_remote_address
 from website.translator import getword
 from dotenv import load_dotenv
@@ -77,8 +77,9 @@ def create_app():
     app.register_blueprint(activationhandler, url_prefix='/')
     app.register_blueprint(externalcallback, url_prefix='/')
     app.register_blueprint(chathandler, url_prefix='/')
-    app.register_blueprint(api, url_prefix='/')
+    app.register_blueprint(api, url_prefix='/api')
     csrfg.exempt(externalcallback)
+    csrfg.exempt(api)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 
@@ -141,7 +142,10 @@ def create_app():
 
     @app.errorhandler(404)
     def page_not_found(e):
-        return render_template('notfound.html'), 404
+        if request.path.startswith('/api'):
+            return jsonify({"status": "error", "error": "404 Not Found", "message": "Did you send all the required arguments?"}), 404
+        else:
+            return render_template('notfound.html'), 404
 
     @app.errorhandler(429)
     def too_many_reqeusts(e):

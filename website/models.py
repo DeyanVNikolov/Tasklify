@@ -26,6 +26,9 @@ class Task(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.id
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "actual_id" and c.name != "ordernumber" and c.name != "notified"}
+
 
 class Worker(db.Model, UserMixin):
     # string with utf-8 encoding
@@ -40,8 +43,8 @@ class Worker(db.Model, UserMixin):
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password"}
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}
 
 
 class Boss(db.Model, UserMixin):
@@ -56,8 +59,8 @@ class Boss(db.Model, UserMixin):
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password"}
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}
 
 
 

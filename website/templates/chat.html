@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block title %}Change Password{% endblock %} {% block content
+%}
+<head>
+    <title>Chat</title>
+</head>
+  
+<body>
+<div class="container" id="chats">
+    {% for chat in chats %}
+    <a href="/chat/{{ chat.id }}">GO</a>
+    {% endfor %}
+</div>
+</body>
+
+
+{% endblock %}

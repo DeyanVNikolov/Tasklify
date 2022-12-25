@@ -1,0 +1,110 @@
+{% extends "base.html" %} {% block title %}Change Password{% endblock %} {% block content
+%}
+
+    <script>
+    // if AFK for 3 seconds, redirect to /chat and always print the timeout
+    var timeout = setTimeout(function() {
+        window.location.href = '/chat';
+        console.log('You have been logged out due to inactivity.');
+    }, 180000);
+
+    // reset the timeout on any mouse movement
+    document.onmousemove = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            window.location.href = '/chat';
+            console.log('You have been logged out due to inactivity.');
+        }, 180000);
+    };
+
+    // reset the timeout on any key press
+    document.onkeydown = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            window.location.href = '/chat';
+            console.log('You have been logged out due to inactivity.');
+        }, 180000);
+    };
+
+    // reset the timeout on any touch
+    document.ontouchstart = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            window.location.href = '/chat';
+            console.log('You have been logged out due to inactivity.');
+        }, 180000);
+    };
+
+    // reset the timeout on any scroll
+    document.onscroll = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            window.location.href = '/chat';
+            console.log('You have been logged out due to inactivity.');
+        }, 180000);
+    };
+
+    // reset the timeout on any click
+    document.onclick = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            window.location.href = '/chat';
+            console.log('You have been logged out due to inactivity.');
+        }, 180000);
+    };
+
+
+
+
+    </script>
+    <style>
+        /* HIDE HORIZONTAL SCROLLBAR */
+        iframe {
+            display: block !important;
+            border: none !important;         /* Reset default border */
+            height: 800px !important;        /* Viewport-relative units */
+            width: calc(100% + 17px) !important;
+            overflow-x: hidden !important;
+            overflow-y: scroll !important;
+            margin: 0px !important;
+            padding: 0px !important;
+            
+
+          }
+            iframe::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            /* HIDE HORIZONTAL SCROLLBAR */
+            iframe::-webkit-scrollbar {
+                height: 0px !important;
+            }
+
+            /* HIDE VERTICAL SCROLLBAR */
+            iframe::-webkit-scrollbar {
+                width: 0px !important;
+            }
+
+            /* HIDE BOTH SCROLLBARS */
+
+            iframe::-webkit-scrollbar {
+                display: none !important;
+            }
+            
+    </style>
+
+    <body style="overflow: hidden">
+    <iframe src="https://127.0.0.1:5000/chatapi/{{ userid }}/{{ otherid }}" id="Iframe" ></iframe>
+    <br><br>
+
+    <div class="justify-content-center container text-center">
+        <form method="POST">
+        <input type="text" id="message" name="message" placeholder="Type your message here" style="width: 100%; height: 50px; font-size: 20px; border-radius: 10px; border: 1px solid #000000; padding: 10px; margin-bottom: 10px;">
+        <input type="hidden" id="userid" name="userid" value="{{ userid }}">
+        <input type="hidden" id="id_receiver" name="id_receiver" value="{{ otherid }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button type="submit" class="btn btn-success justify-content-center text-center">SEND</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
