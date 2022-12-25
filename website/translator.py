@@ -1348,6 +1348,67 @@ words = {
                 " Он хранится в виде зашифрованных паролей, которые не могут быть расшифрованы. Все пароли зашифрованы алгоритмом SHA-256."
                 " Это гарантирует, что ваш пароль будет очень трудно прочитать, даже если кто-то попытается его расшифровать.",
     },
+    "privacypolicytext12": {
+        "bg": " използва Google Analytics, за да събира информация за вашето поведение на сайта. "
+              " Това включва вашият IP адрес, браузър, операционна система, страници, които посещавате и времето, проведено на сайта."
+              " Освен това, Google Analytics събира информация за страната или региона, от който сте, както и за вашето местоположение. "
+              " Имайте предвид, че тези данни са анонимни и не могат да бъдат използвани за идентификация на конкретни лица. "
+              " Данните тип 'локация' са приблизителни и не предоставят точното местонахождение на потребителя, а в регион от няколко километра.",
+        "de": " verwendet Google Analytics, um Informationen über Ihr Verhalten auf der Website zu sammeln."
+                " Dies umfasst Ihre IP-Adresse, Ihren Browser, Ihr Betriebssystem, die von Ihnen besuchten Seiten und die Zeit, die Sie auf der Website verbracht haben."
+                " Darüber hinaus sammelt Google Analytics Informationen über das Land oder die Region, aus der Sie kommen, sowie über Ihren Standort."
+                " Beachten Sie, dass diese Daten anonym sind und nicht zur Identifizierung bestimmter Personen verwendet werden können."
+                " Daten wie 'Standort' sind ungefähr und geben nicht den genauen Standort des Benutzers an, sondern einen Bereich von einigen Kilometern.",
+        "en": " uses Google Analytics to collect information about your behavior on the site."
+                " This includes your IP address, browser, operating system, pages you visit and the time you spend on the site."
+                " In addition, Google Analytics collects information about the country or region from which you come, as well as your location."
+                " Keep in mind that these data are anonymous and cannot be used to identify specific individuals."
+                " Data like 'location' are approximate and do not give the exact location of the user, but a region of a few kilometers.",
+        "ru": " использует Google Analytics для сбора информации о вашем поведении на сайте."
+                " Это включает ваш IP-адрес, браузер, операционную систему, страницы, которые вы посещаете, и время, проведенное на сайте."
+                " Кроме того, Google Analytics собирает информацию о стране или регионе, из которого вы пришли, а также о вашем местоположении."
+                " Имейте в виду, что эти данные анонимны и не могут использоваться для идентификации конкретных лиц."
+                " Данные, такие как 'местоположение', приблизительны и не дают точное местоположение пользователя, а регион в нескольких километрах.",
+        "fr": " utilise Google Analytics pour collecter des informations sur votre comportement sur le site."
+                " Cela comprend votre adresse IP, votre navigateur, votre système d'exploitation, les pages que vous visitez et le temps que vous passez sur le site."
+                " En outre, Google Analytics collecte des informations sur le pays ou la région d'où vous venez, ainsi que votre emplacement."
+                " Gardez à l'esprit que ces données sont anonymes et ne peuvent pas être utilisées pour identifier des personnes spécifiques."
+                " Les données comme 'emplacement' sont approximatives et ne donnent pas l'emplacement exact de l'utilisateur, mais une région de quelques kilomètres.",
+        "es": " utiliza Google Analytics para recopilar información sobre su comportamiento en el sitio."
+                " Esto incluye su dirección IP, su navegador, su sistema operativo, las páginas que visita y el tiempo que pasa en el sitio."
+                " Además, Google Analytics recopila información sobre el país o región desde el que proviene, así como su ubicación."
+                " Tenga en cuenta que estos datos son anónimos y no se pueden utilizar para identificar a personas específicas."
+                " Los datos como 'ubicación' son aproximados y no dan la ubicación exacta del usuario, sino una región de unos pocos kilómetros.",
+
+    },
+    "privacypolicytext13": {
+        "bg": " не упражнява контрол над качваните от потребителите файлове (потребителско-генерирано съдържание) и не носи отговорност за тях и за съдържанието, което те съдържат."
+              " Имайте предвид, че тези файлове могат да съдържат информация, която е лична за вас, като например вашите имена, адреси, телефонни номера, фотографии, видео, аудио и други."
+              " Файловете са защитени, но не са криптирани и не са защитени от парола. Ние не можем да гарантираме, че някой друг не може да получи достъп до тези файлове в случай, че сървърът бъде хакнат."
+              " Препоръчваме да използвате алтернативни методи за съхранение на лична информация, като например криптиране на файловете, преди да ги качите на сайта.",
+        "en": " does not control the files uploaded by users (user-generated content) and is not responsible for them and for the content they contain."
+                "Keep in mind that these files may contain information that is personal to you, such as your names, addresses, phone numbers, photos, videos, audio and other."
+                "The files are protected, but not encrypted and not password protected. We cannot guarantee that someone else cannot access these files in case the server is hacked."
+                "We recommend using alternative methods for storing personal information, such as encrypting the files before uploading them to the site.",
+        "de": " hat keinen Einfluss auf die von Benutzern hochgeladenen Dateien (benutzergeneriertes Material) und ist nicht für sie und den Inhalt verantwortlich, den sie enthalten."
+                "Beachten Sie, dass diese Dateien persönliche Informationen enthalten können, wie z. B. Ihre Namen, Adressen, Telefonnummern, Fotos, Videos, Audio und andere."
+                "Die Dateien sind geschützt, aber nicht verschlüsselt und nicht mit einem Passwort geschützt. Wir können nicht garantieren, dass jemand anders in diesem Fall nicht auf diese Dateien zugreifen kann, wenn der Server gehackt wird."
+                "Wir empfehlen die Verwendung alternativer Methoden zur Speicherung persönlicher Informationen, wie z. B. das Verschlüsseln der Dateien, bevor Sie sie auf die Website hochladen.",
+        "fr": " n'exerce aucun contrôle sur les fichiers téléchargés par les utilisateurs (contenu généré par l'utilisateur) et n'est pas responsable de ceux-ci et du contenu qu'ils contiennent."
+                "Gardez à l'esprit que ces fichiers peuvent contenir des informations personnelles, telles que vos noms, adresses, numéros de téléphone, photos, vidéos, audio et autres."
+                "Les fichiers sont protégés, mais non cryptés et non protégés par mot de passe. Nous ne pouvons pas garantir qu'une autre personne ne peut pas accéder à ces fichiers en cas de piratage du serveur."
+                "Nous vous recommandons d'utiliser des méthodes alternatives pour stocker des informations personnelles, telles que le cryptage des fichiers avant de les télécharger sur le site.",
+        "ru": " не контролирует загруженные пользователем файлы (пользовательское сгенерированное содержимое) и не несет ответственности за них и за содержимое, которое они содержат."
+                "Имейте в виду, что эти файлы могут содержать личную информацию, такую как ваши имена, адреса, номера телефонов, фотографии, видео, аудио и другие."
+                "Файлы защищены, но не зашифрованы и не защищены паролем. Мы не можем гарантировать, что кто-то другой не может получить доступ к этим файлам в случае взлома сервера."
+                "Мы рекомендуем использовать альтернативные методы для хранения личной информации, такие как шифрование файлов перед их загрузкой на сайт.",
+        "es": " no controla los archivos cargados por los usuarios (contenido generado por el usuario) y no es responsable de ellos ni del contenido que contienen."
+                "Ten en cuenta que estos archivos pueden contener información personal, como tus nombres, direcciones, números de teléfono, fotos, videos, audio y otros."
+                "Los archivos están protegidos, pero no están cifrados ni protegidos con contraseña. No podemos garantizar que otra persona no pueda acceder a estos archivos en caso de que el servidor sea pirateado."
+                "Recomendamos usar métodos alternativos para almacenar información personal, como cifrar los archivos antes de cargarlos al sitio.",
+
+
+    },
     "activatetext": {
         "bg": "Активиране на служител",
         "es": "Activar empleado",
