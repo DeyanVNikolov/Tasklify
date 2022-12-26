@@ -1431,7 +1431,7 @@ words = {
         "de": "Stellen Sie sicher, dass Sie die richtige Person aktivieren!",
         "fr": "Assurez-vous d'activer la bonne personne!",
         "ru": "Убедитесь, что вы активируете правильного человека!",
-        "en": "Make sure you activate the right person!"
+        "en": "Make sure you activate the right person!",
     },
     "areyousure": {
         "bg": "Сигурни ли сте?",

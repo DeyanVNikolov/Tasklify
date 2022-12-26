@@ -16,3 +16,7 @@ test.js
 test.cpp
 *.pem
 .pem
+.tmp.driveupload
+.tmp.drivedownload
+/.tmp.driveupload
+/.tmp.drivedownload

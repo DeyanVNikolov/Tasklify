@@ -766,7 +766,7 @@ def printtask(id):
 
 @views.route("/docs", methods=["GET"], subdomain="docs")
 def docs():
-    return "Hey"
+    return "Under construction"
 
 
 @views.route("/cookies-disabled", methods=["GET"])
