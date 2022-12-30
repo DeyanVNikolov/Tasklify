@@ -696,11 +696,27 @@ def urlout(url):
 
 @views.route('/contact', methods=["GET", "POST"])
 def contact():
+    from .mailsender import sendmail
     checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
+
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+        if len(name) < 1:
+            flash(getword("invalidname", cookie), category="error")
+        elif len(email) < 4:
+            flash(getword("invalidemail", cookie), category="error")
+        elif len(message) < 1:
+            flash(getword("invalidmessage", cookie), category="error")
+        else:
+            sendmail(name, email, message)
+            flash(getword("emailsent", cookie), category="success")
+            return redirect(url_for('views.contact'))
 
     return render_template("contact.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -709,7 +725,8 @@ def contact():
                            homenav=getword("homenav", cookie), user=current_user,
                            contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie),
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie),
-                           contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie))
+                           contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie),
+                           name=getword("name", cookie), email=getword("email", cookie), message=getword("message", cookie))
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])

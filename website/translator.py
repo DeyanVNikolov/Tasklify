@@ -1545,6 +1545,46 @@ words = {
         "ru": "Описание",
         "en": "Description"
     },
+    "invalidname": {
+        "bg": "Невалидно име",
+        "es": "Nombre inválido",
+        "de": "Ungültiger Name",
+        "fr": "Nom invalide",
+        "ru": "Неверное имя",
+        "en": "Invalid name"
+    },
+    "invalidemail": {
+        "bg": "Невалиден имейл",
+        "es": "Correo electrónico inválido",
+        "de": "Ungültige E-Mail",
+        "fr": "Email invalide",
+        "ru": "Неверный адрес электронной почты",
+        "en": "Invalid email"
+    },
+    "invalidmessage": {
+        "bg": "Невалидно съобщение",
+        "es": "Mensaje inválido",
+        "de": "Ungültige Nachricht",
+        "fr": "Message invalide",
+        "ru": "Неверное сообщение",
+        "en": "Invalid message"
+    },
+    "emailsent": {
+        "bg": "Съобщението е изпратено",
+        "es": "El mensaje se ha enviado",
+        "de": "Die Nachricht wurde gesendet",
+        "fr": "Le message a été envoyé",
+        "ru": "Сообщение отправлено",
+        "en": "Message sent"
+    },
+    "message": {
+        "bg": "Съобщение",
+        "es": "Mensaje",
+        "de": "Nachricht",
+        "fr": "Message",
+        "ru": "Сообщение",
+        "en": "Message"
+    }
 
 }
 

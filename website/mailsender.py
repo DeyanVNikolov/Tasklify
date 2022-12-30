@@ -200,3 +200,58 @@ def sendremainder(emailaddr, accname, taskcount):
     with smtplib.SMTP_SSL('smtppro.zoho.eu', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         smtp.send_message(msg)
+
+
+def sendmail(name, email, message):
+    import os
+    import smtplib
+    import imghdr
+    from email.message import EmailMessage
+
+    EMAIL_ADDRESS = "hello@tasklify.me"
+    EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Ново съобщение от ' + name
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = ['didonikolovbg@gmail.com', 'anastasov.marti@gmail.com']
+
+    msg.set_content('Tasklify Contact Form')
+
+    msg.add_alternative(f"""\
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <center>
+                <br><br>
+                <img style="width: 300px; height: auto;" src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.png">
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h1 style="color:rgb(0, 0, 0); font-family: sans-serif;">Ново съобщение от {name},</h1>
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">{message}</h2>
+                <br><br>
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Отговорете на {name} на: <strong>{email}</strong></h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Best regards,<br>Tasklify Team</h2>
+                <br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">С най-добри пожелания,<br>Екипът на Tasklify</h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h5>Tasklify, "Studentska" Str. 1, 9000 Varna, Bulgaria <br>
+                All rights reserved. © 2022</h5>
+                <h5>Available on <a href="https://tasklify.me">https://tasklify.me</a></h5>
+                
+            </center>
+        </body>
+    </html>
+    """, subtype='html')
+
+    with smtplib.SMTP_SSL('smtppro.zoho.eu', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
