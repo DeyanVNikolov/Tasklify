@@ -18,19 +18,19 @@ from flask_limiter.util import get_remote_address
 from website.translator import getword
 from dotenv import load_dotenv
 
-
 load_dotenv(".env")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-
 db = SQLAlchemy()
 DB_NAME = "database.db"
+
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     # mysql
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://doadmin:{os.getenv("SQL_PASSWORD")}@{os.getenv("SQL_HOST")}:25060/defaultdb'
+    app.config[
+        'SQLALCHEMY_DATABASE_URI'] = f'mysql://doadmin:{os.getenv("SQL_PASSWORD")}@{os.getenv("SQL_HOST")}:25060/defaultdb'
     app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_CAPTCHA_KEY'] = 'wMmeltW4mhwidorQRli6Oijuhygtfgybunxx9VPXldz'
@@ -52,14 +52,11 @@ def create_app():
     toolbar = DebugToolbarExtension(app)
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 
-
     app.jinja_env.globals.update(getword=getword)
     app.jinja_env.globals.update(undonetasks=undonetasks)
     global limiter
 
-    limiter = Limiter(app, key_func=get_remote_address, default_limits=["50 per minute"], storage_uri="memory://", )
-
-
+    limiter = Limiter(app, key_func=get_remote_address, default_limits=["100 per minute"], storage_uri="memory://", )
 
     from .views import views
     from .auth import auth
@@ -80,6 +77,7 @@ def create_app():
     app.register_blueprint(api, url_prefix='/api')
     csrfg.exempt(externalcallback)
     csrfg.exempt(api)
+    limiter.limit("200 per minute")(externalcallback)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 
@@ -90,8 +88,8 @@ def create_app():
                     return current_user.is_authenticated
 
         column_searchable_list = ['email', 'id']
-        column_list = ['id', 'email', 'first_name', "password", "boss_id", "accounttype", "registrationid", "additionalpermissions", "tasks"]
-
+        column_list = ['id', 'email', 'first_name', "password", "boss_id", "accounttype", "registrationid",
+                       "additionalpermissions", "tasks"]
 
     class TaskView(ModelView):
         def is_accessible(self):
@@ -117,7 +115,8 @@ def create_app():
                 if current_user.accounttype == "boss" and current_user.additionalpermissions == "ADMIN":
                     return current_user.is_authenticated
 
-    admin = Admin(app, name='Dashboard', template_mode='bootstrap3', index_view=MyAdminIndexView(url="/internal/admin-dashboard"), url="/internal/admin-dashboard")
+    admin = Admin(app, name='Dashboard', template_mode='bootstrap3',
+                  index_view=MyAdminIndexView(url="/internal/admin-dashboard"), url="/internal/admin-dashboard")
     path = op.join(op.dirname(__file__), 'static')
 
     admin.add_view(MyModelView(WorkerModel, db.session))
@@ -143,7 +142,8 @@ def create_app():
     @app.errorhandler(404)
     def page_not_found(e):
         if request.path.startswith('/api'):
-            return jsonify({"status": "error", "error": "404 Not Found", "message": "Did you send all the required arguments?"}), 404
+            return jsonify({"status": "error", "error": "404 Not Found",
+                            "message": "Did you send all the required arguments?"}), 404
         else:
             return render_template('notfound.html'), 404
 
@@ -159,11 +159,12 @@ def create_app():
     def forbidden(e):
         return render_template('forbidden.html'), 403
 
-
     return app
+
 
 global first_time
 first_time = False
+
 
 def create_database(app):
     global first_time
@@ -176,7 +177,7 @@ def create_database(app):
             print(e)
             exit()
         print("Connection Success")
-    
+
 
 def undonetasks(id=None):
     from .models import Task
@@ -184,14 +185,14 @@ def undonetasks(id=None):
         if current_user.accounttype == "worker":
             print(current_user.first_name)
             print(current_user.id)
-            total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0", archive="0").count() + Task.query.filter_by(worker_id=current_user.id).filter_by(complete="1", archive="0").count()
+            total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0",
+                                                                              archive="0").count() + Task.query.filter_by(
+                worker_id=current_user.id).filter_by(complete="1", archive="0").count()
             return total
     else:
-        total = Task.query.filter_by(worker_id=id).filter_by(complete="0", archive="0").count() + Task.query.filter_by(worker_id=id).filter_by(complete="1", archive="0").count()
+        total = Task.query.filter_by(worker_id=id).filter_by(complete="0", archive="0").count() + Task.query.filter_by(
+            worker_id=id).filter_by(complete="1", archive="0").count()
         return total
-
-
-
 
 
 app = create_app()
