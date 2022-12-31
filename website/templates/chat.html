@@ -75,7 +75,7 @@
 
                     <div class="card mx-auto" style="max-height:900px; height: 900px;">
                         <iframe style="height:100%;"
-                                src="https://tasklify.me/chatapi/{{ chatid }}/{{ userid }}/{{ otherid }}"
+                                src="/static/offline.html"
                                 id="Iframe"></iframe>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
             }
             console.log(otherid);
             console.log(userid);
-            iframe.src = 'https://127.0.0.1:5000/chatapi/' + userid + '/' + otherid;
+            iframe.src = 'https://tasklify.me/chatapi/' + userid + '/' + otherid;
         } else {
             console.log('args');
             let iframe = document.getElementById('Iframe');
@@ -121,7 +121,7 @@
             }
             console.log(otherid);
             console.log(userid);
-            iframe.src = 'https://127.0.0.1:5000/chatapi/' + userid + '/' + otherid;
+            iframe.src = 'https://tasklify.me/chatapi/' + userid + '/' + otherid;
         }
     </script>
 
