@@ -366,7 +366,7 @@ Created under regulation of ITPG-Varna.
 </script>
 <script>
     var commits = 0;
-    fetch('https://api.github.com/repos/DeyanVNikolov/Tasklify/commits?per_page=200')
+    fetch('https://api.github.com/repos/DeyanVNikolov/Tasklify/commits?per_page=250')
         .then(response => response.json())
         .then(data => {
             commits = data.length;
