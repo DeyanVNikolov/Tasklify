@@ -61,7 +61,7 @@ def home():
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
                            logout=getword("logout", cookie), profile=getword("profile", cookie),
-                           welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie))
+                           welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie), newyear=getword("happynewyear", cookie))
 
 
 @views.route("/home", methods=['GET'])

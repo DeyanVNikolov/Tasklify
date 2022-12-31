@@ -1600,6 +1600,14 @@ words = {
         "fr": "Télécharger un fichier",
         "ru": "Загрузить файл",
         "en": "Upload file"
+    },
+    "happynewyear": {
+        "bg": "Tasklify ви пожелава щастливa нова година, изпълнена със здраве, щастие и късмет!",
+        "es": "Tasklify te desea un feliz año nuevo lleno de salud, felicidad y suerte!",
+        "de": "Tasklify wünscht Ihnen ein glückliches neues Jahr, gesund, glücklich und erfolgreich!",
+        "fr": "Tasklify vous souhaite une bonne année remplie de santé, de bonheur et de chance!",
+        "ru": "Tasklify поздравляет вас с новым годом, полным здоровья, счастья и удачи!",
+        "en": "Tasklify wishes you a happy new year, full of health, happiness and luck!"
     }
 
 }
@@ -1623,5 +1631,9 @@ def loadtime():
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(dt_string)
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
+
+def newyear(target):
+    return getword("happynewyear", target)
+
 
 
