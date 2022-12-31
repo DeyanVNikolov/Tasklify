@@ -20,3 +20,10 @@ test.cpp
 .tmp.drivedownload
 /.tmp.driveupload
 /.tmp.drivedownload
+/pfp/
+/website/static/pfp/*
+website/static/pfp/*
+/website/static/pfp/*
+/website/static/pfp/
+website/static/pfp/
+/website/static/pfp/*
