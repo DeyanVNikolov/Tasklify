@@ -152,7 +152,7 @@ def create_app():
     def too_many_reqeusts(e):
         return """
     
-    <center><b>TOO MANY REQUESTS -- 50 / PER MINUTE ALLOWED</b></center>
+    <center><b>TOO MANY REQUESTS -- 100 / PER MINUTE ALLOWED</b></center>
     
     """, 429
 
