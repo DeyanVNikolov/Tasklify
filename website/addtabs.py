@@ -18,7 +18,7 @@ from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail
 from .models import Task
-from .models import Worker, Boss
+from .models import Worker, Boss, Chat
 from .translator import getword
 
 addtabs = Blueprint('addtabs', __name__)
@@ -70,7 +70,7 @@ def employ_signup():
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                   homenav=getword("homenav", cookie), user=current_user)
+                                   homenav=getword("homenav", cookie), user=current_user, chatnav=getword("chatnav", cookie))
 
         if not CAPTCHA1.verify(c_text, c_hash):
             flash(getword("captchawrong", cookie), category='error')
@@ -133,7 +133,7 @@ def employ_signup():
                            databeingproccessed=getword("databeingproccessed", cookie),
                            employreccode=getword("employreccode", cookie),
                            addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie), goback=getword("goback", cookie))
+                           worker=getword("worker", cookie), boss=getword("boss", cookie), goback=getword("goback", cookie), chatnav=getword("chatnav", cookie))
 
 
 @addtabs.route("/add/employee", methods=["GET", "POST"])
@@ -160,6 +160,8 @@ def add_employee():
                 else:
                     if worker.boss_id is None:
                         worker.boss_id = current_user.id
+                        newchat = Chat(id_creator=current_user.id, id_participant=worker.id, name_creator=current_user.first_name, name_participant=worker.first_name)
+                        db.session.add(newchat)
                         db.session.commit()
                         flash(getword("workeradded", cookie), category="success")
                     else:
@@ -174,7 +176,7 @@ def add_employee():
                            addemployeeinfo=getword("addemployeeinfo", cookie), enterid=getword("enterid", cookie),
                            submit=getword("submit", cookie), databeingproccessed=getword("databeingproccessed", cookie),
                            addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
-                           addworker=getword("addworker", cookie), goback=getword("goback", cookie))
+                           addworker=getword("addworker", cookie), goback=getword("goback", cookie), chatnav=getword("chatnav", cookie))
 
 
 @addtabs.route("/add/task", methods=["GET", "POST"])
@@ -246,4 +248,4 @@ def add_task():
                            selectworkers=getword("selectworkers", cookie), signupemploy=getword("signupemploy", cookie),
                            here=getword("here", cookie), myfiles=getword("empmyfiles", cookie),
                            addtasktext=getword("addtask", cookie), goback=getword("goback", cookie),
-                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie))
+                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie), chatnav=getword("chatnav", cookie))

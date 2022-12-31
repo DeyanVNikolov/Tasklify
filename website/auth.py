@@ -253,7 +253,7 @@ def delete_account():
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
                            homenav=getword("homenav", cookie), user=current_user,
                            deleteaccount=getword("deleteaccount", cookie), confirmtext=getword("confirmdelete", cookie),
-                           password=getword("password", cookie), enterpassword=getword("enterpassword", cookie))
+                           password=getword("password", cookie), enterpassword=getword("enterpassword", cookie), chatnav=getword("chatnav", cookie))
 
 
 @auth.route('/change-password', methods=['GET', 'POST'])
@@ -276,7 +276,7 @@ def change_password():
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                   homenav=getword("homenav", cookie), user=current_user)
+                                   homenav=getword("homenav", cookie), user=current_user, chatnav=getword("chatnav", cookie))
 
         confirm = request.form.get('confirm')
         email = current_user.email
@@ -313,7 +313,7 @@ def change_password():
                            homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
                            changepassword=getword("changepassword", cookie), oldpassword=getword("oldpassword", cookie),
                            newpassword=getword("newpassword", cookie), cnewpassword=getword("cnewpassword", cookie),
-                           confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie))
+                           confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie), chatnav=getword("chatnav", cookie))
 
 
 @auth.errorhandler(CSRFError)

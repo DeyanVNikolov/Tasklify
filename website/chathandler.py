@@ -23,10 +23,10 @@ oneworkerpage = "views.worker"
 
 global csrfg
 
+
 @chathandler.route('/messageget/<id>/<otherid>', methods=['GET', 'POST'])
 @login_required
 def messageget(id, otherid):
-    abort(403)
     id = current_user.id
     if not current_user.is_authenticated:
         return "not authenticated", 401
@@ -66,78 +66,79 @@ def messageget(id, otherid):
         def datetostring(date):
             return date.strftime("%d.%m.%Y %H:%M:%S")
 
-        messagelist.append({
-            "id": message.idmessage,
-            "sender": is_sender(),
-            "date": datetostring(message.date),
-            "message": message.message
-        })
+        messagelist.append({"id": message.idmessage, "sender": is_sender(), "date": datetostring(message.date),
+                            "message": message.message})
 
     messagelist.sort(key=lambda x: x["date"])
 
     return messagelist, 200
 
+
 @chathandler.route('/chat', methods=['GET', 'POST'])
+@login_required
 def chat():
-    abort(403)
     id = current_user.id
 
-    chats=[]
-
-    for chat in Chat.query.filter_by(id_creator=id):
-        chats.append(chat)
-    for chat in Chat.query.filter_by(id_participant=id):
-        chats.append(chat)
-
-
-    return render_template('chat.html', user=current_user, userid=id, chats=chats)
-
-
-@chathandler.route('/chat/<workerid>', methods=['GET', 'POST'])
-@login_required
-def chatwithworker(workerid):
-    abort(403)
-    chat = Chat.query.filter_by(id=workerid).first()
-
-    if chat is None:
-        abort(404)
-
-    # check if both creator_id and participant_id are existing
-    creator = Worker.query.filter_by(id=chat.id_creator).first()
-    participant = Worker.query.filter_by(id=chat.id_participant).first()
-
-    # if either of them is none try again with boss
-    if creator is None:
-        creator = Boss.query.filter_by(id=chat.id_creator).first()
-    if participant is None:
-        participant = Boss.query.filter_by(id=chat.id_participant).first()
-
-
-
-    if creator is None or participant is None:
-        abort(404)
-
-    # check if current user is creator or participant
-    if current_user.id != creator.id and current_user.id != participant.id:
-        abort(404)
+    if 'locale' in request.cookies:
+        cookie =  request.cookies.get('locale')
+    else:
+        cookie = 'en'
 
     if request.method == 'POST':
-        if request.form.get('message') is not None:
-            message = request.form.get('message')
-            id_receiver = request.form.get('id_receiver')
-            if message != "":
-                newmessage = Message(chat=chat.id, id_sender=current_user.id, id_receiver=id_receiver, message=message)
-                db.session.add(newmessage)
+        if request.form.get('typeform') == 'message':
+            if request.form.get('message') is not None:
+                message = request.form.get('message')
+                id_receiver = request.form.get('id_receiver')
+                chatid = request.form.get('chat_id')
+                if message != "":
+                    import datetime
+                    # noinspection PyArgumentList
+                    newmessage = Message(chat=chatid, id_sender=current_user.id, id_receiver=id_receiver,
+                                         message=message, date=datetime.datetime.now())
+                    db.session.add(newmessage)
+                    db.session.commit()
+        elif request.form.get('typeform') == 'delete':
+            idmessage = request.form.get('idmessage')
+            message = Message.query.get(idmessage)
+            userid = request.form.get('userid')
+            if userid != current_user.id:
+                return "You are not allowed to access this page", 403
+            if message is not None:
+                db.session.delete(message)
                 db.session.commit()
 
+    chats = []
+
+    for chat in Chat.query.filter_by(id_creator=id).all():
+        is_creator = False
+        if chat.id_creator == id:
+            is_creator = True
+        chats.append({"id": chat.id, "id_participant": chat.id_participant, "id_creator": chat.id_creator,
+                      "name_creator": chat.name_creator, "name_participant": chat.name_participant,
+                      'image_participant': '/static/pfp/' + chat.id_participant + '.png',
+                      'image_creator': '/static/pfp/' + chat.id_creator + '.png', 'is_creator': is_creator})
+    for chat in Chat.query.filter_by(id_participant=id).all():
+        is_creator = False
+        if chat.id_creator == id:
+            is_creator = True
+        chats.append({"id": chat.id, "id_participant": chat.id_participant, "id_creator": chat.id_creator,
+                      "name_creator": chat.name_creator, "name_participant": chat.name_participant,
+                      'image_participant': '/static/pfp/' + chat.id_participant + '.png',
+                      'image_creator': '/static/pfp/' + chat.id_creator + '.png', 'is_creator': is_creator})
 
 
-    return render_template('chatwithworker.html', user=current_user, workerid=workerid, userid=current_user.id, otherid=creator.id if creator.id != current_user.id else participant.id, chat=chat)
+    print(chats)
+
+    return render_template('chat.html', user=current_user, userid=id, chats=chats,
+                           profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), chatnav=getword("chatnav", cookie))
+
 
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])
 @login_required
 def chatapi(id, otherid):
-    abort(403)
 
     if not current_user.is_authenticated:
         return "not authenticated", 401
@@ -160,7 +161,16 @@ def chatapi(id, otherid):
         if chat is None:
             return "Chat not found", 404
 
+    user1 = Worker.query.filter_by(id=id).first()
+    user2 = Worker.query.filter_by(id=otherid).first()
 
+    if user1 is None:
+        user1 = Boss.query.filter_by(id=id).first()
+    if user2 is None:
+        user2 = Boss.query.filter_by(id=otherid).first()
 
+    if user1 is None or user2 is None:
+        return "User not found", 404
 
-    return render_template('chatapi.html', user=current_user, userid=id, otherid=otherid, chat=chat)
+    return render_template('chatapi.html', user=current_user, userid=id, otherid=otherid, chat=chat, chatid=chat.id,
+                           user1=user1, user2=user2)

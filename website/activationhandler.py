@@ -18,7 +18,7 @@ from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail
 from .models import Task
-from .models import Worker, Boss
+from .models import Worker, Boss, Chat
 from .translator import getword
 from .addtabs import addtabs
 from .fileshandler import fileshandler
@@ -64,6 +64,9 @@ def activate(id):
 
                 if worker.boss_id is None or worker.boss_id == "" or worker.boss_id == 0:
                     worker.boss_id = current_user.id
+                    newchat = Chat(id_creator=current_user.id, id_participant=worker.id,
+                                   name_creator=current_user.first_name, name_participant=worker.first_name)
+                    db.session.add(newchat)
                     db.session.commit()
                     flash(getword("workeradded", cookie), category="success")
                     return redirect(url_for(workerspage))
@@ -78,7 +81,7 @@ def activate(id):
                            activatetext1=getword("activatetext1", cookie), nametext=getword("name", cookie),
                            emailtext=getword("email", cookie), name=worker.first_name, email=worker.email,
                            areyousure=getword("areyousure", cookie), makesuretext=getword("makesuretext1", cookie),
-                           submit=getword("submit", cookie))
+                           submit=getword("submit", cookie), chatnav=getword("chatnav", cookie))
 
 
 @activationhandler.route("/a/<path:id>", methods=["GET", "POST"])

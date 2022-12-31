@@ -1,16 +1,133 @@
-{% extends "base.html" %} {% block title %}Change Password{% endblock %} {% block content
-%}
-<head>
-    <title>Chat</title>
-</head>
-  
-<body>
-<div class="container" id="chats">
-    {% for chat in chats %}
-    <a href="/chat/{{ chat.id }}">GO</a>
-    {% endfor %}
-</div>
-</body>
+{% extends "base.html" %} {% block title %}Change Password{% endblock %} {% block content %}
+
+    <link rel="stylesheet" href="/static/chat.css">
+    <script>
+        // if there were args before the page was loaded, add them to the url
+        if (window.location.href.includes('?')) {
+            var url1 = window.location.href;
+            var args1 = url1.split('?')[1];
+            var newurl1 = window.location.href.split('?')[0] + '?' + args1;
+            window.history.pushState({
+                path: newurl1
+            }, '', newurl1);
+        }
+
+    </script>
+    <div>
+        <br><br>
+        <div class="content">
+            <div class="contact" style="margin-left:20px">
+                <div class="other">
+                    <div class="info">
+                        <h1 class="text-center" style="color:white; padding-top:50px">{{ chatnav }}</h1>
+                        <aside>
+                            <header>
+                            </header>
+                            <ul>
+                                {% for chat in chats %}
+                                    <a href="/chat?{{ loop.index }}" id="{{ loop.index }}">
+                                        <input type="hidden" value="{{ chat.id }}">
+                                        <input type="hidden" id="{{ loop.index }}-senderid"
+                                               value="{{ chat.id_creator }}">
+                                        <input type="hidden" id="{{ loop.index }}-receiverid"
+                                               value="{{ chat.id_participant }}">
+                                        {% if chat.is_creator == True %}
+                                            <li>
+                                                <img src='{{ chat.image_participant }}'
+                                                     onerror="this.src='/static/blank-profile.png' "
+                                                     style="height: 55px; width:55px"
+                                                     alt="">
+                                                <div>
+                                                    <h2 style="margin: 0 0 0 0 !important">{{ chat.name_participant }}</h2>
+                                                </div>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <img src='{{ chat.image_creator }}'
+                                                     onerror="this.src='/static/blank-profile.png' "
+                                                     style="height: 55px; width:55px" alt="">
+                                                <div>
+                                                    <h2 style="margin: 0 0 0 0 !important">{{ chat.name_creator }}</h2>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+
+                                    </a>
+                                {% endfor %}
+
+                            </ul>
+                        </aside>
+                    </div>
+                </div>
+                <div class="container mt-4">
+                    <style>
+                        iframe {
+                            display: block !important;
+                            border: none !important;
+                            width: 100% !important;
+                            height: 100% !important;
+                            min-height: 100% !important;
+                            min-width: 100% !important;
+                            max-height: 100% !important;
+                            max-width: 100% !important;
+                        }
+                    </style>
+
+                    <div class="card mx-auto" style="max-height:900px; height: 900px;">
+                        <iframe style="height:100%;"
+                                src="https://127.0.0.1:5000/chatapi/{{ chatid }}/{{ userid }}/{{ otherid }}"
+                                id="Iframe"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+
+    <script>
+        let args = window.location.search.substring(1).split('&');
+        // check if integer from args[0] is not higher than number of chats
+        let num = parseInt(args[0]);
+        let numchats =
+        {{chats | length}}
+
+        if (num > numchats) {
+            window.location.href = '/chat';
+        }
+
+        if (args[0] == '' || args[0] == ' ') {
+            console.log('no args');
+            let index = 1;
+            let iframe = document.getElementById('Iframe');
+            let chat = document.getElementById(index);
+            let userid = '{{userid}}';
+            let otherid = document.getElementById(index + '-receiverid').value;
+            if (userid == otherid) {
+                otherid = document.getElementById(index + '-senderid').value;
+            }
+            console.log(otherid);
+            console.log(userid);
+            iframe.src = 'https://127.0.0.1:5000/chatapi/' + userid + '/' + otherid;
+        } else {
+            console.log('args');
+            let iframe = document.getElementById('Iframe');
+            let chat = document.getElementById(args[0]);
+            let userid = '{{userid}}'
+            let otherid = document.getElementById(args[0] + '-receiverid').value;
+            if (userid == otherid) {
+                otherid = document.getElementById(args[0] + '-senderid').value;
+            }
+            console.log(otherid);
+            console.log(userid);
+            iframe.src = 'https://127.0.0.1:5000/chatapi/' + userid + '/' + otherid;
+        }
+    </script>
+
+
+
+    </body>
 
 
 {% endblock %}
