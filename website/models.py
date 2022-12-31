@@ -77,7 +77,9 @@ class Message(db.Model):
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_creator = db.Column(db.String(150))
+    name_creator = db.Column(db.String(150))
     id_participant = db.Column(db.String(150))
+    name_participant = db.Column(db.String(150))
     messages = db.relationship('Message')
 
 

@@ -1584,6 +1584,22 @@ words = {
         "fr": "Message",
         "ru": "Сообщение",
         "en": "Message"
+    },
+    "chatnav": {
+        "bg": "Чат",
+        "es": "Chat",
+        "de": "Chat",
+        "fr": "Chat",
+        "ru": "Чат",
+        "en": "Chat"
+    },
+    "uploadfilebtn": {
+        "bg": "Качи файл",
+        "es": "Subir archivo",
+        "de": "Datei hochladen",
+        "fr": "Télécharger un fichier",
+        "ru": "Загрузить файл",
+        "en": "Upload file"
     }
 
 }

@@ -38,28 +38,17 @@ class StatusDenied(Exception):
     print("StatusDenied Exception")
 
 
-def checkmaintenance():
-    # Not in use
-    pass
-
-
-@views.errorhandler(StatusDenied)
-def redirect_on_status_denied(error):
-    print(error)
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie)), 403
+def getcookie(request):
+    if 'locale' in request.cookies:
+        return request.cookies.get('locale')
+    else:
+        return 'en'
 
 
 @views.route('/', methods=['GET'])
 def home():
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
     return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
@@ -72,26 +61,36 @@ def home():
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
                            logout=getword("logout", cookie), profile=getword("profile", cookie),
-                           welcome=getword("welcome", cookie))
+                           welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route("/home", methods=['GET'])
 def homeredirect():
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    cookie = getcookie(request)
     return redirect(url_for("views.home"))
 
 
-@views.route('/profile')
+def allowed_image(filename):
+    allowed_image_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    if not "." in filename:
+        return False
+
+    ext = filename.rsplit(".", 1)[1]
+    if len(ext) > 3:
+        return False
+
+    if ext.lower() in allowed_image_extensions:
+        return True
+    else:
+        return False
+
+
+@views.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+
+    cookie = getcookie(request)
+
     return render_template("profile.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
@@ -102,17 +101,74 @@ def profile():
                            profiletext=getword("profiletext", request.cookies.get('locale')),
                            changepassword=getword("changepassword", request.cookies.get('locale')),
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
-                           myfiles=getword("myfiles", request.cookies.get('locale')))
+                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id, chatnav=getword("chatnav", cookie))
+
+
+@views.route('/profile/pfp', methods=['GET', 'POST'])
+@login_required
+def profilepfp():
+    cookie = getcookie(request)
+
+    if request.method == 'POST':
+        typeform = request.form.get('typeform')
+        if typeform == 'pfp':
+            for file in request.files.getlist('file'):
+                print(file)
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            image = request.files['file']
+            if image.filename == '':
+                flash(getword("nofileselected", cookie), category="error")
+                return redirect(request.url)
+
+            if image.filename == "":
+                print("No filename")
+                return redirect(views.profilepfp)
+            if allowed_image(image.filename):
+                from PIL import Image
+                filename = secure_filename(image.filename)
+                # crop image to square
+                image = Image.open(image)
+                width, height = image.size
+                if width > height:
+                    left = (width - height) / 2
+                    right = (width + height) / 2
+                    top = 0
+                    bottom = height
+                    image = image.crop((left, top, right, bottom))
+                elif height > width:
+                    left = 0
+                    right = width
+                    top = (height - width) / 2
+                    bottom = (height + width) / 2
+                    image = image.crop((left, top, right, bottom))
+                image = image.convert('RGB')
+                # check if file exists
+                if os.path.isfile(os.path.join(app.config['PFP_UPLOADS'], str(current_user.id) + ".png")):
+                    os.remove(os.path.join(app.config['PFP_UPLOADS'], str(current_user.id) + ".png"))
+                image.save(os.path.join(app.config["PFP_UPLOADS"], str(current_user.id) + ".png"))
+                return redirect(url_for('views.profile'))
+
+    return render_template("profilepfp.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
+                           emailtext=getword("emailshort", request.cookies.get('locale')),
+                           nametext=getword("name", request.cookies.get('locale')),
+                           profiletext=getword("profiletext", request.cookies.get('locale')),
+                           changepassword=getword("changepassword", request.cookies.get('locale')),
+                           deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
+                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id, chatnav=getword("chatnav", cookie),
+                           uploadfilebtn=getword("uploadfilebtn", cookie), submit=getword("submit", cookie))
 
 
 @views.route('/boss')
 @login_required
 def boss():
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     if current_user.accounttype == "boss":
         return redirect(url_for(homepage))
@@ -130,17 +186,14 @@ def boss():
                            user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
                            id=getword("idemail", cookie), idd=current_user.registrationid, link=link,
-                           copy=getword("copy", cookie))
+                           copy=getword("copy", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     if current_user.accounttype == 'worker' and current_user.boss_id is None:
         return redirect(url_for('views.boss'))
@@ -184,18 +237,15 @@ def tasks():
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
-                           due=getword("due", cookie), titletext=getword("titletext", cookie))
+                           due=getword("due", cookie), titletext=getword("titletext", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
 @login_required
 def workers():
     allowed_sorts = ['name', 'email', 'tasks']
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     if current_user.is_authenticated:
         if current_user.accounttype == "worker":
@@ -331,17 +381,14 @@ def workers():
                            sorttaskstext=getword("sorttaskstext", cookie),
                            currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
                            taskstext=getword("tasksnav", cookie), search=getword("search", cookie),
-                           areyousure=getword("areyousure", cookie))
+                           areyousure=getword("areyousure", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
 @login_required
 def worker(id):
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     if current_user.accounttype == "worker":
         return redirect(url_for(homepage))
@@ -429,17 +476,14 @@ def worker(id):
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
                            deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie),
-                           unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie))
+                           unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
 @login_required
 def task(id):
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     taskdata = Task.query.filter_by(id=id).first()
     if taskdata is None:
@@ -519,7 +563,8 @@ def task(id):
                                    delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                                    started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                    datedue=dateformat, due=getword("due", cookie),
-                                   fileuploader=getword("fileuploader", cookie), titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
+                                   fileuploader=getword("fileuploader", cookie), titletext=getword("titletext", cookie),
+                                   desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
         elif typeform == "uploadimage":
             ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
@@ -578,7 +623,7 @@ def task(id):
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
                                        fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
             else:
                 flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -645,7 +690,7 @@ def task(id):
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
                                        fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
 
             else:
                 flash(getword("invalidtype", cookie), category="error")
@@ -672,16 +717,13 @@ def task(id):
                            delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                            started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                            datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
-                           titletext=getword("titletext", cookie), desctext=getword("desctext", cookie))
+                           titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
 def urlout(url):
     abort(403)
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    cookie = getcookie(request)
     return render_template("urlout.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
@@ -691,17 +733,14 @@ def urlout(url):
                            ifyourenotredirected=getword("ifyourenotredirected", cookie),
                            oryoucango=getword("oryoucango", cookie), home=getword("home", cookie),
                            thirdpartylink=getword("thirdpartylink", cookie),
-                           infiveseconds=getword("infiveseconds", cookie))
+                           infiveseconds=getword("infiveseconds", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/contact', methods=["GET", "POST"])
 def contact():
     from .mailsender import sendmail
-    checkmaintenance()
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    
+    cookie = getcookie(request)
 
     if request.method == "POST":
         name = request.form.get("name")
@@ -726,7 +765,8 @@ def contact():
                            contactus=getword("contactus", cookie), contactusmessage=getword("contactusmessage", cookie),
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie),
                            contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie),
-                           name=getword("name", cookie), email=getword("email", cookie), message=getword("message", cookie))
+                           name=getword("name", cookie), email=getword("email", cookie),
+                           message=getword("message", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route('/testpastebin', methods=["GET", "POST"])
@@ -738,12 +778,9 @@ def testpastebin():
 @views.route("/printtask/<int:id>", methods=["GET", "POST"])
 def printtask(id):
     abort(403)
-    checkmaintenance()
+    
     # cookie
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    cookie = getcookie(request)
 
     taskdata = Task.query.filter_by(id=id).first()
 
@@ -778,7 +815,7 @@ def printtask(id):
                            workernametext=getword("workernametext", cookie),
                            taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie),
                            requestedbytext=getword("requestedbytext", cookie),
-                           startedtext=getword("startedtext", cookie))
+                           startedtext=getword("startedtext", cookie), chatnav=getword("chatnav", cookie))
 
 
 @views.route("/docs", methods=["GET"], subdomain="docs")
@@ -798,10 +835,7 @@ def offline():
 
 @views.route("/privacy", methods=["GET"])
 def privacy():
-    if 'locale' in request.cookies:
-        cookie = request.cookies.get('locale')
-    else:
-        cookie = 'en'
+    cookie = getcookie(request)
 
     return render_template("privacy.html", user=current_user, privacypolicytitle=getword("privacypolicytitle", cookie),
                            privacypolicytext1=getword("privacypolicytext1", cookie),
@@ -816,4 +850,4 @@ def privacy():
                            privacypolicytext10=getword("privacypolicytext10", cookie),
                            privacypolicytext11=getword("privacypolicytext11", cookie),
                            privacypolicytext12=getword("privacypolicytext12", cookie),
-                           privacypolicytext13=getword("privacypolicytext13", cookie))
+                           privacypolicytext13=getword("privacypolicytext13", cookie), chatnav=getword("chatnav", cookie))
