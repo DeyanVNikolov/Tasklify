@@ -39,7 +39,7 @@ def create_app():
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = "./translations"
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-    app.config['UPLOAD_FOLDER'] = 'static/uploads'
+    app.config['UPLOAD_FOLDER'] = 'ugc/uploads'
     app.config['PFP_UPLOADS'] = 'static/pfp'
     app.config['GOOGLE_CLIENT_ID'] = "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
 
@@ -78,7 +78,7 @@ def create_app():
     app.register_blueprint(api, url_prefix='/api')
     csrfg.exempt(externalcallback)
     csrfg.exempt(api)
-    limiter.limit("200 per minute")(externalcallback)
+    limiter.limit("200 per minute")(chathandler)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 

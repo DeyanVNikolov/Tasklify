@@ -96,7 +96,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
 
 
-@fileshandler.route("/static/uploads/<path:filename>", methods=["GET"])
+@fileshandler.route("/ugc/uploads/<filename>", methods=["GET"])
 def get_file(filename):
     return redirect(url_for('fileshandler.uploaded_file', filename=filename))
 
