@@ -366,14 +366,17 @@ Created under regulation of ITPG-Varna.
 </script>
 <script>
     var commits = 0;
-    fetch('https://api.github.com/repos/DeyanVNikolov/Tasklify/commits?per_page=250')
+    var commitspage2 = 0;
+    var lastCommitDate = "";
+    var lastCommitDateFormatted = "";
+    var linktocommit = ""
+    fetch('https://api.github.com/repos/DeyanVNikolov/Tasklify/commits?per_page=100')
         .then(response => response.json())
         .then(data => {
             commits = data.length;
-            console.log(commits);
-            // make last commit date human readable european format
-            var lastCommitDate = new Date(data[0].commit.author.date);
-            var lastCommitDateFormatted = lastCommitDate.toLocaleDateString("en-GB", {
+            linktocommit = data[0].html_url;
+            lastCommitDate = new Date(data[0].commit.author.date);
+            lastCommitDateFormatted = lastCommitDate.toLocaleDateString("en-GB", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -382,12 +385,23 @@ Created under regulation of ITPG-Varna.
                 second: "numeric"
             });
 
-            var linktocommit = data[0].html_url;
+
+        });
+
+    fetch('https://api.github.com/repos/DeyanVNikolov/Tasklify/commits?per_page=100&page=2')
+        .then(response => response.json())
+        .then(data => {
+            commitspage2 = data.length;
+            commits = commits + commitspage2;
 
             document.getElementById("commits").innerHTML = "Tasklify version <b>" + commits +
                 "</b><br> Last commit: <b>" + lastCommitDateFormatted +
                 "</b><br> <u><a target='_blank' style='color:rgba(255, 255, 255, 0.3)' href='" + linktocommit + "'>Last Commit</a></u>"
+
         });
+
+
+
 </script>
 
 </body>
