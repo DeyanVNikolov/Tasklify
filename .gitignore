@@ -31,3 +31,6 @@ website/static/pfp/
 /ugc/uploads/*
 /static/uploads/*
 website/static/uploads/*
+website\ugc\uploads\*
+website/ugc/uploads/*
+website/ugc/*

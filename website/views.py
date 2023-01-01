@@ -594,7 +594,7 @@ def task(id):
                     return redirect(url_for('views.task', id=id))
                 filename = secure_filename(file.filename)
                 finalfilename = str(current_user.id) + "_" + filename
-                UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
+                UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
                 path = join(UPLOADS_PATH, finalfilename)
                 file.save(path)
                 imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)
