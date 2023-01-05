@@ -41,9 +41,9 @@
 
                     <div>
                         <input type="radio" id="boss" name="accounttype" value="boss">
-                        <label for="dewey">{{boss}}</label>
+                        <label  for="dewey">{{boss}}</label>
                     </div>
-                    <button class="btnn" style="width: 100% !important;" type="submit">{{login}}</button>
+                    <button class="btnn" style="width: 100% !important; background-color:#28A745" type="submit">{{login}}</button>
                 </div>
                 <br>
 
@@ -59,15 +59,15 @@
                {% if user.accounttype == "boss" %}
                 <h2>{{welcome}}, {{ user.first_name }}</h2>
                 <br><br>
-                <a href="/workers"><button class="btnn" style="width: 100% !important;">{{employees}}</button></a>
+                <a href="/workers"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{employees}}</button></a>
                 <br><br><br>
-                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important;">{{logout}}</button></a>
+                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{logout}}</button></a>
                 {% else %}
                 <h2>{{welcome}}, {{ user.first_name }}</h2>
                 <br><br>
-                <a href="/tasks"><button class="btnn" style="width: 100% !important;">{{tasks}}</button></a>
+                <a href="/tasks"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{tasks}}</button></a>
                 <br><br><br>
-                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important;">{{logout}}</button></a>
+                <a style="background-color:#28A745" class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{logout}}</button></a>
                 {% endif %}
                 {% endif %}
         </div>
