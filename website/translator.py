@@ -1608,7 +1608,15 @@ words = {
         "fr": "Tasklify vous souhaite une bonne année remplie de santé, de bonheur et de chance!",
         "ru": "Tasklify поздравляет вас с новым годом, полным здоровья, счастья и удачи!",
         "en": "Tasklify wishes you a happy new year, full of health, happiness and luck!"
-    }
+    },
+    "comment": {
+        "bg": "Коментар",
+        "es": "Comentario",
+        "de": "Kommentar",
+        "fr": "Commentaire",
+        "ru": "Комментарий",
+        "en": "Comment"
+    },
 
 }
 
