@@ -34,3 +34,6 @@ website/static/uploads/*
 website\ugc\uploads\*
 website/ugc/uploads/*
 website/ugc/*
+website\flask_session\*
+website/flask_session/*
+website/flask_session/

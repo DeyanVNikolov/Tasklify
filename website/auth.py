@@ -11,6 +11,8 @@ from . import db
 from .mailsender import sendregisterationemail, sendregisterationemailboss
 from .models import Worker, Boss
 from .translator import getword
+from flask import session
+from flask_session import Session
 
 auth = Blueprint('auth', __name__)
 global csrfg
@@ -92,7 +94,8 @@ def login():
                            passwordtext=getword("password", cookie), logintext=getword("login", cookie),
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie), loginwith=getword("loginwith", cookie))
+                           worker=getword("worker", cookie), boss=getword("boss", cookie),
+                           loginwith=getword("loginwith", cookie))
 
 
 @auth.route('/logout')
@@ -124,6 +127,8 @@ def sign_up():
             return redirect(url_for('views.boss'))
         else:
             return redirect(url_for('views.home'))
+
+
     captcha = CAPTCHA1.create()
     if request.method == 'POST':
         accounttype = request.form.get('accounttype')
@@ -136,9 +141,15 @@ def sign_up():
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
                                    homenav=getword("homenav", cookie), user=current_user)
 
+        session['emailb'] = request.form.get('email')
+        session['passwordb'] = request.form.get('password1')
+        session['accounttypeb'] = accounttype
+        session['nameb'] = request.form.get('firstName')
+
         if not CAPTCHA1.verify(c_text, c_hash):
             flash(getword("captchawrong", cookie), category='error')
             return redirect(url_for('auth.sign_up'))
+
 
         email = request.form.get('email')
 
@@ -152,7 +163,6 @@ def sign_up():
         except Exception as e:
             flash(str(e), category='error')
             return redirect(url_for('auth.sign_up'))
-
 
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
@@ -189,6 +199,7 @@ def sign_up():
 
             db.session.add(new_user)
             db.session.commit()
+            session.clear()
             login_user(new_user, remember=True)
             flash(getword("accountcreated", cookie), category='success')
             if accounttype == 'worker':
@@ -197,6 +208,14 @@ def sign_up():
             else:
                 sendregisterationemailboss(email, first_name)
                 return redirect(url_for('views.home'))
+
+
+    print(session.get('emailb', 'not set'))
+
+    emailb = session.get('emailb', None)
+    passwordb = session.get('passwordb', None)
+    accounttypeb = session.get('accounttypeb', None)
+    nameb = session.get('nameb', None)
 
     return render_template("sign_up.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -209,8 +228,10 @@ def sign_up():
                            signup=getword("signup", cookie), enteremail=getword("enteremail", cookie),
                            alreadyhaveaccount=getword("alreadyhaveaccount", cookie),
                            loginhere=getword("loginhere", cookie),
-                           databeingproccessed=getword("databeingproccessed", cookie), signupas=getword("signupas", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie), signupwith=getword("signupwith", cookie))
+                           databeingproccessed=getword("databeingproccessed", cookie),
+                           signupas=getword("signupas", cookie), worker=getword("worker", cookie),
+                           boss=getword("boss", cookie), signupwith=getword("signupwith", cookie),
+                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb)
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
@@ -253,7 +274,8 @@ def delete_account():
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
                            homenav=getword("homenav", cookie), user=current_user,
                            deleteaccount=getword("deleteaccount", cookie), confirmtext=getword("confirmdelete", cookie),
-                           password=getword("password", cookie), enterpassword=getword("enterpassword", cookie), chatnav=getword("chatnav", cookie))
+                           password=getword("password", cookie), enterpassword=getword("enterpassword", cookie),
+                           chatnav=getword("chatnav", cookie))
 
 
 @auth.route('/change-password', methods=['GET', 'POST'])
@@ -276,7 +298,8 @@ def change_password():
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                   homenav=getword("homenav", cookie), user=current_user, chatnav=getword("chatnav", cookie))
+                                   homenav=getword("homenav", cookie), user=current_user,
+                                   chatnav=getword("chatnav", cookie))
 
         confirm = request.form.get('confirm')
         email = current_user.email
@@ -313,7 +336,8 @@ def change_password():
                            homenav=getword("homenav", cookie), user=current_user, captcha=captcha,
                            changepassword=getword("changepassword", cookie), oldpassword=getword("oldpassword", cookie),
                            newpassword=getword("newpassword", cookie), cnewpassword=getword("cnewpassword", cookie),
-                           confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie), chatnav=getword("chatnav", cookie))
+                           confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie),
+                           chatnav=getword("chatnav", cookie))
 
 
 @auth.errorhandler(CSRFError)

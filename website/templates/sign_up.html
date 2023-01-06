@@ -43,6 +43,28 @@ content %}
         <input type="password" class="form-control" id="password2" name="password2" placeholder="{{passwordconfirm}}" />
       </div>
     </div>
+      <script>
+    nameb = "{{ nameb|safe }}";
+    emailb = "{{ emailb|safe }}";
+    passwordb = "{{ passwordb|safe }}";
+    acctypeb = "{{ acctypeb|safe }}";
+
+    console.log(nameb);
+    console.log(emailb);
+    console.log(passwordb)
+    console.log(acctypeb)
+
+    if (nameb != "None") {
+      document.getElementById("firstName").value = nameb;
+    }
+    if (emailb != "None") {
+      document.getElementById("email").value = emailb;
+    }
+    if (passwordb != "None") {
+      document.getElementById("password1").value = passwordb;
+      document.getElementById("password2").value = passwordb;
+    }
+</script>
     <div class="gender-details-box">
       <span class="gender-title">{{signupas}}</span>
       <div class="gender-category" style="font-size: 25px;">

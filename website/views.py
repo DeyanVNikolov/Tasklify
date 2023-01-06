@@ -47,7 +47,7 @@ def getcookie(request):
 
 @views.route('/', methods=['GET'])
 def home():
-    
+
     cookie = getcookie(request)
     return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -61,7 +61,8 @@ def home():
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
                            logout=getword("logout", cookie), profile=getword("profile", cookie),
-                           welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie), newyear=getword("happynewyear", cookie))
+                           welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie),
+                           newyear=getword("happynewyear", cookie))
 
 
 @views.route("/home", methods=['GET'])
@@ -101,7 +102,8 @@ def profile():
                            profiletext=getword("profiletext", request.cookies.get('locale')),
                            changepassword=getword("changepassword", request.cookies.get('locale')),
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
-                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id, chatnav=getword("chatnav", cookie))
+                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
+                           chatnav=getword("chatnav", cookie))
 
 
 @views.route('/profile/pfp', methods=['GET', 'POST'])
@@ -160,14 +162,15 @@ def profilepfp():
                            profiletext=getword("profiletext", request.cookies.get('locale')),
                            changepassword=getword("changepassword", request.cookies.get('locale')),
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
-                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id, chatnav=getword("chatnav", cookie),
-                           uploadfilebtn=getword("uploadfilebtn", cookie), submit=getword("submit", cookie))
+                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
+                           chatnav=getword("chatnav", cookie), uploadfilebtn=getword("uploadfilebtn", cookie),
+                           submit=getword("submit", cookie))
 
 
 @views.route('/boss')
 @login_required
 def boss():
-    
+
     cookie = getcookie(request)
 
     if current_user.accounttype == "boss":
@@ -192,7 +195,7 @@ def boss():
 @views.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
-    
+
     cookie = getcookie(request)
 
     if current_user.accounttype == 'worker' and current_user.boss_id is None:
@@ -225,7 +228,16 @@ def tasks():
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
     taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
-    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
+
+    for task in taskstodisplay:
+        if task['complete'] == "2":
+            taskstodisplay.remove(task)
+            taskstodisplay.append(task)
+
+    for task in taskstodisplay:
+        if task['archive'] == "1":
+            taskstodisplay.remove(task)
+            taskstodisplay.append(task)
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -237,14 +249,15 @@ def tasks():
                            workertext=getword("workertext", cookie), done=getword("done", cookie),
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
-                           due=getword("due", cookie), titletext=getword("titletext", cookie), chatnav=getword("chatnav", cookie))
+                           due=getword("due", cookie), titletext=getword("titletext", cookie),
+                           chatnav=getword("chatnav", cookie))
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
 @login_required
 def workers():
     allowed_sorts = ['name', 'email', 'tasks']
-    
+
     cookie = getcookie(request)
 
     if current_user.is_authenticated:
@@ -387,7 +400,7 @@ def workers():
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
 @login_required
 def worker(id):
-    
+
     cookie = getcookie(request)
 
     if current_user.accounttype == "worker":
@@ -476,13 +489,14 @@ def worker(id):
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            delete=getword("delete", cookie), started=getword("started", cookie),
                            deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie),
-                           unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie), chatnav=getword("chatnav", cookie))
+                           unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie),
+                           chatnav=getword("chatnav", cookie))
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
 @login_required
 def task(id):
-    
+
     cookie = getcookie(request)
 
     taskdata = Task.query.filter_by(id=id).first()
@@ -623,7 +637,8 @@ def task(id):
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
                                        fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
+                                       chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
             else:
                 flash(getword("invalidtype", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -690,7 +705,8 @@ def task(id):
                                        started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                                        datedue=dateformat, due=getword("due", cookie),
                                        fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
+                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
+                                       chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
 
             else:
                 flash(getword("invalidtype", cookie), category="error")
@@ -717,7 +733,8 @@ def task(id):
                            delete=getword("delete", cookie), starttext=getword("starttext", cookie),
                            started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                            datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
-                           titletext=getword("titletext", cookie), desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
+                           titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
+                           chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -739,7 +756,7 @@ def urlout(url):
 @views.route('/contact', methods=["GET", "POST"])
 def contact():
     from .mailsender import sendmail
-    
+
     cookie = getcookie(request)
 
     if request.method == "POST":
@@ -778,7 +795,7 @@ def testpastebin():
 @views.route("/printtask/<int:id>", methods=["GET", "POST"])
 def printtask(id):
     abort(403)
-    
+
     # cookie
     cookie = getcookie(request)
 
@@ -850,4 +867,5 @@ def privacy():
                            privacypolicytext10=getword("privacypolicytext10", cookie),
                            privacypolicytext11=getword("privacypolicytext11", cookie),
                            privacypolicytext12=getword("privacypolicytext12", cookie),
-                           privacypolicytext13=getword("privacypolicytext13", cookie), chatnav=getword("chatnav", cookie))
+                           privacypolicytext13=getword("privacypolicytext13", cookie),
+                           chatnav=getword("chatnav", cookie))

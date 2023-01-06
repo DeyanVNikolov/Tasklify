@@ -17,6 +17,8 @@ from flask import jsonify, request
 from flask_limiter.util import get_remote_address
 from website.translator import getword
 from dotenv import load_dotenv
+from flask import session
+from flask_session import Session
 
 load_dotenv(".env")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +27,11 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 
 
+
+
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+    app.config['SECRET_KEY'] = '234e34f6-cca4-40d9-8387-304149e6e8e5'
     # mysql
     app.config[
         'SQLALCHEMY_DATABASE_URI'] = f'mysql://doadmin:{os.getenv("SQL_PASSWORD")}@{os.getenv("SQL_HOST")}:25060/defaultdb'
@@ -42,6 +46,8 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = 'ugc/uploads'
     app.config['PFP_UPLOADS'] = 'static/pfp'
     app.config['GOOGLE_CLIENT_ID'] = "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
+    app.secret_key = '234e34f6-cca4-40d9-8387-304149e6e8e5'
+    app.config['SESSION_TYPE'] = 'filesystem'
 
     global CAPTCHA1
     CAPTCHA1 = CAPTCHA(config=app.config)
@@ -56,6 +62,10 @@ def create_app():
     app.jinja_env.globals.update(getword=getword)
     app.jinja_env.globals.update(undonetasks=undonetasks)
     global limiter
+
+    SEESION_TYPE = "redis"
+    app.config.from_object(__name__)
+    Session(app)
 
     limiter = Limiter(app, key_func=get_remote_address, default_limits=["100 per minute"], storage_uri="memory://", )
 
