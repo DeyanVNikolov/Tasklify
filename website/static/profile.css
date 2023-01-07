@@ -4,13 +4,11 @@
 
 .containerd{
     width: 100%;
-    max-width: 400px;
     background: rgba(0, 0, 0, 0.9);
     padding: 28px;
     margin: 0 28px;
     border-radius: 10px;
     box-shadow: inset -2px 2px 2px white;
-    max-height: 800px;
 }
 
 .form-title{
@@ -106,6 +104,7 @@
     .containerd {
         width: 100%;
         max-width: 350px;
+        height: 400px;
     }
     button {
         font-size: smaller;
@@ -127,7 +126,6 @@
     }
 
     .main-user-info{
-        max-height: 380px;
         overflow: auto;
     }
 

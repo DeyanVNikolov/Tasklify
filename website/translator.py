@@ -1617,6 +1617,15 @@ words = {
         "ru": "Комментарий",
         "en": "Comment"
     },
+    "workeremailtext": {
+        "bg": "Имейл на служителя",
+        "es": "Correo electrónico del trabajador",
+        "de": "E-Mail des Mitarbeiters",
+        "fr": "Email du travailleur",
+        "ru": "Электронная почта работника",
+        "en": "Employee email"
+    },
+
 
 }
 

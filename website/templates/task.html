@@ -133,10 +133,15 @@
             transition: .4s;
         }
 
-        button:hover {
-            background-color: transparent;
-            border: 2px solid red;
-            cursor: pointer;
+        .buttondanger {
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border: 2px solid transparent;
+            font-weight: bold;
+            padding: 10px 10px;
+            border-radius: 30px;
+            transition: .4s;
         }
 
         .taskdiv {
@@ -336,7 +341,7 @@
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <input type="hidden" name="task_id" value="{{ taskid }}"/>
                                 <br>
-                                <button type="submit" class="btn btn-danger">{{ notdone }}</button>
+                                <button type="submit" class="buttondanger">{{ notdone }}</button>
                             </form>
                         {% endif %}
             </div>

@@ -1,64 +1,78 @@
-{% extends "base.html" %} {% block title %} {{ profiletext }} {% endblock %} {% block content
-%}
-<link rel="stylesheet" href="/static/profile.css">
-<br><br><br>
-<div class="container-fluid text-center">
-  <br><br><br><br>
+{% extends "base.html" %} {% block title %} {{ profiletext }} {% endblock %} {% block content %}
+    <link rel="stylesheet" href="/static/profile.css">
+    <br><br><br>
+    <div class="container-fluid text-center">
+        <br><br><br><br>
 
-  <center>
-    <div class="containerd container text-center">
-      <h1 class="form-title">{{ profiletext }}</h1>
-        <div class="main-user-info">
+        <center>
+            <div class="containerd container text-center" style="height: 920px; width:500px">
+                <h1 class="form-title">{{ profiletext }}</h1>
+                <div class="main-user-info">
 
-          <div class="user-input-box">
-            <div class="user-input-box justify-content-center">
-              <img src="/static/pfp/{{id}}.png" onerror="this.src='/static/blank-profile.png'"
-               alt="pfp" style="width:150px; height:auto; border-radius:50%" class="pfp img-fluid center-cropped">
+                    <div class="user-input-box">
+                        <div class="user-input-box justify-content-center">
+                            <img src="/static/pfp/{{ id }}.png" onerror="this.src='/static/blank-profile.png'"
+                                 alt="pfp" style="width:150px; height:auto; border-radius:50%"
+                                 class="pfp img-fluid center-cropped">
+                        </div>
+
+                        <br>
+                    </div>
+
+                    <br>
+
+                    <div class="user-input-box">
+                        <span class="gender-title">{{ nametext }}</span>
+                        <label><strong>{{ user.first_name }}</strong></label>
+                    </div>
+
+                    <br>
+
+                    <div class="user-input-box">
+                        <span class="gender-title">{{ emailtext }}</span>
+                        <label><strong>{{ user.email }}</strong></label>
+                    </div>
+
+                    <br>
+
+                    <div class="user-input-box">
+                        <span class="gender-title">{{ idtext }}</span>
+                        <label><strong>{{ id }}</strong></label>
+                    </div>
+
+
+                </div>
+                <div class="gender-details-box">
+                    <hr style="color:white">
+                    <div class="gender-category">
+                        <a href="/files/{{ user.id }}">
+                            <button type="button">{{ myfiles }}</button>
+                        </a>
+
+                        <a href="/auth/change-password">
+                            <button type="button">{{ changepassword }}</button>
+                        </a>
+                        <br><br>
+                        <a href="/profile/pfp">
+                            <button type="button">Смени профилна снимка</button>
+                        </a>
+
+                        <br>
+                        <br>
+
+
+                        <a href="/auth/delete-account">
+                            <button type="button" class="buttonred">{{ deleteaccount }}</button>
+                        </a>
+
+                    </div>
+                </div>
             </div>
-  
-            <br>
-          </div>
+        </center>
 
-          <br>
-
-          <div class="user-input-box">
-            <span class="gender-title">{{nametext}}</span>
-            <label><strong>{{ user.first_name }}</strong></label>
-          </div>
-
-          <br>
-
-          <div class="user-input-box">
-            <span class="gender-title">{{emailtext}}</span>
-            <label><strong>{{ user.email }}</strong></label>
-          </div>
+        <br><br><br><br>
 
 
-
-        </div>
-        <div class="gender-details-box">
-          <hr style="color:white">
-          <div class="gender-category">
-            <a href="/files/{{ user.id }}"><button type="button">{{ myfiles }}</button></a>
-
-            <a href="/auth/change-password"><button type="button">{{ changepassword }}</button></a>
-            <br><br>
-            <a href="/profile/pfp"><button type="button">Смени профилна снимка</button></a>
-
-            <br>
-            <br>
-
-
-            <a href="/auth/delete-account"><button type="button" class="buttonred">{{ deleteaccount }}</button></a>
-
-          </div>
-        </div>
     </div>
-  </center>
-
-  <br><br><br><br>
-
-
-</div>
 
 {% endblock %}
