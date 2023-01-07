@@ -103,7 +103,7 @@ def profile():
                            changepassword=getword("changepassword", request.cookies.get('locale')),
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
                            myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie), idtext=getword("idtext", cookie))
 
 
 @views.route('/profile/pfp', methods=['GET', 'POST'])
@@ -227,7 +227,7 @@ def tasks():
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
-    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
+    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=True)
 
     for task in taskstodisplay:
         if task['complete'] == "2":
@@ -422,8 +422,19 @@ def worker(id):
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
              "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
 
-    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=False)
-    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
+    taskstodisplay.sort(key=lambda x: x['datedue'], reverse=True)
+
+    for task in taskstodisplay:
+        if task['complete'] == "2":
+            taskstodisplay.remove(task)
+            taskstodisplay.append(task)
+
+    for task in taskstodisplay:
+        if task['archive'] == "1":
+            taskstodisplay.remove(task)
+            taskstodisplay.append(task)
+
+
     if request.method == "POST":
         typeform = request.form.get('typeform')
         taskid = request.form.get('task_id')
@@ -490,7 +501,8 @@ def worker(id):
                            delete=getword("delete", cookie), started=getword("started", cookie),
                            deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie),
                            unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie),
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie), workername=worker.first_name, workeremail=worker.email,
+                           workeremailtext=getword("workeremailtext", cookie))
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
