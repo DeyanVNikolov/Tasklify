@@ -661,7 +661,7 @@ def task(id):
             db.session.commit()
             return redirect(url_for('views.task', id=id))
         elif typeform == "uploadzip":
-            ALLOWED_EXTENSIONS1 = ['zip', 'rar', '7z']
+            ALLOWED_EXTENSIONS1 = ['zip', 'rar', '7z', "pptx", "ppt", "doc", "docx", "xls", "xlsx"]
 
             def allowed_file(filename):
                 return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS1
@@ -688,9 +688,14 @@ def task(id):
                 if file.content_type in suspicious_file_types:
                     flash(getword("wecannotacceptthisfile", cookie), category="error")
                     return redirect(url_for('views.task', id=id))
+                # filename = secure_filename(file.filename)
+                # finalfilename = str(current_user.id) + "_" + filename
+                # UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
+                # path = join(UPLOADS_PATH, finalfilename)
                 filename = secure_filename(file.filename)
                 finalfilename = str(current_user.id) + "_" + filename
-                UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
+
+                UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
                 path = join(UPLOADS_PATH, finalfilename)
                 file.save(path)
                 imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)

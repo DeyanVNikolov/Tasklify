@@ -27,7 +27,7 @@
                     class="btn1">{{addemployeebutton}}</a>
                 <a href="/employ/sign-up" style="border-style:solid;border-width:2px; color:white; border-color:black;"
                     class="btn1">{{registeryouremployee}}</a>
-                <a style="background-color:#32bea6; border-style:solid;border-width:2px; color:white; border-color:black;"
+                <a style="background-color:#28A745; border-style:solid;border-width:2px; color:white; border-color:black;"
                     href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
@@ -129,7 +129,7 @@
                         <td>{{ undonetasks(worker.id) }}</td>
                         <td>
                             <form method="POST" id="deleteform{{worker.id}}" name="deleteform">
-                                <a href="/worker/{{worker.id}}"><i class="far fa-eye"></i></a>
+                                <a href="/worker/{{worker.id}}"><i style="background-color: #28A745" class="far fa-eye"></i></a>
 
 
                                 <input type="hidden" name="typeform" value="delete" />

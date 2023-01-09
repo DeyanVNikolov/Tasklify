@@ -145,4 +145,4 @@ def files(id):
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie))
+                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie), chatnav=getword("chatnav", cookie))
