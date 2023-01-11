@@ -1080,7 +1080,7 @@ words = {
     },
     "registeryouremployee": {
         "en": "Register your employee",
-        "bg": "Регистрирайте служителя си",
+        "bg": "Регистрирай нов служителя",
         "es": "Registra a tu empleado",
         "de": "Melden Sie Ihren Mitarbeiter an",
         "fr": "Inscrivez votre employé",
