@@ -19,25 +19,21 @@
 
     <h1>{{nowtime}}</h1>
 
-    <div class="last-appointments container-fluid" style="width: 100%; height: fit-content; overflow:auto">
+    <div class="card1 container-fluid" style="width: 100%; height: fit-content; overflow:auto">
         <div class="heading text-truncate" style="width:100%; overflow:auto">
             <h2>{{adminpaneltext}}</h2>&nbsp;
             <div class="justify-content-right">
-                <a href="/add/employee" style="border-style:solid;border-width:2px; color:white; border-color:black;"
+                <a href="/add/employee" style="background-color: #343A40;"
                     class="btn1">{{addemployeebutton}}</a>
-                <a href="/employ/sign-up" style="border-style:solid;border-width:2px; color:white; border-color:black;"
+                <a href="/employ/sign-up" style="background-color: #343A40"
                     class="btn1">{{registeryouremployee}}</a>
-                <a style="background-color:#28A745; border-style:solid;border-width:2px; color:white; border-color:black;"
+                <a style="background-color:#28A745;color:white;"
                     href="/add/task" class="btn1">{{addtasktext}}</a>
             </div>
         </div>
         <br>
         <table class="appointments text-truncate">
             <div class="btn-group">
-                <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{sorttext}}
-                </button>
                 <script>
                     // on load if search is in url, set the search input to the search value
                     window.onload = function () {
@@ -52,7 +48,7 @@
                         // redirect to /workers/?search=SearchInputT and keep the current sorting
                         var search = document.getElementById("SearchInputT").value;
                         // if search is empty, redirect to /workers
-                        if (search == "") {
+                        if (search === "") {
                             window.location.href = "/workers";
                             return;
                         }
@@ -71,22 +67,15 @@
                 </script>
                 <script>
                     function AreYouSure(workerid) {
-                        confirmed = confirm("{{areyousure}}");
+                        var confirmed = confirm("{{areyousure}}");
 
 
                         if (confirmed) {
                             document.getElementById("deleteform" + workerid).submit();
-                        }   
+                        }
                     }
                 </script>
 
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/workers">{{nonetext}}</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/workers/?sort=name">{{sortnametext}}</a>
-                    <a class="dropdown-item" href="/workers/?sort=email">{{sortemailtext}}</a>
-                    <a class="dropdown-item" href="/workers/?sort=tasks">{{sorttaskstext}}</a>
-                </div>
             </div>
             <br><br>
             <div class="input-group mb-4 makesmallwhenscreengoesbrrr" style="width:50%; transform: translateX(50%);">
@@ -94,12 +83,16 @@
                     aria-describedby="button-addon5" class="form-control" style="display:table">
                 <div class="input-group-append">
                     <button onclick="myFunction()" onkeydown="enterkey()" id="button-addon5" type="submit"
-                        class="btn btn-primary"> <i class="fa fa-search"> </i> </button>
+                        class="btn btn-primary" style="background-color: #28A745 !important; border: #28A745"> <i class="fa fa-search"> </i> </button>
                 </div>
             </div>
 
 
             <br>
+                                    <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{sorttext}}
+                </button>
             <h5 style="margin-top:15px">{{currentlysorting}}
 
                 {% if sorttype == "tasks" %}
@@ -111,6 +104,13 @@
                 {% else %}
                 {{nonetext}}
                 {% endif %}
+                            <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/workers">{{nonetext}}</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/workers/?sort=name">{{sortnametext}}</a>
+                    <a class="dropdown-item" href="/workers/?sort=email">{{sortemailtext}}</a>
+                    <a class="dropdown-item" href="/workers/?sort=tasks">{{sorttaskstext}}</a>
+                </div>
 
 
             </h5>

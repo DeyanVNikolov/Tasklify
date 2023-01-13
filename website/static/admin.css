@@ -24,8 +24,8 @@ body {
     overflow: scroll;
 }
 
-.last-appointments,
-.doctor-visiting {
+.card1,
+.insidecard {
     min-height: fit-content;
     background: #fff;
     padding: 20px;
@@ -81,7 +81,7 @@ td i {
     border-radius: 50px;
 }
 
-.last-appointments table tbody td:last-child {
+.card1 table tbody td:last-child {
     white-space: nowrap;
 }
 
@@ -120,8 +120,8 @@ td i {
 }
 
 @media(max-width:530px) {
-    .last-appointments,
-    .doctor-visiting {
+    .card1,
+    .insidecard {
         font-size: 70%;
         padding: 10px;
         min-height: 200px;
@@ -140,8 +140,8 @@ td i {
 }
 
 @media(max-width:420px) {
-    .last-appointments,
-    .doctor-visiting {
+    .card1,
+    .insidecard {
         font-size: 70%;
         padding: 10px;
         min-height: 200px;

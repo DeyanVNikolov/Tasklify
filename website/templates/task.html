@@ -12,6 +12,16 @@
             border-bottom: solid 1px white;
         }
 
+        .donebutton:hover {
+            background-color: #343A40;
+            color: white;
+        }
+
+        .notdonebutton:hover {
+            background-color: #343A40 !important;
+            color: white;
+        }
+
         .main-user-info {
             display: flex;
             flex-wrap: wrap;
@@ -216,7 +226,7 @@
         {% elif status == "2" %}
             {% set status = "Done" %}
         {% endif %}
-        <div class="container containerg text-center">
+        <div class="container containerg text-center" style="max-width:70% !important;">
             <h1 class="form-title">{{ tasktext }}</h1>
             <div class="main-user-info">
 
@@ -229,7 +239,7 @@
 
                 <div class="user-input-box">
                     <span class="gender-title">{{ desctext }}</span>
-                    <label>{{ task1.task }}
+                    <label>{{ task1.task }}</label>
                         <br>
                         <br>
 
@@ -253,25 +263,26 @@
 
                         <br>
                         {% if status == "Not Started" %}
-                            <form method="POST">
+                            <label><form method="POST">
                                 <input type="hidden" name="typeform" value="start"/>
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <input type="hidden" name="task_id" value="{{ taskid }}"/>
                                 <br>
-                                <button type="submit" class="btn btn-success">{{ starttext }}</button>
-                            </form>
+                                <button type="submit" class="donebutton">{{ starttext }} </button>
+                            </form></label>
                         {% elif status == "Started" %}
                             <form method="POST" enctype="multipart/form-data">
                                 <div class="user-input-box">
                             <span class="gender-title">{{ photouploader }} <i
                                     class="fa-solid fa-cloud-arrow-up"></i></span>
                                     <br>
-                                    <h5 class="font-weight-bold">15MB - '.txt', '.pdf', '.png', '.jpg', '.jpeg',
-                                        '.gif'</h5>
-                                    <label>
+                                    <label><h5 class="font-weight-bold">15MB - '.txt', '.pdf', '.png', '.jpg', '.jpeg',
+                                        '.gif'</h5></label>
+
                                 </div>
+                                <label>
                                 <div class="cont">
-                                    <input style="white-space: initial" type="file" name="file" id="file">
+                                    <input style="white-space: initial; font-size:15px !important;" type="file" name="file" id="file">
                                     <br>
                                     <br>
                                 </div>
@@ -280,6 +291,7 @@
                                 <input type="hidden" name="task_id" value="{{ taskid }}"/>
                                 <button type="submit" class="btn btn-success">{{ uploadtext }} &nbsp;<i
                                         class="fa-solid fa-file-arrow-up"></i></button>
+                                </label>
                             </form>
                             <br>
                             <form method="POST" enctype="multipart/form-data">
@@ -287,11 +299,14 @@
                             <span class="gender-title">{{ fileuploader }} <i
                                     class="fa-solid fa-cloud-arrow-up"></i></span>
                                     <br>
-                                    <h5 class="font-weight-bold">200MB - ".zip", ".rar", ".7z", ".pptx", ".ppt", ".doc", ".docx", ".xls", ".xlsx"</h5>
-                                    <label>
+                                    <label><h5 class="font-weight-bold">200MB - ".zip", ".rar", ".7z", ".pptx", ".ppt", ".doc",
+                                        ".docx", ".xls", ".xlsx"</h5> </label>
+
+
                                 </div>
                                 <div class="cont">
-                                    <input style="white-space: initial" type="file" name="file" id="file">
+                                    <label>
+                                    <input style="white-space: initial; font-size:15px !important;" type="file" name="file" id="file"></label>
                                     <br>
                                     <br>
                                 </div>
@@ -302,6 +317,8 @@
                                         class="fa-solid fa-file-arrow-up"></i></button>
                             </form>
 
+                            <br>
+                            <label>
                             <br>
                             <form method="post">
                                 <div class="user-input-box">
@@ -321,28 +338,27 @@
                                     <input type="hidden" name="typeform" value="done"/>
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                     <input type="hidden" name="task_id" value="{{ taskid }}"/>
-                                    <button type="submit">{{ done }} <i class="fa-solid fa-check"></i></button>
+                                    <button type="submit" class="donebutton">{{ done }} <i
+                                            class="fa-solid fa-check"></i></button>
                                 </label>
                             </form>
+                            </label>
                             </div>
-                            </label>
-
-                            </label>
                         {% elif status == "Done" %}
                             <div class="user-input-box">
-                                    <span class="gender-title">{{comment}}</span>
-                                    <label>
-                                                                        <br>
-                                        <h3>{{ task1.comment }}</h3>
-                                    </label>
-                                </div>
-                            <form method="POST">
+                                <span class="gender-title">{{ comment }}</span>
+                                <label>
+                                    <br>
+                                    <h3>{{ task1.comment }}</h3>
+                                </label>
+                            </div>
+                            <label><form method="POST">
                                 <input type="hidden" name="typeform" value="start"/>
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <input type="hidden" name="task_id" value="{{ taskid }}"/>
                                 <br>
-                                <button type="submit" class="buttondanger">{{ notdone }}</button>
-                            </form>
+                                <button type="submit" class="buttondanger notdonebutton">{{ notdone }}</button>
+                            </form></label>
                         {% endif %}
             </div>
 

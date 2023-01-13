@@ -119,7 +119,7 @@ body {
     transition: 0.4s ease;
 }
 .btnn:hover{
-    background: rgb(17, 17, 17);
+    background-color: #343A40 !important;
     color: #f4f5f6;
 }
 .btnn a{
