@@ -85,6 +85,8 @@
     </div>
     <br><br>
 
+    <input type="hidden" id="emptychats" value="0">
+
 
     <script>
         let args = window.location.search.substring(1).split('&');
@@ -95,6 +97,14 @@
 
         if (num > numchats) {
             window.location.href = '/chat';
+        }
+
+        if (numchats == 0) {
+             let iframe = document.getElementById('Iframe');
+            document.getElementById('emptychats').value = 1;
+            iframe.src = '/static/emptychats.html';
+
+
         }
 
         if (args[0] == '' || args[0] == ' ') {
