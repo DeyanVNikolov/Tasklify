@@ -239,6 +239,18 @@ def tasks():
             taskstodisplay.remove(task)
             taskstodisplay.append(task)
 
+
+    sort = request.args.get('sort')
+    if sort == "date":
+        taskstodisplay.sort(key=lambda x: x['datedue'])
+    elif sort == "title":
+        taskstodisplay.sort(key=lambda x: x['title'].lower())
+    elif sort == "status":
+        taskstodisplay.sort(key=lambda x: x['complete'], reverse=False)
+    elif sort == "archive":
+        taskstodisplay.sort(key=lambda x: x['archive'], reverse=True)
+
+
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
@@ -250,7 +262,10 @@ def tasks():
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
                            due=getword("due", cookie), titletext=getword("titletext", cookie),
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie),
+                           sorttypestatus=getword("sorttypestatus", cookie), sorttypedate=getword("sorttypedate", cookie),
+                            sorttypetitle=getword("sorttypetitle", cookie), sorttypearchive=getword("sorttypearchive", cookie),
+                           nonetext=getword("nonetext", cookie), sorttext=getword("sorttext", cookie), sorttype=sort)
 
 
 @views.route('/workers/', methods=['GET', 'POST'])

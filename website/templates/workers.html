@@ -89,27 +89,27 @@
 
 
             <br>
-                                    <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
+            <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{sorttext}}
-                </button>
-            <h5 style="margin-top:15px">{{currentlysorting}}
+                {{ sorttext }}
+            </button>
+            <h5 style="margin-top:15px">{{ currentlysorting }}
 
                 {% if sorttype == "tasks" %}
-                {{sorttaskstext}}
+                    {{ sorttaskstext }}
                 {% elif sorttype == "name" %}
-                {{sortnametext}}
+                    {{ sortnametext }}
                 {% elif sorttype == "email" %}
-                {{sortemailtext}}
+                    {{ sortemailtext }}
                 {% else %}
-                {{nonetext}}
+                    {{ nonetext }}
                 {% endif %}
-                            <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/workers">{{nonetext}}</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/workers">{{ nonetext }}</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/workers/?sort=name">{{sortnametext}}</a>
-                    <a class="dropdown-item" href="/workers/?sort=email">{{sortemailtext}}</a>
-                    <a class="dropdown-item" href="/workers/?sort=tasks">{{sorttaskstext}}</a>
+                    <a class="dropdown-item" href="/workers/?sort=name">{{ sortnametext }}</a>
+                    <a class="dropdown-item" href="/workers/?sort=email">{{ sortemailtext }}</a>
+                    <a class="dropdown-item" href="/workers/?sort=tasks">{{ sorttaskstext }}</a>
                 </div>
 
 

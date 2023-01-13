@@ -1625,9 +1625,38 @@ words = {
         "ru": "Электронная почта работника",
         "en": "Employee email"
     },
-
-
-}
+    "sorttypestatus": {
+        "bg": "Статус",
+        "es": "Estado",
+        "de": "Status",
+        "fr": "Statut",
+        "ru": "Статус",
+        "en": "Status"
+    },
+    "sorttypedate": {
+        "bg": "Дата",
+        "es": "Fecha",
+        "de": "Datum",
+        "fr": "Date",
+        "ru": "Дата",
+        "en": "Date"
+    },
+    "sorttypetitle": {
+        "bg": "Заглавие",
+        "es": "Título",
+        "de": "Titel",
+        "fr": "Titre",
+        "ru": "Заголовок",
+        "en": "Title"
+    },
+    "sorttypearchive": {
+        "bg": "Архив",
+        "es": "Archivo",
+        "de": "Archiv",
+        "fr": "Archive",
+        "ru": "Архив",
+        "en": "Archive"
+    }, }
 
 
 
