@@ -239,7 +239,6 @@ def tasks():
             taskstodisplay.remove(task)
             taskstodisplay.append(task)
 
-
     sort = request.args.get('sort')
     if sort == "date":
         taskstodisplay.sort(key=lambda x: x['datedue'])
@@ -249,7 +248,6 @@ def tasks():
         taskstodisplay.sort(key=lambda x: x['complete'], reverse=False)
     elif sort == "archive":
         taskstodisplay.sort(key=lambda x: x['archive'], reverse=True)
-
 
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -263,9 +261,10 @@ def tasks():
                            completed=getword("completed", cookie), started=getword("started", cookie),
                            due=getword("due", cookie), titletext=getword("titletext", cookie),
                            chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie),
-                           sorttypestatus=getword("sorttypestatus", cookie), sorttypedate=getword("sorttypedate", cookie),
-                            sorttypetitle=getword("sorttypetitle", cookie), sorttypearchive=getword("sorttypearchive", cookie),
-                           nonetext=getword("nonetext", cookie), sorttext=getword("sorttext", cookie), sorttype=sort)
+                           sorttypestatus=getword("sorttypestatus", cookie),
+                           sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
+                           sorttypearchive=getword("sorttypearchive", cookie), nonetext=getword("nonetext", cookie),
+                           sorttext=getword("sorttext", cookie), sorttype=sort)
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
@@ -449,6 +448,15 @@ def worker(id):
             taskstodisplay.remove(task)
             taskstodisplay.append(task)
 
+    sort = request.args.get('sort')
+    if sort == "date":
+        taskstodisplay.sort(key=lambda x: x['datedue'])
+    elif sort == "title":
+        taskstodisplay.sort(key=lambda x: x['title'].lower())
+    elif sort == "status":
+        taskstodisplay.sort(key=lambda x: x['complete'], reverse=False)
+    elif sort == "archive":
+        taskstodisplay.sort(key=lambda x: x['archive'], reverse=True)
 
     if request.method == "POST":
         typeform = request.form.get('typeform')
@@ -517,7 +525,12 @@ def worker(id):
                            deletefromall=getword("deletefromall", cookie), workeridtext=getword("workeridtext", cookie),
                            unarchive=getword("unarchive", cookie), fullydelete=getword("fullydelete", cookie),
                            chatnav=getword("chatnav", cookie), workername=worker.first_name, workeremail=worker.email,
-                           workeremailtext=getword("workeremailtext", cookie))
+                           workeremailtext=getword("workeremailtext", cookie),
+                           currentlysorting=getword("currentlysorting", cookie),
+                           sorttypestatus=getword("sorttypestatus", cookie),
+                           sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
+                           sorttypearchive=getword("sorttypearchive", cookie), nonetext=getword("nonetext", cookie),
+                           sorttext=getword("sorttext", cookie), sorttype=sort)
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
