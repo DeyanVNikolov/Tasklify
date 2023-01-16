@@ -129,11 +129,20 @@ def chat():
 
     print(chats)
 
+    basepath = None
+    print(request.host)
+    if request.host == '127.0.0.1:5000':
+        basepath = 'http://127.0.0.1:5000'
+    else:
+        basepath = 'https://www.tasklify.me'
+
+
     return render_template('chat.html', user=current_user, userid=id, chats=chats,
                            profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
-                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), chatnav=getword("chatnav", cookie))
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), chatnav=getword("chatnav", cookie),
+                           basepath=basepath)
 
 
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])

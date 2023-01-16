@@ -119,7 +119,7 @@
             }
             console.log(otherid);
             console.log(userid);
-            iframe.src = 'https://tasklify.me/chatapi/' + userid + '/' + otherid;
+            iframe.src = '{{basepath}}/chatapi/' + userid + '/' + otherid;
         } else {
             console.log('args');
             let iframe = document.getElementById('Iframe');
@@ -131,7 +131,7 @@
             }
             console.log(otherid);
             console.log(userid);
-            iframe.src = 'https://tasklify.me/chatapi/' + userid + '/' + otherid;
+            iframe.src = '{{basepath}}/chatapi/' + userid + '/' + otherid;
         }
     </script>
 

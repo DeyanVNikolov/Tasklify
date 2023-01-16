@@ -201,6 +201,13 @@
                 }
             });
         });
+
+        // detect when the user presses the enter key and fire the button click event
+        message.addEventListener('keydown', function (e) {
+            if (e.keyCode === 13) {
+                button.click();
+            }
+        });
     </script>
 
 
@@ -304,10 +311,10 @@
 
         function loaddata() {
 
-            data = getdata("{{ userid }}", "{{ otherid }}")
+            let data = getdata("{{ userid }}", "{{ otherid }}")
             console.log(data)
 
-            if (data == "No data could be retrieved! Web server is down or not responding.") {
+            if (data === "No data could be retrieved! Web server is down or not responding.") {
                 document.getElementById("errorgiven").value = "1";
                 document.getElementById("messagebox").innerHTML = "";
                 document.getElementById("messagebox").appendChild(preparemessage_reciver("No data could be retrieved! Web server is down or not responding.", "XX:XX - TASKLIFY OFFICIAL ERROR - CONTACT SUPPORT", 0));
@@ -321,8 +328,8 @@
             }
 
 
-            count = document.getElementById("count")
-            first_time = document.getElementById("first_time")
+            let count = document.getElementById("count");
+            let first_time = document.getElementById("first_time");
 
             if (count.value != data.length) {
                 count.value = data.length;
@@ -330,7 +337,7 @@
 
 
                 for (var i = 0; i < data.length; i++) {
-                    if (data[i].sender == true) {
+                    if (data[i].sender === true) {
                         // remove all children
                         document.getElementById("messagebox").appendChild(preparemessage_sender(data[i].message, data[i]
                             .date, data[i].id));
@@ -342,26 +349,26 @@
                     }
 
                 }
+
+                scrolltobottom()
+
             }
 
-            datalenght = data.length;
-            messagebox_child_count = document.getElementById("messagebox").childElementCount;
+            let datalenght = data.length;
+            let messagebox_child_count = document.getElementById("messagebox").childElementCount;
 
 
-            if (datalenght != messagebox_child_count) {
+            if (datalenght !== messagebox_child_count) {
                 window.location.reload();
             }
 
             if (first_time.value == 0) {
+                console.log("first time")
                 scrolltobottom();
                 count.value = data.length;
                 first_time.value = 1;
             }
 
-            if (count.value != data.length) {
-                count.value = data.length;
-                scrolltobottom();
-            }
 
 
 
