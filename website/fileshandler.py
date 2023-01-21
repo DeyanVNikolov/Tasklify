@@ -39,17 +39,60 @@ def checkmaintenance():
     pass
 
 
-@fileshandler.errorhandler(StatusDenied)
-def redirect_on_status_denied(error):
-    print(error)
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie)), 403
+# no potential security issue
+allowed_extensions = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt',
+                      'ods', 'odp', 'odg', 'odf', 'rtf', 'csv', 'zip', 'rar', '7z', 'tar', 'gz', 'bz2', 'mp3', 'mp4',
+                      'wav', 'avi', 'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm', 'vob', 'ogg', 'ogv',
+                      '3gp', '3g2', 'm4a', 'flac', 'aac', 'wma', 'iso', 'apk', 'exe', 'jar', 'bat', 'cmd', 'vb', 'vbs',
+                      'js', 'php', 'py', 'pl', 'rb', 'sh', 'html', 'htm', 'xhtml', 'asp', 'aspx', 'css', 'scss', 'sass',
+                      'less', 'c', 'cpp', 'h', 'hpp', 'cs', 'java', 'class', 'jar', 'vb', 'vbs', 'js', 'php', 'py',
+                      'pl', 'rb', 'sh', 'html', 'htm', 'xhtml', 'asp', 'aspx', 'css', 'scss', 'sass', 'less', 'c',
+                      'cpp', 'h', 'hpp', 'cs', 'java', 'class', 'jar', 'vb', 'vbs', 'js', 'php', 'py', 'pl', 'rb', 'sh',
+                      'html', 'htm', 'xhtml', 'asp', 'aspx', 'css', 'scss', 'sass', 'less', 'c', 'cpp', 'h', 'hpp',
+                      'cs', 'java', 'class', 'jar', 'vb', 'vbs', 'js', 'php', 'py', 'pl', 'rb', 'sh', 'html', 'htm',
+                      'xhtml', 'asp', 'aspx', 'css', 'scss', 'sass', 'less', 'c', 'cpp', 'h', 'hpp', 'cs', 'java',
+                      'class', 'jar', 'vb', 'vbs', 'js', 'php', 'py', 'pl', 'rb', 'sh', 'html', 'htm', 'xhtml', 'asp',
+                      'aspx', 'css', 'scss']
 
 
-@fileshandler.route('/uploaded_file/<path:filename>', methods=['GET'])
+def allowed_file(filename):
+    if len(filename.rsplit('.', 1)) > 2:
+        return False
+    else:
+        extension = filename.rsplit('.', 1)[1].lower()
+        if extension in allowed_extensions:
+            return True
+
+
+@fileshandler.route('/file/upld', methods=['GET', 'POST'])
+@login_required
+def fileupd():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            # 100 mb
+            if file.content_length > 100000000:
+                flash("File is too big! Max size is 100 MB")
+                return redirect(request.url)
+
+            filename = secure_filename(file.filename)
+            finalfilename = str(current_user.id) + "_" + filename
+            UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
+            path = join(UPLOADS_PATH, finalfilename)
+            file.save(path)
+    return redirect(f"/files/{current_user.id}")
+
+
+@fileshandler.route('/uploaded_file/<filename>')
 def uploaded_file(filename):
     checkmaintenance()
 
@@ -105,6 +148,7 @@ def hastebin(text):
     r = requests.post("https://hastebin.com/documents", data=text)
     return "https://hastebin.com/raw/" + r.json()["key"]
 
+
 @fileshandler.route("/files/<path:id>", methods=["GET", "POST"])
 def files(id):
     if 'locale' in request.cookies:
@@ -145,4 +189,6 @@ def files(id):
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie), chatnav=getword("chatnav", cookie))
+                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie),
+                           chatnav=getword("chatnav", cookie), uploadtext=getword("uploadtext", cookie),
+                           myfiles=getword("myfiles", cookie), fileuploadtext=getword("fileuploadtext", cookie))

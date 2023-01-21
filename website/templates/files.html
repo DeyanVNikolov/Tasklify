@@ -12,7 +12,16 @@
 
 
 <br><br><br><br>
-<h1>My Files</h1>
+<h1>{{ myfiles }}</h1>
+
+    <hr>
+    <h2>{{ fileuploadtext }}</h2>
+    <br>
+    <form action="/file/upld" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="{{ uploadtext }}" name="submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
 
 
 {% for file, split in files.items() %}
@@ -24,10 +33,10 @@
     <input type="hidden" name="file" value="{{file}}" />
     <div class="container containertobesized text-center" style="max-width:50%">
         <h3>{{split}}</h3>
-        <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}">
+        <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" target="_blank">
             <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
                 class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
-                src="{{ url_for('fileshandler.uploaded_file', filename=file) }}"></a>
+                src="{{ url_for('fileshandler.uploaded_file', filename=file) }}" alt="uploaded file"></a>
         <button class="btn btn-danger" type="submit">{{delete}}</button>
     </div>
 </form>

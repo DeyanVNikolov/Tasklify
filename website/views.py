@@ -589,176 +589,74 @@ def task(id):
             taskpost.complete = False
             db.session.commit()
             return redirect(url_for('views.task', id=id))
-        elif typeform == "hastebin":
-            if request.form.get('commenthaste') == "" or request.form.get('commenthaste') is None:
-                flash(getword("nocontent", cookie), category="error")
-                return redirect(url_for('views.task', id=id))
-            if len(request.form.get('commenthaste')) > 20000:
-                flash(getword("toolong20kmax", cookie), category="error")
-                return redirect(url_for('views.task', id=id))
-            hastebinlink = hastebin(request.form.get('commenthaste'))
-            return render_template("task.html", profilenav=getword("profilenav", cookie),
-                                   loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                                   tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                                   adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                   homenav=getword("homenav", cookie),
-                                   markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
-                                   photolinktexttitle=getword("photolinktexttitle", cookie),
-                                   photouploader=getword("photouploader", cookie), copy=getword("copy", cookie),
-                                   sevendaylimit=getword("sevendaylimit", cookie),
-                                   submitcodetext=getword("submitcodetext", cookie), showhastebinmodal=True,
-                                   hastebinlink=hastebinlink, print=getword("print", cookie), user=current_user,
-                                   notdone=getword("notdone", cookie), task=taskdata.task, task1=taskdata,
-                                   title=taskdata.title, taskid=id, done=getword("done", cookie),
-                                   tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
-                                   workertext=getword("workertext", cookie),
-                                   tasktextplural=getword("tasktextplural", cookie),
-                                   notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                   delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                   started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
-                                   datedue=dateformat, due=getword("due", cookie),
-                                   fileuploader=getword("fileuploader", cookie), titletext=getword("titletext", cookie),
-                                   desctext=getword("desctext", cookie), chatnav=getword("chatnav", cookie))
-        elif typeform == "uploadimage":
-            ALLOWED_EXTENSIONS = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
-
-            def allowed_file(filename):
-                return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-            if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
-            file = request.files['file']
-            if file.filename == '':
-                flash(getword("nofileselected", cookie), category="error")
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
-                # check file size
-                if file.content_length > 15000000:
-                    flash(getword("filetoobig15mb", cookie), category="error")
-                    return redirect(url_for('views.task', id=id))
-                # check if file is suspicious
-                suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
-                                         'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
-                                         'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
-                                         'application/x-java-applet', 'application/x-java-bean',
-                                         'application/x-java-vm', ]
-                if file.content_type in suspicious_file_types:
-                    flash(getword("wecannotacceptthisfile", cookie), category="error")
-                    return redirect(url_for('views.task', id=id))
-                filename = secure_filename(file.filename)
-                finalfilename = str(current_user.id) + "_" + filename
-                UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
-                path = join(UPLOADS_PATH, finalfilename)
-                file.save(path)
-                imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)
-
-                datedue = taskdata.datedue
-                dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
-
-                return render_template("task.html", profilenav=getword("profilenav", cookie),
-                                       loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                                       tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                                       adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                       homenav=getword("homenav", cookie),
-                                       markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
-                                       photolinktexttitle=getword("photolinktexttitle", cookie),
-                                       photouploader=getword("photouploader", cookie), showimagemodal=True,
-                                       imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
-                                       showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie),
-                                       submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie),
-                                       user=current_user, notdone=getword("notdone", cookie), task=taskdata.task,
-                                       task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie),
-                                       tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
-                                       workertext=getword("workertext", cookie),
-                                       tasktextplural=getword("tasktextplural", cookie),
-                                       notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
-                                       datedue=dateformat, due=getword("due", cookie),
-                                       fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
-                                       chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
-            else:
-                flash(getword("invalidtype", cookie), category="error")
-                return redirect(url_for('views.task', id=id))
         elif typeform == "start":
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
             taskpost.complete = "1"
             db.session.commit()
             return redirect(url_for('views.task', id=id))
-        elif typeform == "uploadzip":
-            ALLOWED_EXTENSIONS1 = ['zip', 'rar', '7z', "pptx", "ppt", "doc", "docx", "xls", "xlsx"]
-
-            def allowed_file(filename):
-                return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS1
-
-            if 'file' not in request.files:
-                flash('No file part', category="error")
-                return redirect(request.url)
-
-            file = request.files['file']
-            if file.filename == '':
-                flash(getword("nofileselected", cookie), category="error")
+        elif typeform == "attach":
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            file = request.form.get('file')
+            filename = current_user.id + "_" + file
+            if file is None or file == "" or file == " ":
+                flash(getword("fileisnone", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
-            if file and allowed_file(file.filename):
-                # check file size
-                if file.content_length > 200000000:
-                    flash("File too big! 200MB", category="error")
-                    return redirect(url_for('views.task', id=id))
-                # check if file is suspicious
-                suspicious_file_types = ['application/x-dosexec', 'application/x-msdownload',
-                                         'application/x-msdos-program', 'application/x-msi', 'application/x-winexe',
-                                         'application/x-shockwave-flash', 'application/x-shockwave-flash2-preview',
-                                         'application/x-java-applet', 'application/x-java-bean',
-                                         'application/x-java-vm', ]
-                if file.content_type in suspicious_file_types:
-                    flash(getword("wecannotacceptthisfile", cookie), category="error")
-                    return redirect(url_for('views.task', id=id))
-                # filename = secure_filename(file.filename)
-                # finalfilename = str(current_user.id) + "_" + filename
-                # UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
-                # path = join(UPLOADS_PATH, finalfilename)
-                filename = secure_filename(file.filename)
-                finalfilename = str(current_user.id) + "_" + filename
-
-                UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
-                path = join(UPLOADS_PATH, finalfilename)
-                file.save(path)
-                imageurl = url_for('fileshandler.uploaded_file', filename=finalfilename)
-                datedue = taskdata.datedue
-                dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
-                return render_template("task.html", profilenav=getword("profilenav", cookie),
-                                       loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                                       tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                                       adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                       homenav=getword("homenav", cookie),
-                                       markyourtaskasdonetext=getword("markyourtaskasdonetext", cookie),
-                                       photolinktexttitle=getword("photolinktexttitle", cookie),
-                                       photouploader=getword("photouploader", cookie), showimagemodal=True,
-                                       imageurl=imageurl, copy=getword("copy", cookie), hastebinlink=None,
-                                       showhastebinmodal=False, sevendaylimit=getword("sevendaylimit", cookie),
-                                       submitcodetext=getword("submitcodetext", cookie), print=getword("print", cookie),
-                                       user=current_user, notdone=getword("notdone", cookie), task=taskdata.task,
-                                       task1=taskdata, title=taskdata.title, taskid=id, done=getword("done", cookie),
-                                       tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
-                                       workertext=getword("workertext", cookie),
-                                       tasktextplural=getword("tasktextplural", cookie),
-                                       notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
-                                       delete=getword("delete", cookie), starttext=getword("starttext", cookie),
-                                       started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
-                                       datedue=dateformat, due=getword("due", cookie),
-                                       fileuploader=getword("fileuploader", cookie),
-                                       titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
-                                       chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
-
+            if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
+                attachements1 = taskpost.attachments
+                for attachement in attachements1.split("|FILESEPARATOR|"):
+                    if attachement == filename:
+                        flash(getword("filealreadyattached", cookie), category="error")
+                        return redirect(url_for('views.task', id=id))
+                currnetattachments = taskpost.attachments
+                taskpost.attachments = currnetattachments + '|FILESEPARATOR|' + filename
+                db.session.commit()
+        elif typeform == "deleteattachment":
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            file = request.form.get('file')
+            filename = current_user.id + "_" + file
+            if file is None or file == "" or file == " ":
+                flash(getword("fileisnone", cookie), category="error")
+                return redirect(url_for('views.task', id=id))
+            attachements1 = taskpost.attachments
+            attachements2 = attachements1.split("|FILESEPARATOR|")
+            if len(attachements2) == 1:
+                taskpost.attachments = ""
+                db.session.commit()
             else:
-                flash(getword("invalidtype", cookie), category="error")
-                return redirect(url_for('views.task', id=id))
+                attachements3 = ""
+                for attachement in attachements2:
+                    if attachement != filename:
+                        attachements3 = attachements3 + "|FILESEPARATOR|" + attachement
+                taskpost.attachments = attachements3
+                db.session.commit()
 
     datedue = taskdata.datedue
     dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
+
+    myfiles = []
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        file1 = file.split("_")
+        if str(file1[0]) == str(current_user.id):
+                myfiles.append(file)
+
+
+    myfileswithoutid = []
+    for file in myfiles:
+        file1 = file.split("_")
+        myfileswithoutid.append(file1[1])
+
+    attachements = taskdata.attachments
+    attachements = attachements.split("|FILESEPARATOR|")
+
+    attachements1 = []
+    for attachement in attachements:
+        if attachement != "":
+            attachement = attachement.split("_")[1]
+            attachements1.append(attachement)
+
 
     return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -779,7 +677,8 @@ def task(id):
                            started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                            datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
                            titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
-                           chatnav=getword("chatnav", cookie), comment=getword("comment", cookie))
+                           chatnav=getword("chatnav", cookie), comment=getword("comment", cookie),
+                           myfiles=myfiles, myfileswithoutid=myfileswithoutid, attachements=attachements1)
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])

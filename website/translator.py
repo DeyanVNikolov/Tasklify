@@ -1656,7 +1656,25 @@ words = {
         "fr": "Archive",
         "ru": "Архив",
         "en": "Archive"
-    }, }
+    },
+    "filealreadyattached": {
+        "bg": "Файлът е прикачен",
+        "es": "El archivo ya está adjunto",
+        "de": "Die Datei ist bereits angehängt",
+        "fr": "Le fichier est déjà attaché",
+        "ru": "Файл уже прикреплен",
+        "en": "File already attached"
+    },
+    "fileuploadtext": {
+        "bg": "Качете файл",
+        "es": "Subir archivo",
+        "de": "Datei hochladen",
+        "fr": "Télécharger un fichier",
+        "ru": "Загрузить файл",
+        "en": "Upload file"
+    },
+
+}
 
 
 

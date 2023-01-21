@@ -22,6 +22,7 @@ class Task(db.Model):
     datedue = db.Column(db.DateTime, default=datetime.datetime.now())
     notified = db.Column(db.Boolean, default=False)
     archive = db.Column(db.Boolean, default=False)
+    attachments = db.Column(db.String(1000), default="")
 
     def __repr__(self):
         return '<Task %r>' % self.id
