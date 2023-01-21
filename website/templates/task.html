@@ -261,7 +261,7 @@
 
                     <br>
                     {% if status == "Not Started" %}
-                        <label></label>
+                        <label>
                         <form method="POST">
                             <input type="hidden" name="typeform" value="start"/>
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -270,8 +270,11 @@
                             <button type="submit" class="donebutton">{{ starttext }} </button>
                         </form>
                         </label>
+                        </div>
                     {% elif status == "Started" %}
-                        <div class="user-input-box">
+
+                        <div class="user-input-box" style="margin-top:20px !important;">
+
                             <span class="gender-title">ПРИКАЧАНЕ НА ФАЙЛОВЕ</span>
                             <button style="margin-left: 20px" type="button" data-toggle="modal"
                                     data-target="#pickfilesmodal">ПРИКАЧИ
@@ -380,6 +383,7 @@
                                 <button type="submit" class="buttondanger notdonebutton">{{ notdone }}</button>
                             </form>
                         </label>
+                        </div>
                     {% endif %}
             </div>
 
