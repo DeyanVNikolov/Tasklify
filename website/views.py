@@ -654,7 +654,6 @@ def task(id):
     attachements1 = []
     for attachement in attachements:
         if attachement != "":
-            attachement = attachement.split("_")[1]
             attachements1.append(attachement)
 
 
