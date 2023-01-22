@@ -197,6 +197,19 @@ def add_task():
             return redirect(url_for(homepage))
 
     if request.method == 'POST':
+        filecount = request.form.get('filecount')
+        filespresent = False
+        filestring = ""
+
+        if filecount is None or filecount == "" or filecount == "0" or filecount == 0:
+            filespresent = False
+
+        else:
+            filespresent = True
+            for i in range(int(filecount)):
+                filestring = filestring + current_user.id + "_" + request.form.get('file' + str(i)) + "|FILESEPARATOR|"
+
+
         if request.form.get("typeform") == "task":
             date = request.form.get('date')
 
@@ -226,7 +239,11 @@ def add_task():
                         acid = str(uuid.uuid4())
                         for workerg in workersl:
                             tasknum += 1
-                            new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
+                            if filespresent:
+                                new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
+                                            actual_id=acid, ordernumber=tasknum, datedue=datedue, attachments=filestring)
+                            else:
+                                new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
                                             actual_id=acid, ordernumber=tasknum, datedue=datedue)
                             db.session.add(new_task)
                             db.session.commit()
@@ -234,6 +251,19 @@ def add_task():
                         redirect(url_for(workerspage))
                     except Exception as e:
                         flash(str(e), category="error")
+
+    myfiles = []
+    for file in os.listdir(app.config['UPLOAD_FOLDER']):
+        file1 = file.split("_")
+        if str(file1[0]) == str(current_user.id):
+                myfiles.append(file)
+
+
+    myfileswithoutid = []
+    for file in myfiles:
+        file1 = file.split("_")
+        myfileswithoutid.append(file1[1])
+
 
     return render_template("add_task.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -248,4 +278,5 @@ def add_task():
                            selectworkers=getword("selectworkers", cookie), signupemploy=getword("signupemploy", cookie),
                            here=getword("here", cookie), myfiles=getword("empmyfiles", cookie),
                            addtasktext=getword("addtask", cookie), goback=getword("goback", cookie),
-                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie), chatnav=getword("chatnav", cookie))
+                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie), chatnav=getword("chatnav", cookie),
+                           myfileswithoutid=myfileswithoutid, myfilesd=myfiles)

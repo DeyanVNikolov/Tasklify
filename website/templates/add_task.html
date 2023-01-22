@@ -1,54 +1,528 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
-<link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css" type="text/css" />
-<div class="container text-center">
-    <br><br>
-    <h1>{{addtasktext}} </h1>
-    <br><br>
-    <a href="/workers"><button class="btn-success btn">{{ goback }}</button></a>
-    <br><br>
-    <div class="container containersign text-center">
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css"
+          type="text/css"/>
+    <div class="container text-center">
+        <style>
+            .form-title {
+                font-size: 26px;
+                font-weight: 600;
+                text-align: center;
+                padding-bottom: 6px;
+                color: white;
+                text-shadow: 2px 2px 2px black;
+                border-bottom: solid 1px white;
+            }
 
-        <form method="POST">
-            <div class="main-user-info">
+
+            .donebutton:hover {
+                background-color: #343A40;
+                color: white;
+            }
+
+            .notdonebutton:hover {
+                background-color: #343A40 !important;
+                color: white;
+            }
+
+            .main-user-info {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding: 20px 0;
+            }
+
+            .user-input-box:nth-child(2n) {
+                justify-content: end;
+
+            }
+
+            .user-input-box {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                padding-bottom: 15px;
+            }
+
+            .user-input-box label {
+                width: 100%;
+                color: white;
+                font-size: 20px;
+                font-weight: 400;
+                margin: 5px 0;
+                text-align: center;
+            }
+
+            .user-input-box input:not([type="file"]) {
+                height: 40px;
+                width: 95%;
+                border-radius: 7px;
+                outline: none;
+                border: 1px solid grey;
+                padding: 0 10px;
+            }
+
+            .gender-title {
+                color: white;
+                font-size: 24px;
+                font-weight: 600;
+                border-bottom: 1px solid white;
+            }
+
+            .gender-category {
+                color: white;
+            }
+
+            .form-submit-btn input {
+                cursor: pointer;
+            }
+
+            .form-submit-btn {
+                margin-top: 40px;
+            }
+
+            .form-submit-btn input {
+                display: block;
+                width: 100%;
+                margin-top: 10px;
+                font-size: 20px;
+                padding: 10px;
+                border: none;
+                border-radius: 3px;
+                color: rgb(209, 209, 209);
+                background: rgba(63, 114, 76, 0.7);
+            }
+
+            .form-submit-btn input:hover {
+                background: rgba(56, 204, 93, 0.7);
+                color: rgb(255, 255, 255);
+            }
+
+            @media (max-width: 600px) {
+                .container {
+                    min-width: 280px;
+                }
+
+                .user-input-box {
+                    margin-bottom: 12px;
+                    width: 100%;
+                }
+
+                .user-input-box:nth-child(2n) {
+                    justify-content: space-between;
+                }
+
+                .gender-category {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+
+                .main-user-info {
+                    overflow: auto;
+                }
+
+                .main-user-info::-webkit-scrollbar {
+                    width: 0;
+                }
+            }
+
+            .containerg {
+                width: 100%;
+                max-width: 510px;
+                background: rgba(0, 0, 0, 0.9);
+                border-radius: 10px;
+                box-shadow: inset -2px 2px 2px white;
+            }
+
+            button {
+                background-color: #28A745;
+                color: white;
+                text-decoration: none;
+                border: 2px solid transparent;
+                font-weight: bold;
+                padding: 10px 10px;
+                border-radius: 30px;
+                transition: .4s;
+            }
+
+            .buttondanger {
+                background-color: #dc3545;
+                color: white;
+                text-decoration: none;
+                border: 2px solid transparent;
+                font-weight: bold;
+                padding: 10px 10px;
+                border-radius: 30px;
+                transition: .4s;
+            }
+
+            .taskdiv {
+                white-space: initial;
+                border-style: dashed;
+                width: 50%;
+                transform: translateX(50%);
+            }
+
+            @media only screen and (max-width: 991px) {
+                .taskdiv {
+                    width: 100%;
+                    transform: translateX(0%);
+                }
+
+            }
+
+            .upload-box {
+                font-size: 15px;
+                background: white;
+                border-radius: 50px;
+                box-shadow: 5px 5px 10px black;
+                width: 350px;
+                outline: none;
+            }
+
+            ::-webkit-file-upload-button {
+                color: white;
+                background: #28A745;
+                padding: 20px;
+                border: none;
+                border-radius: 50px;
+                box-shadow: 1px 0px 1px 1px #6b4559;
+                outline: none;
+            }
+
+
+            element.style {
+                resize: vertical;
+                width: 100%;
+                min-height: 100px;
+            }
+
+            .taskfield2 {
+                border-radius: 7px;
+            }
+
+            textarea {
+                max-width: 100%;
+                max-height: 100%;
+                overflow: auto;
+                margin: 0;
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+            }
+
+            .tooltip-text {
+                visibility: hidden;
+                position: absolute;
+                z-index: 1;
+                width: 100px;
+                color: white;
+                font-size: 12px;
+                border-radius: 10px;
+                padding: 10px 15px 10px 15px;
+            }
+
+            .hover-text:hover .tooltip-text {
+                visibility: visible;
+            }
+
+            #top {
+                top: -40px;
+                left: -50%;
+            }
+
+            #bottom {
+                top: 25px;
+                left: -50%;
+            }
+
+            #left {
+                top: -8px;
+                right: 120%;
+            }
+
+            #right {
+                top: -8px;
+                left: 120%;
+            }
+
+            .hover-text {
+                position: relative;
+                display: inline-block;
+                margin: 40px;
+                text-align: center;
+            }
+        </style>
+        <br><br>
+        <h1>{{ addtasktext }} </h1>
+        <br><br>
+        <a href="/workers">
+            <button class="btn-success btn">{{ goback }}</button>
+        </a>
+        <br><br>
+        <div class="container containersign text-center">
+
+            <form method="POST" id="addtaskform">
+                <div class="main-user-info">
                     <div class="form-group" style="width:100%">
-                        <input type="text" class="form-control taskfield1" id="title" name="title" placeholder="{{titletext1}}" />
+                        <input type="text" class="form-control taskfield1" id="title" name="title"
+                               placeholder="{{ titletext1 }}"/>
                     </div>
-                
+
                     <div class="form-group" style="width:100%">
-                        <textarea type="text" class="taskfield2" style="resize:vertical; width: 100%; min-height: 100px;" id="task" name="task" placeholder="{{tasktext1}}"></textarea>
-                        
+                        <textarea type="text" class="taskfield2"
+                                  style="resize:vertical; width: 100%; min-height: 100px;" id="task" name="task"
+                                  placeholder="{{ tasktext1 }}"></textarea>
+
                     </div>
-            </div>
-            <br>
-            <input class="form-control" type="datetime-local" id="date" name="date">
-            <br>
-            <div class="rounded-background-signup">
-                <br>
-                <div class="form-check">
-                    <h3>{{ selectworkers }}</h3>
-                    <input type="button" onclick='selects()' class="btn btn-success" value="{{ selectall }}" />
-                    <input type="button" onclick='deSelect()' class="btn btn-success" value="{{ deselectall }}" />
                 </div>
                 <br>
-                {% for worker in current_user.workers %}
-                <div class="form-check">
-                    <input style="transform: scale(1.3); margin-top: 10px;" class="form-check-input" type="checkbox"
-                        value="{{ worker.id }}" id="worker{{ worker.id }}" name="worker">
-                    <label style="font-size:20px" class="form-check-label" for="worker{{ worker.id }}">
-                        {{ worker.first_name }}
-                    </label>
-                </div>
-                {% endfor %}
+                <input class="form-control" type="datetime-local" id="date" name="date">
                 <br>
-            </div>
-            <div class="form-submit-btn">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="typeform" value="task" />
-                <button type="submit" class="btn btn-success" onclick="showModal()">{{submit}}</button>
-            </div>
-        </form>
+                <div class="user-input-box" style="margin-top:20px !important;">
+
+                    <span class="gender-title">ПРИКАЧАНЕ НА ФАЙЛОВЕ</span>
+                    <button style="margin-left: 20px" type="button" data-toggle="modal"
+                            data-target="#pickfilesmodal">ПРИКАЧИ
+                    </button>
+                    <label></label>
+                    <div id="files">
+
+                    </div>
+                    <br>
+                    <div class="card-deck row row-cols-1 row-cols-md-3"
+                         style="width: 100% !important; padding: 0px 0px 0px 0px !important; margin: 0px 0px 0px 0px !important;">
+                        {% for file in attachements %}
+                            <div class="col mb-4" style="width: 100% !important;">
+
+                                <div class="card h-100">
+                                    <div class="card-title">
+                                        <p style="color:black" class="card-text">{{ file }}</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <a href="/uploaded_file/{{ user.id }}_{{ file }}" target="_blank"><img
+                                                class="img-fluid mx-auto d-block"
+                                                style="max-width: 100%px; max-height: auto;"
+                                                src="/uploaded_file/{{ user.id }}_{{ file }}"
+                                                class="card-img-top" alt="..."
+                                                onerror="this.src='/static/image/nopreview.jpg'"></a>
+                                    </div>
+                                    <div class="card-footer">
+                                        <input type="hidden" name="typeform" value="deleteattachment"/>
+                                        <input type="hidden" name="csrf_token" id="csrf_token_del_attch"
+                                               value="{{ csrf_token() }}"/>
+                                        <input type="hidden" name="task_id" id="task_id_attch"
+                                               value="{{ taskid }}"/>
+                                        <input type="hidden" name="file" id="file_attch"
+                                               value="{{ file }}"/>
+                                        <button type="submit" id="deleteattachbtn" class="buttondanger">
+                                            Изтрий
+                                        </button>
+
+                                        <script>
+                                            let button = document.getElementById("deleteattachbtn");
+                                            button.addEventListener("click", function () {
+                                                let csrf_token = document.getElementById("csrf_token_del_attch").value;
+                                                let task_id = document.getElementById("task_id_attch").value;
+                                                let file = document.getElementById("file_attch").value;
+                                                let data = new FormData();
+                                                data.append("typeform", "deleteattachment");
+                                                data.append("csrf_token", csrf_token);
+                                                data.append("task_id", task_id);
+                                                data.append("file", file);
+                                                fetch("/task/{{ taskid }}", {
+                                                    method: "POST",
+                                                    body: data
+                                                    // reload
+                                                }).then(function (response) {
+                                                    location.reload();
+                                                });
+
+                                            });
+                                        </script>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <br>
+                <div class="rounded-background-signup">
+                    <br>
+                    <div class="form-check">
+                        <h3>{{ selectworkers }}</h3>
+                        <input type="button" onclick='selects()' class="btn btn-success" value="{{ selectall }}"/>
+                        <input type="button" onclick='deSelect()' class="btn btn-success" value="{{ deselectall }}"/>
+                    </div>
+                    <br>
+                    {% for worker in current_user.workers %}
+                        <div class="form-check">
+                            <input style="transform: scale(1.3); margin-top: 10px;" class="form-check-input"
+                                   type="checkbox"
+                                   value="{{ worker.id }}" id="worker{{ worker.id }}" name="worker">
+                            <label style="font-size:20px" class="form-check-label" for="worker{{ worker.id }}">
+                                {{ worker.first_name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <br>
+                </div>
+                <div class="form-submit-btn">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="typeform" value="task"/>
+                    <input type="hidden" name="filecount" id="filecount" value="0"/>
+                    <button type="submit" class="btn btn-success" onclick="showModal()">{{ submit }}</button>
+                </div>
+            </form>
+        </div>
+
+        <br><br>
     </div>
+    <div class="modal fade" id="pickfilesmodal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">ВАШИТЕ ФАЙЛОВЕ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-deck row row-cols-1 row-cols-md-3">
+                        {% for file in myfileswithoutid %}
+                            <div class="col mb-4">
+                                <div class="card h-100">
+                                    <div class="card-title">
+                                        <p class="card-text">{{ file }}</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <img class="img-fluid mx-auto d-block"
+                                             style="max-width: 100%; max-height: auto;"
+                                             src="/uploaded_file/{{ user.id }}_{{ file }}" class="card-img-top"
+                                             alt="..."
+                                             onerror="this.src='/static/image/nopreview.jpg'">
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary" id="{{ file }}" onclick="addfile(this.id)">
+                                            Избери
+                                        </button>
+                                    </div>
 
-    <br><br>
-</div>
+                                    <script>
+                                        function removeitem(id) {
+                                            let filecount = document.getElementById("filecount").value;
+                                            let filecountint = parseInt(filecount);
+                                            filecountint = filecountint - 1;
+                                            document.getElementById("filecount").value = filecountint;
+                                            // split id by p
+                                            let idsplit = id.split("p");
+                                            let idint = idsplit[1];
+                                            let file = document.getElementById(idint);
+                                            file.remove();
+                                            let file2 = document.getElementById("h" + idint);
+                                            file2.remove();
+
+
+                                        }
+                                    </script>
+
+                                    <script>
+                                        function addfile(id) {
+                                            // check all added files for same value as id
+                                            for (let i = 0; i < document.getElementById("filecount").value; i++) {
+                                                let file = document.getElementById("file" + i);
+                                                if (file.value === id) {
+                                                    // close modal
+                                                    $('#pickfilesmodal').modal('hide');
+                                                    return;
+                                                }
+                                            }
+                                            // create new hidden input inside form with name file and value id addtaskform
+                                            let filecount = document.getElementById("filecount").value;
+                                            let input1 = document.createElement("input");
+                                            input1.type = "hidden";
+                                            input1.name = "file" + filecount;
+                                            input1.id = "file" + filecount;
+                                            input1.value = id;
+                                            // get int value of filecount, add 1 and set its string value to filecount
+
+                                            // create p element with id fileid and text id
+                                            let p = document.createElement("p");
+                                            p.id = "pfile" + filecount;
+                                            p.innerText = id;
+                                            p.style = "font-size: 20px; color: #ffffff; margin: 0px 0px 20px 0px !important;";
+                                            p.className = "hover-text"
+                                            // create button element with id fileid and text Изтрий
+                                            let button = document.createElement("button");
+                                            button.id = "bfile" + filecount;
+                                            button.innerText = "Изтрий";
+                                            button.className = "btn btn-danger";
+                                            button.style = "margin-left: 10px;";
+                                            button.onclick = function () {
+                                                let id = p.id;
+                                                removeitem(id);
+                                            };
+
+                                            //<div class="hover-text">hover me
+                                            //    <span class="tooltip-text" id="bottom"><img
+                                            //        src="https://via.placeholder.com/350x150"></span>
+                                           // </div>
+
+
+                                            let span = document.createElement("span");
+                                            span.className = "tooltip-text";
+                                            span.id = "spfile" + filecount;
+                                            let img = document.createElement("img");
+                                            img.src = "/uploaded_file/{{ user.id }}_" + id;
+                                            img.style = "width: 300px; height: auto;";
+                                            img.onerror = function () {
+                                                this.src = "/static/image/nopreview.jpg";
+                                            };
+                                            span.appendChild(img);
+
+
+                                        // create div element with id fileid
+                                        let div = document.createElement("div");
+                                        div.id = "hfile" + filecount;
+                                        div.className = "form-check";
+                                        // append p and button to div
+                                        p.appendChild(button);
+                                        p.appendChild(span);
+                                        div.appendChild(p);
+
+                                        // append div to div with id files
+                                        document.getElementById("files").appendChild(div);
+
+
+                                        filecount = parseInt(filecount) + 1;
+                                        document.getElementById("filecount").value = filecount.toString();
+                                        document.getElementById("addtaskform").appendChild(input1);
+                                        $('#pickfilesmodal').modal('hide');
+
+                                        }
+                                    </script>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+                <h3 class="text-center">Можете да качите нови файлове от тук: <a href="/files/{{ user.id }}">
+                    <button class="btn btn-primary">Моите файлове</button>
+                </a></h3>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        </script>
+
+    </div>
 {% endblock %}

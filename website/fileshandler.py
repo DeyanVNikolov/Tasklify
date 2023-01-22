@@ -121,22 +121,49 @@ def uploaded_file(filename):
             else:
                 if worker.id != current_user.id:
                     return redirect(url_for(homepage))
-            return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                # if file is previewable image or video or audio then return it else download it
+                if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
+                                                          'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
+                                                          'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
+                                                          'wma']:
+                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                else:
+                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
+                                               environ=request.environ)
 
 
         elif current_user.accounttype == "boss":
             imageid = filename.split("_")[0]
             if Boss.query.filter_by(id=imageid).first() is not None:
                 if Boss.query.filter_by(id=imageid).first().id == current_user.id:
-                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                    if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
+                                                              'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
+                                                              'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
+                                                              'wma']:
+                        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                    else:
+                        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
+                                                   environ=request.environ)
             elif Worker.query.filter_by(id=imageid).first() is not None:
                 if Worker.query.filter_by(id=imageid).first().boss_id == current_user.id:
-                    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                    if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
+                                                              'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
+                                                              'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
+                                                              'wma']:
+                        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+                    else:
+                        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
+                                                   environ=request.environ)
 
             flash(getword("nopermtoviewthisview", cookie), category="error")
             return redirect(url_for(homepage))
 
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+    if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi', 'mov', 'mkv',
+                                              'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm', 'vob', 'ogg', 'ogv', '3gp',
+                                              '3g2', 'm4a', 'flac', 'aac', 'wma']:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
+    else:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True, environ=request.environ)
 
 
 @fileshandler.route("/ugc/uploads/<filename>", methods=["GET"])
