@@ -84,7 +84,12 @@ def fileupd():
                 flash("File is too big! Max size is 100 MB")
                 return redirect(request.url)
 
-            filename = secure_filename(file.filename)
+            from transliterate import translit
+
+            filenametranslit = translit(file.filename, reversed=True)
+
+            filename = secure_filename(filenametranslit)
+            print(filename)
             finalfilename = str(current_user.id) + "_" + filename
             UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
             path = join(UPLOADS_PATH, finalfilename)
@@ -125,7 +130,7 @@ def uploaded_file(filename):
                 if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
                                                           'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
                                                           'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
-                                                          'wma']:
+                                                          'wma', 'pdf', 'txt']:
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
                 else:
                     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
@@ -139,7 +144,7 @@ def uploaded_file(filename):
                     if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
                                                               'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
                                                               'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
-                                                              'wma']:
+                                                              'wma', 'pdf', 'txt']:
                         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
                     else:
                         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
@@ -149,7 +154,7 @@ def uploaded_file(filename):
                     if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi',
                                                               'mov', 'mkv', 'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm',
                                                               'vob', 'ogg', 'ogv', '3gp', '3g2', 'm4a', 'flac', 'aac',
-                                                              'wma']:
+                                                              'wma', 'pdf', 'txt']:
                         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
                     else:
                         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True,
@@ -160,7 +165,7 @@ def uploaded_file(filename):
 
     if filename.rsplit('.', 1)[1].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi', 'mov', 'mkv',
                                               'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm', 'vob', 'ogg', 'ogv', '3gp',
-                                              '3g2', 'm4a', 'flac', 'aac', 'wma']:
+                                              '3g2', 'm4a', 'flac', 'aac', 'wma', 'pdf', 'txt']:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
     else:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True, environ=request.environ)
