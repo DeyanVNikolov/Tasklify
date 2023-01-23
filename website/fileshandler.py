@@ -85,10 +85,14 @@ def fileupd():
                 return redirect(request.url)
 
             from transliterate import translit
+            filenametranslit = file.filename
+            if not all(ord(c) < 128 for c in file.filename):
+                filenametranslit = translit(file.filename, reversed=True)
 
-            filenametranslit = translit(file.filename, reversed=True)
+
 
             filename = secure_filename(filenametranslit)
+            filename = filename.replace("_", "-")
             print(filename)
             finalfilename = str(current_user.id) + "_" + filename
             UPLOADS_PATH = join(dirname(realpath(__file__)), 'ugc/uploads/')
