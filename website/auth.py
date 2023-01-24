@@ -19,7 +19,6 @@ global csrfg
 
 
 
-@auth.errorhandler(StatusDenied)
 def redirect_on_status_denied1(error):
     flash("")
     return render_template("maintenance.html", profilenav=getword("profilenav", cookie),

@@ -36,7 +36,6 @@ def checkmaintenance():
     pass
 
 
-@addtabs.errorhandler(StatusDenied)
 def redirect_on_status_denied(error):
     print(error)
     return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
