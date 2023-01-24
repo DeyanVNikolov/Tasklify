@@ -33,11 +33,6 @@ oneworkerpage = "views.worker"
 
 global csrfg
 
-
-class StatusDenied(Exception):
-    print("StatusDenied Exception")
-
-
 def getcookie(request):
     if 'locale' in request.cookies:
         return request.cookies.get('locale')

@@ -30,10 +30,6 @@ oneworkerpage = "views.worker"
 global csrfg
 
 
-class StatusDenied(Exception):
-    print("StatusDenied Exception")
-
-
 def checkmaintenance():
     # Not in use
     pass

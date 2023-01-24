@@ -18,9 +18,6 @@ auth = Blueprint('auth', __name__)
 global csrfg
 
 
-class StatusDenied(Exception):
-    print("StatusDenied Exception")
-
 
 @auth.errorhandler(StatusDenied)
 def redirect_on_status_denied1(error):
