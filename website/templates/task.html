@@ -262,13 +262,13 @@
                     <br>
                     {% if status == "Not Started" %}
                         <label>
-                        <form method="POST">
-                            <input type="hidden" name="typeform" value="start"/>
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            <input type="hidden" name="task_id" value="{{ taskid }}"/>
-                            <br>
-                            <button type="submit" class="donebutton">{{ starttext }} </button>
-                        </form>
+                            <form method="POST">
+                                <input type="hidden" name="typeform" value="start"/>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <input type="hidden" name="task_id" value="{{ taskid }}"/>
+                                <br>
+                                <button type="submit" class="donebutton">{{ starttext }} </button>
+                            </form>
                         </label>
                         </div>
                     {% elif status == "Started" %}
@@ -281,21 +281,23 @@
                             </button>
                             <label></label>
                             <br>
-                            <div class="card-deck row row-cols-1 row-cols-md-3" style="width: 100% !important; padding: 0px 0px 0px 0px !important; margin: 0px 0px 0px 0px !important;">
+                            <div class="card-deck row row-cols-1 row-cols-md-3"
+                                 style="width: 100% !important; padding: 0px 0px 0px 0px !important; margin: 0px 0px 0px 0px !important;">
                                 {% for file in attachements %}
                                     {% set fileslist = file.split('_') %}
                                     <div class="col mb-4" style="width: 100% !important;">
 
                                         <div class="card h-100">
                                             <div class="card-title">
-                                                <p style="color:black" class="card-text">{{fileslist[1]}}</p>
+                                                <p style="color:black" class="card-text">{{ fileslist[1] }}</p>
                                             </div>
                                             <div class="card-body">
-                                                <a href="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}" target="_blank"><img class="img-fluid mx-auto d-block"
-                                                     style="max-width: 100%px; max-height: auto;"
-                                                     src="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
-                                                     class="card-img-top" alt="..."
-                                                     onerror="this.src='/static/image/nopreview.jpg'"></a>
+                                                <a href="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                   target="_blank"><img class="img-fluid mx-auto d-block"
+                                                                        style="max-width: 100%px; max-height: auto;"
+                                                                        src="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                                        class="card-img-top" alt="..."
+                                                                        onerror="this.src='/static/image/nopreview.jpg'"></a>
                                             </div>
                                             <div class="card-footer">
                                                 <input type="hidden" name="typeform" value="deleteattachment"/>
@@ -368,8 +370,79 @@
                         </label>
                         </div>
                     {% elif status == "Done" %}
+                        <div class="user-input-box" style="margin-top:20px !important;">
+
+                            <span class="gender-title">ПРИКАЧАНЕ НА ФАЙЛОВЕ</span>
+                            <button style="margin-left: 20px" type="button" data-toggle="modal"
+                                    data-target="#pickfilesmodal">ПРИКАЧИ
+                            </button>
+                            <label></label>
+                            <br>
+                            <div class="card-deck row row-cols-1 row-cols-md-3"
+                                 style="width: 100% !important; padding: 0px 0px 0px 0px !important; margin: 0px 0px 0px 0px !important;">
+                                {% for file in attachements %}
+                                    {% set fileslist = file.split('_') %}
+                                    <div class="col mb-4" style="width: 100% !important;">
+
+                                        <div class="card h-100">
+                                            <div class="card-title">
+                                                <p style="color:black" class="card-text">{{ fileslist[1] }}</p>
+                                            </div>
+                                            <div class="card-body">
+                                                <a href="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                   target="_blank"><img class="img-fluid mx-auto d-block"
+                                                                        style="max-width: 100%px; max-height: auto;"
+                                                                        src="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                                        class="card-img-top" alt="..."
+                                                                        onerror="this.src='/static/image/nopreview.jpg'"></a>
+                                            </div>
+                                            <div class="card-footer">
+                                                <input type="hidden" name="typeform" value="deleteattachment"/>
+                                                <input type="hidden" name="csrf_token" id="csrf_token_del_attch"
+                                                       value="{{ csrf_token() }}"/>
+                                                <input type="hidden" name="task_id" id="task_id_attch"
+                                                       value="{{ taskid }}"/>
+                                                <input type="hidden" name="file" id="file_attch"
+                                                       value="{{ file }}"/>
+                                                <button type="submit" id="deleteattachbtn" class="buttondanger">
+                                                    Изтрий
+                                                </button>
+
+                                                <script>
+                                                    let button = document.getElementById("deleteattachbtn");
+                                                    button.addEventListener("click", function () {
+                                                        let csrf_token = document.getElementById("csrf_token_del_attch").value;
+                                                        let task_id = document.getElementById("task_id_attch").value;
+                                                        let file = document.getElementById("file_attch").value;
+                                                        let data = new FormData();
+                                                        data.append("typeform", "deleteattachment");
+                                                        data.append("csrf_token", csrf_token);
+                                                        data.append("task_id", task_id);
+                                                        data.append("file", file);
+                                                        fetch("/task/{{ taskid }}", {
+                                                            method: "POST",
+                                                            body: data
+                                                            // reload
+                                                        }).then(function (response) {
+                                                            location.reload();
+                                                        });
+
+                                                    });
+                                                </script>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
                         <div class="user-input-box">
+                        <div class="user-input-box" style="margin-top:20px !important;">
                             <span class="gender-title">{{ comment }}</span>
+                        </div>
                             <label>
                                 <br>
                                 <h3>{{ task1.comment }}</h3>
@@ -386,10 +459,10 @@
                         </label>
                         </div>
                     {% endif %}
-            </div>
+    </div>
 
 
-        </div>
+    </div>
     </div>
     <script>
         function copyToClipboard(element) {
