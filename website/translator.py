@@ -1341,7 +1341,7 @@ words = {
         "fr": " stocke vos informations sensibles, telles que vos mots de passe, dans des bases de données protégées. Personne n'a accès à vos informations sensibles, à l'exception des administrateurs du site."
                 " Il est stocké sous forme de mots de passe chiffrés qui ne peuvent pas être déchiffrés. Tous les mots de passe sont salés et chiffrés avec l'algorithme SHA-256."
                 " Cela garantit que votre mot de passe sera très difficile à lire, même si quelqu'un essaie de le déchiffrer.",
-        "еn": " stores your sensitive information, such as your passwords, in protected databases. No one has access to your sensitive information, except the site administrators."
+        "en": " stores your sensitive information, such as your passwords, in protected databases. No one has access to your sensitive information, except the site administrators."
                 " It is stored in the form of encrypted passwords that cannot be decrypted. All passwords are encrypted with the SHA-256 algorithm."
                 " This ensures that your password will be very difficult to read, even if someone tries to decrypt it.",
         "ru": " хранит вашу чувствительную информацию, такую как ваши пароли, в защищенных базах данных. Никто не имеет доступа к вашей чувствительной информации, кроме администраторов сайта."
