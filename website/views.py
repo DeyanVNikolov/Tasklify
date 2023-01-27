@@ -98,7 +98,8 @@ def profile():
                            changepassword=getword("changepassword", request.cookies.get('locale')),
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
                            myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
-                           chatnav=getword("chatnav", cookie), idtext=getword("idtext", cookie))
+                           chatnav=getword("chatnav", cookie), idtext=getword("idtext", cookie),
+                           changeprofilepicture=getword("changeprofilepicture", cookie))
 
 
 @views.route('/profile/pfp', methods=['GET', 'POST'])
@@ -806,4 +807,7 @@ def privacy():
                            privacypolicytext11=getword("privacypolicytext11", cookie),
                            privacypolicytext12=getword("privacypolicytext12", cookie),
                            privacypolicytext13=getword("privacypolicytext13", cookie),
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie),
+                           homenav=getword("homenav", cookie), loginnav=getword("loginnav", cookie),
+                           profilenav=getword("profilenav", cookie), signupnav=getword("signupnav", cookie),
+                           workersnav=getword("workersnav", cookie), tasksnav=getword("tasksnav", cookie))

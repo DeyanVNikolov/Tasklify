@@ -175,7 +175,6 @@ def uploaded_file(filename):
 def get_file(filename):
     return redirect(url_for('fileshandler.uploaded_file', filename=filename))
 
-
 def hastebin(text):
     r = requests.post("https://hastebin.com/documents", data=text)
     return "https://hastebin.com/raw/" + r.json()["key"]

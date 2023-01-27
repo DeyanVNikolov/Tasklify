@@ -1,22 +1,45 @@
 {% extends "base.html" %} {% block title %} {{ profiletext }} {% endblock %} {% block content
 %}
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
     <br><br>
 
-<div class="container justify-content-center text-center">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{ profiletext }}</h1>
-        </div>
-        <form method="post" enctype='multipart/form-data'>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="form-group">
-                <label for="file">{{ uploadfilebtn }}</label>
-                <input type="file" class="form-control-file" id="file" name="file">
+<div class="container containersign text-center" style="width: 100% !important; margin: 0px 0px 0px 0px; max-width: 100%">
+<h1 style="color:white">{{ myfiles }}</h1>
+    <hr style="color:white">
+        <form method="POST" enctype='multipart/form-data'>
+            <div class="main-user-info" style="width: 105% !important;">
+                <div class="user-input-box" style="width: 105% !important">
+                    <style>
+                        h4 {
+                            width: 95%;
+                            color: white;
+                            font-size: 20px;
+                            font-weight: 400;
+                            margin: 5px 0;
+                        }
+                        .form-control {
+                            height: auto !important;
+                            background-color: #28A745;
+                            border-radius: 20px;
+                        }
+                    </style>
+                    <label><h3>{{ fileuploadtext }}</h3></label>
+                </div>
             </div>
-            <input type="hidden" name="typeform" value="pfp">
-            <button type="submit" class="btn btn-primary">{{ submit }}</button>
+            <div class="gender-details-box">
+                <span class="gender-title">{{ signupas }}</span>
+                <div class="gender-category" style="font-size: 25px;">
+
+                        <div class="mb-3" style="width: 65%; justify-content: center; text-align: center; margin: auto">
+                            <input class="form-control" type="file" id="file" name="file">
+                        </div>
+                        <input type="submit" class="btn btn-success" value="{{ submit }}" name="submit">
+                        <input type="hidden" name="typeform" value="pfp">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                </div>
+                <br>
+            </div>
         </form>
     </div>
-</div>
 
 {% endblock %}

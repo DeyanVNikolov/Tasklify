@@ -1,48 +1,79 @@
 {% extends "base.html" %} {% block title %}Task{% endblock %} {% block content %}
-
-<style>
-    @media screen and (max-width: 600px) {
-        .containertobesized {
-            max-width: 100% !important;
+    <style>
+        @media screen and (max-width: 600px) {
+            .containertobesized {
+                max-width: 100% !important;
+            }
         }
-    }
 
-    }
-</style>
-
-
-<br><br><br><br>
-<h1>{{ myfiles }}</h1>
-
-    <hr>
-    <h2>{{ fileuploadtext }}</h2>
-    <br>
-    <form action="/file/upld" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file">
-        <input type="submit" value="{{ uploadtext }}" name="submit">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    </form>
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
 
 
-{% for file, split in files.items() %}
-<hr>
-<br>
-<form method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <input type="hidden" name="typeform" value="delete" />
-    <input type="hidden" name="file" value="{{file}}" />
-    <div class="container containertobesized text-center" style="max-width:50%">
-        <h3>{{split}}</h3>
-        <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" target="_blank">
-            <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
-                class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
-                src="{{ url_for('fileshandler.uploaded_file', filename=file) }}" alt="uploaded file"></a>
-        <button class="btn btn-danger" type="submit">{{delete}}</button>
+    <br><br><br><br>
+
+<div class="container containersign text-center" style="width: 100% !important; margin: 0px 0px 0px 0px; max-width: 100%">
+<h1 style="color:white">{{ myfiles }}</h1>
+    <hr style="color:white">
+            <div class="main-user-info" style="width: 105% !important;">
+                <div class="user-input-box" style="width: 105% !important">
+                    <style>
+                        h4 {
+                            width: 95%;
+                            color: white;
+                            font-size: 20px;
+                            font-weight: 400;
+                            margin: 5px 0;
+                        }
+                        .form-control {
+                            height: auto !important;
+                            background-color: #28A745;
+                            border-radius: 20px;
+                        }
+                    </style>
+                    <label><h3>{{ fileuploadtext }}</h3></label>
+                </div>
+            </div>
+            <div class="gender-details-box">
+                <span class="gender-title">{{ signupas }}</span>
+                <div class="gender-category" style="font-size: 25px;">
+
+                    <form action="/file/upld" method="post" enctype="multipart/form-data">
+                        <div class="mb-3" style="width: 65%; justify-content: center; text-align: center; margin: auto">
+                            <input class="form-control" type="file" id="file" name="file">
+                        </div>
+                        <input type="submit" class="btn btn-success" value="{{ uploadtext }}" name="submit">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    </form>
+                </div>
+                <br>
+            </div>
     </div>
-</form>
-<br>
-<br>
-{% endfor %}
+
+    <br>
+
+
+
+    {% for file, split in files.items() %}
+        <hr>
+        <br>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="typeform" value="delete"/>
+            <input type="hidden" name="file" value="{{ file }}"/>
+            <div class="container containertobesized text-center" style="max-width:50%">
+                <h3>{{ split }}</h3>
+                <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" target="_blank">
+                    <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
+                         class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
+                         src="{{ url_for('fileshandler.uploaded_file', filename=file) }}" alt="uploaded file"></a>
+                <button class="btn btn-danger" type="submit">{{ delete }}</button>
+            </div>
+        </form>
+        <br>
+        <br>
+    {% endfor %}
 
 
 

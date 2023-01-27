@@ -1673,6 +1673,14 @@ words = {
         "ru": "Загрузить файл",
         "en": "Upload file"
     },
+    "changeprofilepicture": {
+        "bg": "Смени профилна снимка",
+        "es": "Cambiar foto de perfil",
+        "de": "Profilbild ändern",
+        "fr": "Changer la photo de profil",
+        "ru": "Сменить фото профиля",
+        "en": "Change profile picture"
+    },
 
 }
 
