@@ -66,10 +66,15 @@ def messageget(id, otherid):
         def datetostring(date):
             return date.strftime("%d.%m.%Y %H:%M:%S")
 
-        messagelist.append({"id": message.idmessage, "sender": is_sender(), "date": datetostring(message.date),
+        messagelist.append({"id": message.idmessage, "sender": is_sender(), "date": message.date,
                             "message": message.message})
 
-    messagelist.sort(key=lambda x: x["date"])
+    # sort messages by date, make sure the newest message is at the bottom and that month is also sorted
+    messagelist = sorted(messagelist, key=lambda k: k['date'])
+
+    for message in messagelist:
+        message['date'] = datetostring(message['date'])
+
 
     return messagelist, 200
 
@@ -93,8 +98,9 @@ def chat():
                 if message != "":
                     import datetime
                     # noinspection PyArgumentList
+                    # make date in utc+2
                     newmessage = Message(chat=chatid, id_sender=current_user.id, id_receiver=id_receiver,
-                                         message=message, date=datetime.datetime.now())
+                                         message=message, date=datetime.datetime.now() + datetime.timedelta(hours=2))
                     db.session.add(newmessage)
                     db.session.commit()
         elif request.form.get('typeform') == 'delete':
