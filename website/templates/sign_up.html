@@ -1,119 +1,137 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
-<link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script>
-  function showModal() {
-    const inpObj = document.getElementById("email");
-    if (!inpObj.checkValidity()) {
-      document.getElementById("demo").innerHTML = inpObj.validationMessage;
-  } else {
-    $('#exampleModalCenter').modal('show');
-  }
-}
-</script>
-<div class="container text-center">
-      <br><br><br>
-      <h3 align="center">{{signup}}</h3>
-      <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg" style="max-height:70px; width: auto;">
-      <br>
-      <br><br>
-      <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{loginhere}}</a> </h4>
-      <br><br>
-</div>
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="container containersign text-center">
-
-  <form method="POST">
-    <div class="main-user-info">
-      <div class="user-input-box">
-        <label for="email">{{emailtext}}</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
-      </div>
-      <div class="user-input-box">
-         <label for="firstName">{{nametext}}</label>
-        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{firstandlast}}" />
-      </div>
-      <div class="user-input-box">
-        <label for="password1">{{passwordtext}}</label>
-        <input type="password" class="form-control" id="password1" name="password1" placeholder="{{passwordtext}}" />
-      </div>
-      <div class="user-input-box">
-        <label for="password2">{{passwordconfirm}}</label>
-        <input type="password" class="form-control" id="password2" name="password2" placeholder="{{passwordconfirm}}" />
-      </div>
+    <script>
+        function showModal() {
+            const inpObj = document.getElementById("email");
+            if (!inpObj.checkValidity()) {
+                document.getElementById("demo").innerHTML = inpObj.validationMessage;
+            } else {
+                $('#exampleModalCenter').modal('show');
+            }
+        }
+    </script>
+    <div class="container text-center">
+        <br><br><br>
+        <h3 align="center">{{ signup }}</h3>
+        <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
+             style="max-height:70px; width: auto;">
+        <br>
+        <br><br>
+        <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{ loginhere }}</a></h4>
+        <br><br>
     </div>
-      <script>
-    nameb = "{{ nameb|safe }}";
-    emailb = "{{ emailb|safe }}";
-    passwordb = "{{ passwordb|safe }}";
-    acctypeb = "{{ acctypeb|safe }}";
 
-    console.log(nameb);
-    console.log(emailb);
-    console.log(passwordb)
-    console.log(acctypeb)
+    <div class="container containersign text-center">
 
-    if (nameb != "None") {
-      document.getElementById("firstName").value = nameb;
-    }
-    if (emailb != "None") {
-      document.getElementById("email").value = emailb;
-    }
-    if (passwordb != "None") {
-      document.getElementById("password1").value = passwordb;
-      document.getElementById("password2").value = passwordb;
-    }
-</script>
-    <div class="gender-details-box">
-      <span class="gender-title">{{signupas}}</span>
-      <div class="gender-category" style="font-size: 25px;">
-        <input type="radio" id="worker" name="accounttype" value="worker" checked>
-        <label for="worker">{{worker}}</label>
-        <input type="radio" id="boss" name="accounttype" value="boss">
-        <label for="boss">{{boss}}</label>
-      </div>
-      <br>
-      <img src="{{ captcha_img(captcha) }}"><br><br>
-      <div class="user-input-box" style="width:100%; justify-content:center !important;">
-      <input type="text" class="form-control" class="simple-captcha-text" name="captcha-text", placeholder="CAPTCHA CODE">
+        <form method="POST">
+            <div class="main-user-info">
+                <div class="user-input-box">
+                    <label for="email">{{ emailtext }}</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="{{ enteremail }}"/>
+                </div>
+                <div class="user-input-box">
+                    <label for="firstName">{{ nametext }}</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           placeholder="{{ firstandlast }}"/>
+                </div>
+                <div class="user-input-box">
+                    <label for="password1">{{ passwordtext }}</label>
+                    <input type="password" class="form-control" id="password1" name="password1"
+                           placeholder="{{ passwordtext }}"/>
+                </div>
+                <div class="user-input-box">
+                    <label for="password2">{{ passwordconfirm }}</label>
+                    <input type="password" class="form-control" id="password2" name="password2"
+                           placeholder="{{ passwordconfirm }}"/>
+                </div>
+            </div>
+            <script>
+                nameb = "{{ nameb|safe }}";
+                emailb = "{{ emailb|safe }}";
+                passwordb = "{{ passwordb|safe }}";
+                acctypeb = "{{ acctypeb|safe }}";
+
+                console.log(nameb);
+                console.log(emailb);
+                console.log(passwordb)
+                console.log(acctypeb)
+
+                if (nameb != "None") {
+                    document.getElementById("firstName").value = nameb;
+                }
+                if (emailb != "None") {
+                    document.getElementById("email").value = emailb;
+                }
+                if (passwordb != "None") {
+                    document.getElementById("password1").value = passwordb;
+                    document.getElementById("password2").value = passwordb;
+                }
+            </script>
+            <div class="gender-details-box">
+                <span class="gender-title">{{ signupas }}</span>
+                <div class="gender-category" style="font-size: 25px;">
+                    <input type="radio" id="worker" name="accounttype" value="worker" checked>
+                    <label for="worker">{{ worker }}</label>
+                    <input type="radio" id="boss" name="accounttype" value="boss">
+                    <label for="boss">{{ boss }}</label>
+                </div>
+                <br>
+                <img src="{{ captcha_img(captcha) }}"><br><br>
+                <div class="user-input-box" style="width:100%; justify-content:center !important;">
+                    <input type="text" class="form-control" class="simple-captcha-text" name="captcha-text" ,
+                           placeholder="CAPTCHA CODE">
+                </div>
+            </div>
+            <div class="form-submit-btn">
+                <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" class="btn btn-success" onclick="showModal()">{{ submit }}</button>
+            </div>
+        </form>
+        <br>
+        <hr style="color:white">
+        <h4 style="color:white">{{ signupwith }}</h4>
+        <center>
+            <h1>
+                <div id="g_id_onload"
+                     data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
+                     data-context="signin" data-ux_mode="redirect" data-login_uri="https://tasklify.me/googlesignup"
+                     data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large" data-logo_alignment="center">
+                </div>
+
+                <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px" class="btn btn-block" href="/github/login">
+                    <span style="font-size: 20px" class="fa fa-github"></span> {{ signinwithgithub }}
+                </a>
+            </h1>
+        </center>
     </div>
-  </div>
-    <div class="form-submit-btn">
-      <input type="hidden" name="captcha-hash" value="{{ captcha_input(captcha) }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button type="submit" class="btn btn-success" onclick="showModal()">{{submit}}</button>
-    </div>
-  </form>
-  <br>
-  <hr style="color:white">
-  <h4 style="color:white">{{signupwith}}</h4>
-  <center>
-    <h1>  <div id="g_id_onload" data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
-      data-context="signin" data-ux_mode="redirect" data-login_uri="https://tasklify.me/googlesignup"
-      data-auto_prompt="false">
-    </div>
-  
-    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"
-      data-size="large" data-logo_alignment="center">
-    </div></h1>
-  </center>
-</div>
 
-<br><br><br>
+    <br><br><br>
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{signup}}</h5>
-      </div>
-      <div class="modal-body">
-        {{databeingproccessed}}
-      </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{ signup }}</h5>
+                </div>
+                <div class="modal-body">
+                    {{ databeingproccessed }}
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 {% endblock %}

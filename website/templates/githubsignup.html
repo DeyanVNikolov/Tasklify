@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
+    %}
+
+
+<form method="POST" action="/github/authorize">
+    <div class="gender-category" style="font-size: 25px;">
+        <input type="radio" id="worker" name="accounttype" value="worker" checked>
+        <label for="worker">{{worker}}</label>
+        <input type="radio" id="boss" name="accounttype" value="boss">
+        <label for="boss">{{boss}}</label>
+        <input type="password" name="passwordtogive" placeholder="{{enterpassword}}" required>
+        <input type="hidden" name="emailtogive" value="{{emailrequest}}">
+        <input type="hidden" name="nametogive" value="{{namerequest}}">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+{% endblock %}

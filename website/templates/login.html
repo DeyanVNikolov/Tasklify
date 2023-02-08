@@ -2,6 +2,10 @@
 %}
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
+
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container text-center">
   <br><br><br>
   <h3 align="center">{{logintext}}</h3>
@@ -41,7 +45,11 @@
     
       <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"
         data-size="large" data-logo_alignment="center">
-      </div></h1>
+      </div>
+
+                      <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px" class="btn btn-block" href="/github/login">
+                    <span style="font-size: 20px" class="fa fa-github"></span> {{ signinwithgithub }}
+                </a></h1>
     </center>
 
   </form>

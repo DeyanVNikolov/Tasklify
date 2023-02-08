@@ -1681,6 +1681,14 @@ words = {
         "ru": "Сменить фото профиля",
         "en": "Change profile picture"
     },
+    "signinwithgithub": {
+        "bg": "Влез с GitHub",
+        "es": "Iniciar sesión con GitHub",
+        "de": "Mit GitHub anmelden",
+        "fr": "Se connecter avec GitHub",
+        "ru": "Войти с помощью GitHub",
+        "en": "Sign in with GitHub"
+    }
 
 }
 

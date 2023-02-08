@@ -90,7 +90,10 @@ def create_app():
     csrfg.exempt(api)
     limiter.limit("200 per minute")(chathandler)
 
+
+
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
+
 
     class MyModelView(ModelView):
         def is_accessible(self):

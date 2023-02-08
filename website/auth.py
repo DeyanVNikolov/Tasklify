@@ -91,7 +91,7 @@ def login():
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
                            worker=getword("worker", cookie), boss=getword("boss", cookie),
-                           loginwith=getword("loginwith", cookie))
+                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie))
 
 
 @auth.route('/logout')
@@ -206,8 +206,6 @@ def sign_up():
                 return redirect(url_for('views.home'))
 
 
-    print(session.get('emailb', 'not set'))
-
     emailb = session.get('emailb', None)
     passwordb = session.get('passwordb', None)
     accounttypeb = session.get('accounttypeb', None)
@@ -227,7 +225,7 @@ def sign_up():
                            databeingproccessed=getword("databeingproccessed", cookie),
                            signupas=getword("signupas", cookie), worker=getword("worker", cookie),
                            boss=getword("boss", cookie), signupwith=getword("signupwith", cookie),
-                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb)
+                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb, signinwithgithub=getword("signinwithgithub", cookie))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
