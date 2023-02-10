@@ -1688,6 +1688,14 @@ words = {
         "fr": "Se connecter avec GitHub",
         "ru": "Войти с помощью GitHub",
         "en": "Sign in with GitHub"
+    },
+    "signinwithfacebook": {
+        "bg": "Влез с Facebook",
+        "es": "Iniciar sesión con Facebook",
+        "de": "Mit Facebook anmelden",
+        "fr": "Se connecter avec Facebook",
+        "ru": "Войти с помощью Facebook",
+        "en": "Sign in with Facebook"
     }
 
 }

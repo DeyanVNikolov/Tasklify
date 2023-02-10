@@ -197,8 +197,6 @@ def undonetasks(id=None):
     from .models import Task
     if not id or id is None or id == "":
         if current_user.accounttype == "worker":
-            print(current_user.first_name)
-            print(current_user.id)
             total = Task.query.filter_by(worker_id=current_user.id).filter_by(complete="0",
                                                                               archive="0").count() + Task.query.filter_by(
                 worker_id=current_user.id).filter_by(complete="1", archive="0").count()

@@ -91,7 +91,8 @@ def login():
                            enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
                            worker=getword("worker", cookie), boss=getword("boss", cookie),
-                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie))
+                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithgoogle=getword("signinwithgoogle", cookie), signinwithfacebook=getword("signinwithfacebook", cookie))
 
 
 @auth.route('/logout')
@@ -225,7 +226,8 @@ def sign_up():
                            databeingproccessed=getword("databeingproccessed", cookie),
                            signupas=getword("signupas", cookie), worker=getword("worker", cookie),
                            boss=getword("boss", cookie), signupwith=getword("signupwith", cookie),
-                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb, signinwithgithub=getword("signinwithgithub", cookie))
+                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb, signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie), signinwithgoogle=getword("signinwithgoogle", cookie))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])

@@ -1,59 +1,76 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-%}
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content %}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
 
-        <link rel="stylesheet"
+    <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="container text-center">
-  <br><br><br>
-  <h3 align="center">{{logintext}}</h3>
-  <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
-    style="max-height:70px; width: auto;">
-  <br>
-  <br><br>
-  <h4 align="center">{{ notregistered }} <br> <a href="/auth/sign-up">{{registerhere}}</a> </h4>
-  <br><br>
-</div>
-<div class="container containersign text-center">
-
-  <form method="POST">
-    <div class="main-user-info">
-      <div class="user-input-box">
-        <label for="email">{{ emailtext }}</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="{{enteremail}}" />
-      </div>
-      <div class="user-input-box">
-        <label for="password">{{ passwordtext }}</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="{{enterpassword}}" />
-      </div>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+            src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v16.0&appId=697359442012060&autoLogAppEvents=1"
+            nonce="2tKFmaiE"></script>
+    <div class="container text-center">
+        <br><br><br>
+        <h3 align="center">{{ logintext }}</h3>
+        <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
+             style="max-height:70px; width: auto;">
+        <br>
+        <br><br>
+        <h4 align="center">{{ notregistered }} <br> <a href="/auth/sign-up">{{ registerhere }}</a></h4>
+        <br><br>
     </div>
-    <div class="form-submit-btn">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-      <button type="submit" class="btn btn-success">{{logintext}}</button>
-      
+    <div class="container containersign text-center">
+
+        <form method="POST">
+            <div class="main-user-info">
+                <div class="user-input-box">
+                    <label for="email">{{ emailtext }}</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="{{ enteremail }}"/>
+                </div>
+                <div class="user-input-box">
+                    <label for="password">{{ passwordtext }}</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="{{ enterpassword }}"/>
+                </div>
+            </div>
+            <div class="form-submit-btn">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" class="btn btn-success">{{ logintext }}</button>
+
+            </div>
+            <br>
+            <hr style="color:white">
+            <h4 style="color:white">{{ loginwith }}</h4>
+            <center>
+                <h1>
+                    <div id="g_id_onload"
+                         data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
+                         data-context="signin" data-ux_mode="redirect"
+                         data-login_uri="https://tasklify.me/googlecallback"
+                         data-auto_prompt="true">
+                    </div>
+
+                    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+                         data-text="signin_with"
+                         data-size="large" data-logo_alignment="center">
+                    </div>
+
+                    <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px"
+                       class="btn btn-block" href="/github/login">
+                        <span style="font-size: 20px" class="fa fa-github"></span> {{ signinwithgithub }}
+                    </a>
+
+                    <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px"
+                       class="btn btn-block" href="/facebook/login">
+                        <span style="font-size: 20px" class="fa fa-facebook-official"></span> {{ signinwithfacebook }}
+                    </a>
+
+
+                </h1>
+            </center>
+
+        </form>
     </div>
-    <br>
-    <hr style="color:white">
-    <h4 style="color:white">{{loginwith}}</h4>
-    <center>
-      <h1>  <div id="g_id_onload" data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
-        data-context="signin" data-ux_mode="redirect" data-login_uri="https://tasklify.me/googlecallback"
-        data-auto_prompt="false">
-      </div>
-    
-      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"
-        data-size="large" data-logo_alignment="center">
-      </div>
-
-                      <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px" class="btn btn-block" href="/github/login">
-                    <span style="font-size: 20px" class="fa fa-github"></span> {{ signinwithgithub }}
-                </a></h1>
-    </center>
-
-  </form>
-</div>
-<br><br><br><br><br>
-<br><br><br>
+    <br><br><br><br><br>
+    <br><br><br>
 {% endblock %}

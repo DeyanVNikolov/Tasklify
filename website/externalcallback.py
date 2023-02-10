@@ -291,3 +291,113 @@ def githubauthorize():
         else:
             sendregisterationemailboss(email, name)
             return redirect(url_for('views.home'))
+
+
+
+@externalcallback.route('/facebook/login', methods=['GET', 'POST'])
+def facebooklogin():
+    return redirect(
+        "https://www.facebook.com/v16.0/dialog/oauth?client_id=697359442012060&redirect_uri=https://tasklify.me/facebook/callback&scope=email,public_profile&response_type=code&auth_type=rerequest&state=tskfl")
+
+
+@externalcallback.route('/facebook/callback', methods=['GET', 'POST'])
+def facebookcallback():
+
+    # get the data from the request
+    code = request.args.get('code')
+    load_dotenv()
+    if code is None:
+        print("No code")
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
+
+
+    # get the access token
+    access_url = "https://graph.facebook.com/v16.0/oauth/access_token"
+
+    client_id = '697359442012060'
+    client_secret = os.getenv('FACEBOOK_SECRET')
+    redirect_uri = 'https://tasklify.me/facebook/callback'
+    url = f"{access_url}?client_id={client_id}&redirect_uri={redirect_uri}&client_secret={client_secret}&code={code}"
+    finalurl = url.replace(" ", "")
+    response = requests.get(finalurl)
+
+    if response.status_code != 200:
+        print(response.json())
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
+
+    access_token = response.json()['access_token']
+    inspect_url = "https://graph.facebook.com/debug_token"
+    data = {'input_token': access_token,
+            'access_token': access_token}
+    response = requests.get(inspect_url, params=data)
+    if response.status_code != 200:
+        print(response.json())
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
+
+    # get the user data
+    user_url = "https://graph.facebook.com/v16.0/me"
+
+    data = {'fields': 'id,name,email',
+            'access_token': access_token}
+    response = requests.get(user_url, params=data)
+    if response.status_code != 200:
+        print(response.json())
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
+
+    data = response.json()
+    email = data['email']
+    name = data['name']
+
+    # check if email is not already in use
+    user = Worker.query.filter_by(email=email).first()
+    if user:
+        login_user(user, remember=True)
+        return redirect(url_for('views.home'))
+    else:
+        user = Boss.query.filter_by(email=email).first()
+        if user:
+            login_user(user, remember=True)
+            return redirect(url_for('views.home'))
+
+    cookie = request.cookies.get('locale')
+
+    return render_template("facebooksignup.html", user=current_user, worker=getword("worker", cookie),
+                            boss=getword("boss", cookie), emailrequest=email, namerequest=name,
+                            enterpassword=getword("enterpassword", cookie))
+
+
+
+@externalcallback.route('/facebook/authorize', methods=['GET', 'POST'])
+def facebookauthorize():
+    email = request.form.get('emailtogive')
+    name = request.form.get('nametogive')
+    accounttype = request.form.get('accounttype')
+    password = request.form.get('passwordtogive')
+    cookie = request.cookies.get('locale')
+
+    if request.method == 'POST':
+        if accounttype == 'worker':
+            key = uuid.uuid4().hex[:12]
+            new_user = Worker(email=email, first_name=name, password=generate_password_hash(password, method='sha256'),
+                              accounttype="worker", registrationid=key)
+        elif accounttype == 'boss':
+            new_user = Boss(email=email, first_name=name, password=generate_password_hash(password, method='sha256'),
+                            accounttype="boss")
+        else:
+            flash("Error. Type not selected.", category='error')
+            return redirect(url_for('auth.sign_up'))
+
+        db.session.add(new_user)
+        db.session.commit()
+        login_user(new_user, remember=True)
+        flash(getword("accountcreated", cookie), category='success')
+        if accounttype == 'worker':
+            sendregisterationemail(email, name, current_user.registrationid)
+            return redirect(url_for('views.boss'))
+        else:
+            sendregisterationemailboss(email, name)
+            return redirect(url_for('views.home'))
