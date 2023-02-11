@@ -1,72 +1,56 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/stylehome.css">
-<link href="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
-
+<link rel="stylesheet" href="/static/home.css">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="/static/homecss/{{ cookiet }}.css">
 <br><br><br><br>
 
-<div class="main container-fluid" >
-    <div class="content">
-        <div class="afterlogin text-home" style="max-width:700px">
-            <h1><span><img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg" style="max-height:70px; width: auto; padding: 10px 0px 0px 0px"></h1>
-            <br>
-            <p class="par">{{tooltext1}} <br>
-                {{tooltext2}}<br> {{tooltext3}}</p>
+
+
+    <header>
+
+	<main>
+		<section>
+			<h3>{{ welcometotasklify }}</h3>
+			<h2>{{ maketaskalloc }}<br><span class="change_content"> </span>
+                <span style="margin-top: -10px;"></span> </h2>
+			<p>{{ getstartednow }}</p>
+        <br>
+        <hr>
+        <br>
             {% if not user.is_authenticated %}
-            <a href="/auth/sign-up"><button class="cn" style="max-width:fit-content; min-width:fit-content">{{register}}</button></a>
-            {% endif %}
-        </div>
-
-        <!----Form---->
-        {% if not user.is_authenticated %}
-        <div class="form" style="min-height:200px; height:fit-content">
-            <h2 style="width:100%">{{login}}</h2>
-            <br>
-            <form action="/auth/login" method="POST">
-                <input type="email" name="email" id="email" placeholder="{{enteremail}}">
-                <br><br>
-                <input type="password" name="password" id="password" placeholder="{{enterpassword}}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-                <br><br>
-
-                <div class="max-height:50px" style="color:rgb(13, 13, 13)">
-                    <button class="btnn" style="width: 100% !important; background-color:#28A745" type="submit">{{login}}</button>
-                </div>
-                <br>
-
-                <div class="afterlogin">
-                    <p class="link">{{notregistered}}<br>
-                        <span style="padding-bottom: 50px;"><a style="color:blue" href="/auth/sign-up">{{registerhere}}</a></p></span>
-
-                </div>
-            </form>
+			<a href="/auth/sign-up" class="btnone">{{ signupnav }}</a>
+            <a href="/auth/login" class="btntwo">{{ loginnav }}</a>
             {% else %}
-            <div class="form" style="min-height:200px; height:fit-content">
-               {% if user.is_authenticated %}
-               {% if user.accounttype == "boss" %}
-                <h2>{{welcome}}, {{ user.first_name }}</h2>
-                <br><br>
-                <a href="/workers"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{employees}}</button></a>
+                <div><p>{{ welcome }}, <b>{{ user.first_name }}</b> <br>
+                    {{ youareloggedinas }} <b>
+                    {% if user.accounttype == "boss" %}
+                        {{ boss }}
+                    {% else %}
+                        {{ employee }}
+                    {% endif %}
+                    </b></p>
+                </div>
+            {% if user.accounttype == "boss" %}
+            <a href="/workers" class="btntwo">{{ workersnav }}</a><br><br>
+                <a href="/profile" class="btntwo">{{ profilenav }}</a>
+                <a href="/chat" class="btntwo">{{ chatnav }}</a>
                 <br><br><br>
-                <a class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{logout}}</button></a>
-                {% else %}
-                <h2>{{welcome}}, {{ user.first_name }}</h2>
-                <br><br>
-                <a href="/tasks"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{tasks}}</button></a>
+                <a href="/auth/logout" class="btnthree">{{ logout }}</a>
+            {% else %}
+            <a href="/tasks" class="btnone">{{ tasks }}</a>
                 <br><br><br>
-                <a style="background-color:#28A745" class="text-center" href="/auth/logout"><button class="btnn" style="width: 100% !important; background-color:#28A745">{{logout}}</button></a>
-                {% endif %}
-                {% endif %}
-        </div>
+                <a href="/auth/logout" class="btnthree">{{ logout }}</a>
             {% endif %}
+            {% endif %}
+		</section>
+	</main>
 
-        </div>
-    </div>
-</div>
-</div>
-</div>
 
-<br><br><br><br><br><br><br><br><br>
+</header>
+
+    <br><br><br><br><br>
+
 
 {% endblock %}

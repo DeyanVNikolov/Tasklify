@@ -1,0 +1,26 @@
+.change_content:after {
+    content: "";
+    animation: changetext 10s infinite linear;
+    color: #28A745;
+}
+
+/*FRENCH */
+
+@keyframes changetext {
+    /*FRENCH */
+    0% {
+        content: "SIMPLE";
+    }
+    25% {
+        content: "SÉCURISÉ";
+    }
+    45% {
+        content: "FIABLE";
+    }
+    65% {
+        content: "RAPIDE";
+    }
+    85% {
+        content: "ÉCONOMIQUE";
+    }
+}

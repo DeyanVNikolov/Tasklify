@@ -1,0 +1,26 @@
+.change_content:after {
+    content: "";
+    animation: changetext 10s infinite linear;
+    color: #28A745;
+}
+
+/*GERMAN */
+
+@keyframes changetext {
+    /*GERMAN */
+    0% {
+        content: "EINFACH";
+    }
+    25% {
+        content: "SICHER";
+    }
+    45% {
+        content: "VERLÄSSLICH";
+    }
+    65% {
+        content: "SCHNELL";
+    }
+    85% {
+        content: "KOSTENGÜNSTIG";
+    }
+}

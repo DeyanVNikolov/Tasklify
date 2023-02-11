@@ -1,0 +1,26 @@
+.change_content:after {
+    content: "";
+    animation: changetext 10s infinite linear;
+    color: #28A745;
+}
+
+/*ESPANOL */
+
+@keyframes changetext {
+    /*RUSSIAN */
+    0% {
+        content: "ЛЕГКО";
+    }
+    25% {
+        content: "БЕЗОПАСНО";
+    }
+    45% {
+        content: "НАДЕЖНО";
+    }
+    65% {
+        content: "БЫСТРО";
+    }
+    85% {
+        content: "ЭКОНОМНО";
+    }
+}

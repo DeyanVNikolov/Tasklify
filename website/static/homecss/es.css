@@ -1,0 +1,26 @@
+.change_content:after {
+    content: "";
+    animation: changetext 10s infinite linear;
+    color: #28A745;
+}
+
+/*ESPANOL */
+
+@keyframes changetext {
+    /*ESPANOL */
+    0% {
+        content: "FACIL";
+    }
+    25% {
+        content: "SEGURO";
+    }
+    45% {
+        content: "CONFIABLE";
+    }
+    65% {
+        content: "RAPIDO";
+    }
+    85% {
+        content: "ECONOMICO";
+    }
+}

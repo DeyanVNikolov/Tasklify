@@ -1696,11 +1696,48 @@ words = {
         "fr": "Se connecter avec Facebook",
         "ru": "Войти с помощью Facebook",
         "en": "Sign in with Facebook"
+    },
+    "youareloggedinas": {
+        "bg": "Влезнали сте като",
+        "es": "Has iniciado sesión como",
+        "de": "Sie sind angemeldet als",
+        "fr": "Vous êtes connecté en tant que",
+        "ru": "Вы вошли как",
+        "en": "You are logged in as"
+    },
+    "employee": {
+        "bg": "Служител",
+        "es": "Empleado",
+        "de": "Mitarbeiter",
+        "fr": "Employé",
+        "ru": "Сотрудник",
+        "en": "Employee"
+    },
+    "welcometotasklify": {
+        "bg": "Добре дошли в Tasklify",
+        "es": "Bienvenido a Tasklify",
+        "de": "Willkommen bei Tasklify",
+        "fr": "Bienvenue sur Tasklify",
+        "ru": "Добро пожаловать в Tasklify",
+        "en": "Welcome to Tasklify"
+    },
+    "getstartednow": {
+        "bg": "Започнете сега!",
+        "es": "Empezar ahora!",
+        "de": "Jetzt starten!",
+        "fr": "Commencer maintenant!",
+        "ru": "Начать сейчас!",
+        "en": "Get started now!"
+    },
+    "maketaskalloc": {
+        "en": "MAKE TASK ALLOCATION",
+        "bg": "НАПРАВИ РАЗПРЕДЕЛЕНИЕTO НА ЗАДАЧИ",
+        "es": "HACER ASIGNACIÓN DE TAREAS",
+        "de": "TASCHENVERTEILUNG MACHEN",
+        "fr": "FAIRE UNE ALLOCATION DE TÂCHES",
+        "ru": "СДЕЛАТЬ РАСПРЕДЕЛЕНИЕ ЗАДАЧ"
     }
-
 }
-
-
 
 def getword(word, target):
     if target not in ["en", "bg", "es", "de", "fr", "ru"]:

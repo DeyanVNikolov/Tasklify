@@ -57,7 +57,10 @@ def home():
                            notregistered=getword("notregistered", cookie), registerhere=getword("registerhere", cookie),
                            logout=getword("logout", cookie), profile=getword("profile", cookie),
                            welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie),
-                           newyear=getword("happynewyear", cookie))
+                           newyear=getword("happynewyear", cookie), employee=getword("employee", cookie),
+                           youareloggedinas=getword("youareloggedinas", cookie), idtext=getword("idtext", cookie),
+                           welcometotasklify=getword("welcometotasklify", cookie), getstartednow=getword("getstartednow", cookie),
+                           maketaskalloc=getword("maketaskalloc", cookie), cookiet=cookie)
 
 
 @views.route("/home", methods=['GET'])
