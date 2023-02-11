@@ -1,29 +1,20 @@
-import datetime
+import os
 import os
 import time
 import uuid
-from os.path import join, dirname, realpath
 
 import requests
-from dateutil import parser
-from email_validator import validate_email, EmailNotValidError
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
+from dotenv import load_dotenv
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask import abort
 from flask import current_app as app
-from flask_wtf.csrf import CSRFProtect
-from flask_login import login_required, current_user, login_user, logout_user
+from flask_login import current_user, login_user
 from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename, send_from_directory
-from dotenv import load_dotenv
 
-from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail, sendregisterationemailboss
-from .models import Task
 from .models import Worker, Boss
 from .translator import getword
-from .addtabs import addtabs
-from .fileshandler import fileshandler
 
 externalcallback = Blueprint('externalcallback', __name__)
 load_dotenv()
@@ -219,8 +210,8 @@ def githubcallback():
 
     access_url = "https://github.com/login/oauth/access_token"
 
-    data = {'client_id': 'bd6042273acba34c7a84', # load from env file
-        'client_secret': os.getenv('GITHUB_SECRET'), 'code': code}
+    data = {'client_id': 'bd6042273acba34c7a84',  # load from env file
+            'client_secret': os.getenv('GITHUB_SECRET'), 'code': code}
 
     response = requests.post(access_url, data=data, headers={'Accept': 'application/json'})
     if response.status_code != 200:
@@ -254,11 +245,9 @@ def githubcallback():
             login_user(user, remember=True)
             return redirect(url_for('views.home'))
 
-
     return render_template("githubsignup.html", user=current_user, worker=getword("worker", cookie),
-                            boss=getword("boss", cookie), emailrequest=email, namerequest=name,
-                            enterpassword=getword("enterpassword", cookie))
-
+                           boss=getword("boss", cookie), emailrequest=email, namerequest=name,
+                           enterpassword=getword("enterpassword", cookie))
 
 
 @externalcallback.route('/github/authorize', methods=['GET', 'POST'])
@@ -293,7 +282,6 @@ def githubauthorize():
             return redirect(url_for('views.home'))
 
 
-
 @externalcallback.route('/facebook/login', methods=['GET', 'POST'])
 def facebooklogin():
     return redirect(
@@ -310,7 +298,6 @@ def facebookcallback():
         print("No code")
         flash("Error. ", category='error')
         return redirect(url_for('auth.login'))
-
 
     # get the access token
     access_url = "https://graph.facebook.com/v16.0/oauth/access_token"
@@ -329,8 +316,7 @@ def facebookcallback():
 
     access_token = response.json()['access_token']
     inspect_url = "https://graph.facebook.com/debug_token"
-    data = {'input_token': access_token,
-            'access_token': access_token}
+    data = {'input_token': access_token, 'access_token': access_token}
     response = requests.get(inspect_url, params=data)
     if response.status_code != 200:
         print(response.json())
@@ -340,8 +326,7 @@ def facebookcallback():
     # get the user data
     user_url = "https://graph.facebook.com/v16.0/me"
 
-    data = {'fields': 'id,name,email',
-            'access_token': access_token}
+    data = {'fields': 'id,name,email', 'access_token': access_token}
     response = requests.get(user_url, params=data)
     if response.status_code != 200:
         print(response.json())
@@ -365,10 +350,32 @@ def facebookcallback():
 
     cookie = request.cookies.get('locale')
 
-    return render_template("facebooksignup.html", user=current_user, worker=getword("worker", cookie),
-                            boss=getword("boss", cookie), emailrequest=email, namerequest=name,
-                            enterpassword=getword("enterpassword", cookie))
+    # download the profile picture
+    profile_url = "https://graph.facebook.com/v16.0/me/picture"
+    data = {'redirect': 'false', 'access_token': access_token}
+    response = requests.get(profile_url, params=data)
+    if response.status_code != 200:
+        print(response.json())
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
 
+    data = response.json()
+    profilepic = data['data']['url']
+    response = requests.get(profilepic)
+    if response.status_code != 200:
+        print(response.json())
+        flash("Error. ", category='error')
+        return redirect(url_for('auth.login'))
+
+    emailwithnoat = email.replace("@", "")
+
+    with open(f"static/pfp/TEMP-{emailwithnoat}.png", "wb") as f:
+        f.write(response.content)
+
+
+    return render_template("facebooksignup.html", user=current_user, worker=getword("worker", cookie),
+                           boss=getword("boss", cookie), emailrequest=email, namerequest=name,
+                           enterpassword=getword("enterpassword", cookie))
 
 
 @externalcallback.route('/facebook/authorize', methods=['GET', 'POST'])
@@ -378,6 +385,9 @@ def facebookauthorize():
     accounttype = request.form.get('accounttype')
     password = request.form.get('passwordtogive')
     cookie = request.cookies.get('locale')
+
+    emailwithnoat = email.replace("@", "")
+
 
     if request.method == 'POST':
         if accounttype == 'worker':
@@ -393,6 +403,8 @@ def facebookauthorize():
 
         db.session.add(new_user)
         db.session.commit()
+        pfp = f"static/pfp/TEMP-{emailwithnoat}.png"
+        os.rename(pfp, f"static/pfp/{new_user.id}.png")
         login_user(new_user, remember=True)
         flash(getword("accountcreated", cookie), category='success')
         if accounttype == 'worker':
