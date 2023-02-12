@@ -1,8 +1,5 @@
-from flask import request, current_app, render_template, redirect, url_for, flash, session, jsonify
-from flask_login import current_user, login_required
 import time
 words = {
-
     "email": {
         "en": "Email Address",
         "bg": "Електронна поща",
@@ -458,38 +455,6 @@ words = {
         "de": "Wenn Sie Fragen haben, kontaktieren Sie uns bitte.",
         "fr": "Si vous avez des questions, veuillez nous contacter.",
         "ru": "Если у вас есть какие-либо вопросы, пожалуйста, свяжитесь с нами."
-    },
-    "contactname": {
-        "en": "Deyan Vladimirov Nikolov",
-        "bg": "Деян Владимиров Николов",
-        "es": "Deyan Vladimirov Nikolov",
-        "de": "Deyan Vladimirov Nikolov",
-        "fr": "Deyan Vladimirov Nikolov",
-        "ru": "Деян Владимиров Николов"
-    },
-    "contactemail": {
-        "en": "deyannikolov25@itpg-varna.bg",
-        "bg": "deyannikolov25@itpg-varna.bg",
-        "es": "deyannikolov25@itpg-varna.bg",
-        "de": "deyannikolov25@itpg-varna.bg",
-        "fr": "deyannikolov25@itpg-varna.bg",
-        "ru": "deyannikolov25@itpg-varna.bg",
-    },
-    "contactname2": {
-        "bg": "Мартин Стоянов Анастасов",
-        "es": "Martin Stoyanov Anastasov",
-        "de": "Martin Stoyanov Anastasov",
-        "fr": "Martin Stoyanov Anastasov",
-        "ru": "Мартин Стоянов Анастасов",
-        "en": "Martin Stoyanov Anastasov"
-    },
-    "contactemail2": {
-        "bg": "martinanastasov@itpg-varna.bg",
-        "en": "martinanastasov@itpg-varna.bg",
-        "es": "martinanastasov@itpg-varna.bg",
-        "fr": "martinanastasov@itpg-varna.bg",
-        "ru": "martinanastasov@itpg-varna.bg",
-        "de": "martinanastasov@itpg-varna.bg",
     },
     "databeingproccessed": {
         "en": "Your data is being processed. Please wait and do not refresh the page.",
@@ -1601,14 +1566,6 @@ words = {
         "ru": "Загрузить файл",
         "en": "Upload file"
     },
-    "happynewyear": {
-        "bg": "Tasklify ви пожелава щастливa нова година, изпълнена със здраве, щастие и късмет!",
-        "es": "Tasklify te desea un feliz año nuevo lleno de salud, felicidad y suerte!",
-        "de": "Tasklify wünscht Ihnen ein glückliches neues Jahr, gesund, glücklich und erfolgreich!",
-        "fr": "Tasklify vous souhaite une bonne année remplie de santé, de bonheur et de chance!",
-        "ru": "Tasklify поздравляет вас с новым годом, полным здоровья, счастья и удачи!",
-        "en": "Tasklify wishes you a happy new year, full of health, happiness and luck!"
-    },
     "comment": {
         "bg": "Коментар",
         "es": "Comentario",
@@ -1616,14 +1573,6 @@ words = {
         "fr": "Commentaire",
         "ru": "Комментарий",
         "en": "Comment"
-    },
-    "workeremailtext": {
-        "bg": "Имейл на служителя",
-        "es": "Correo electrónico del trabajador",
-        "de": "E-Mail des Mitarbeiters",
-        "fr": "Email du travailleur",
-        "ru": "Электронная почта работника",
-        "en": "Employee email"
     },
     "sorttypestatus": {
         "bg": "Статус",
@@ -1751,15 +1700,13 @@ def getword(word, target):
     else:
         return "!!! WORD NOT FOUND !!! " + word
 
+
 def loadtime():
     from datetime import datetime
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print(dt_string)
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
-
-def newyear(target):
-    return getword("happynewyear", target)
 
 
 

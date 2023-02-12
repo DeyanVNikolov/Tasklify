@@ -33,6 +33,7 @@ oneworkerpage = "views.worker"
 
 global csrfg
 
+
 def getcookie(request):
     if 'locale' in request.cookies:
         return request.cookies.get('locale')
@@ -59,19 +60,19 @@ def home():
                            welcome=getword("welcome", cookie), chatnav=getword("chatnav", cookie),
                            newyear=getword("happynewyear", cookie), employee=getword("employee", cookie),
                            youareloggedinas=getword("youareloggedinas", cookie), idtext=getword("idtext", cookie),
-                           welcometotasklify=getword("welcometotasklify", cookie), getstartednow=getword("getstartednow", cookie),
+                           welcometotasklify=getword("welcometotasklify", cookie),
+                           getstartednow=getword("getstartednow", cookie),
                            maketaskalloc=getword("maketaskalloc", cookie), cookiet=cookie)
 
 
 @views.route("/home", methods=['GET'])
 def homeredirect():
-    cookie = getcookie(request)
     return redirect(url_for("views.home"))
 
 
 def allowed_image(filename):
     allowed_image_extensions = {'png', 'jpg', 'jpeg', 'gif'}
-    if not "." in filename:
+    if "." not in filename:
         return False
 
     ext = filename.rsplit(".", 1)[1]
@@ -505,7 +506,6 @@ def worker(id):
         elif typeform == 'fullydelete':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
-            task_actual_id = task.actual_id
             db.session.delete(task)
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
@@ -639,8 +639,7 @@ def task(id):
     for file in os.listdir(app.config['UPLOAD_FOLDER']):
         file1 = file.split("_")
         if str(file1[0]) == str(current_user.id):
-                myfiles.append(file)
-
+            myfiles.append(file)
 
     myfileswithoutid = []
     for file in myfiles:
@@ -654,7 +653,6 @@ def task(id):
     for attachement in attachements:
         if attachement != "":
             attachements1.append(attachement)
-
 
     return render_template("task.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -675,8 +673,8 @@ def task(id):
                            started=getword("started", cookie), uploadtext=getword("uploadtext", cookie),
                            datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
                            titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
-                           chatnav=getword("chatnav", cookie), comment=getword("comment", cookie),
-                           myfiles=myfiles, myfileswithoutid=myfileswithoutid, attachements=attachements1)
+                           chatnav=getword("chatnav", cookie), comment=getword("comment", cookie), myfiles=myfiles,
+                           myfileswithoutid=myfileswithoutid, attachements=attachements1)
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -728,68 +726,9 @@ def contact():
                            message=getword("message", cookie), chatnav=getword("chatnav", cookie))
 
 
-@views.route('/testpastebin', methods=["GET", "POST"])
-def testpastebin():
-    abort(403)
-    return "false"
-
-
-@views.route("/printtask/<int:id>", methods=["GET", "POST"])
-def printtask(id):
-    abort(403)
-
-    # cookie
-    cookie = getcookie(request)
-
-    taskdata = Task.query.filter_by(id=id).first()
-
-    worker = Worker.query.filter_by(id=taskdata.worker_id).first()
-    worker_id = worker.id
-    workername = worker.first_name
-    workeremail = worker.email
-
-    if taskdata is None:
-        flash(getword("tasknotfound", cookie), category="error")
-        return redirect(url_for(homepage))
-
-    if current_user.accounttype == "worker":
-        if taskdata.worker_id != current_user.id:
-            flash(getword("tasknotfound", cookie), category="error")
-            return redirect(url_for(homepage))
-
-    elif current_user.accounttype == "boss":
-        if taskdata.boss_id != current_user.id:
-            flash(getword("tasknotfound", cookie), category="error")
-            return redirect(url_for(homepage))
-
-    return render_template("printtask.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie), user=current_user, task=taskdata.task, task1=taskdata,
-                           title=taskdata.title, taskid=id, workerid=worker_id, notdone=getword("notdone", cookie),
-                           workeremail=workeremail, workername=workername, boss=current_user.first_name, cookie=cookie,
-                           workeridtext=getword("workeridtext", cookie),
-                           workeremailtext=getword("workeremailtext", cookie),
-                           workernametext=getword("workernametext", cookie),
-                           taskstatustext=getword("taskstatustext", cookie), attext=getword("attext", cookie),
-                           requestedbytext=getword("requestedbytext", cookie),
-                           startedtext=getword("startedtext", cookie), chatnav=getword("chatnav", cookie))
-
-
-@views.route("/docs", methods=["GET"], subdomain="docs")
-def docs():
-    return "Under construction"
-
-
 @views.route("/cookies-disabled", methods=["GET"])
 def cookies_disabled():
     return render_template("cookies_disabled.html", user=current_user)
-
-
-@views.route("/offline", methods=["GET"])
-def offline():
-    abort(403)
 
 
 @views.route("/privacy", methods=["GET"])
@@ -810,7 +749,7 @@ def privacy():
                            privacypolicytext11=getword("privacypolicytext11", cookie),
                            privacypolicytext12=getword("privacypolicytext12", cookie),
                            privacypolicytext13=getword("privacypolicytext13", cookie),
-                           chatnav=getword("chatnav", cookie),
-                           homenav=getword("homenav", cookie), loginnav=getword("loginnav", cookie),
-                           profilenav=getword("profilenav", cookie), signupnav=getword("signupnav", cookie),
-                           workersnav=getword("workersnav", cookie), tasksnav=getword("tasksnav", cookie))
+                           chatnav=getword("chatnav", cookie), homenav=getword("homenav", cookie),
+                           loginnav=getword("loginnav", cookie), profilenav=getword("profilenav", cookie),
+                           signupnav=getword("signupnav", cookie), workersnav=getword("workersnav", cookie),
+                           tasksnav=getword("tasksnav", cookie))
