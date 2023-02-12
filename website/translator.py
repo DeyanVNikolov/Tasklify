@@ -1739,6 +1739,7 @@ words = {
     }
 }
 
+
 def getword(word, target):
     if target not in ["en", "bg", "es", "de", "fr", "ru"]:
         return "Тarget language not supported"
