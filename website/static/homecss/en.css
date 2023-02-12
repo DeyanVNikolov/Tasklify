@@ -20,4 +20,7 @@
     85% {
         content: "EASY";
     }
+    100% {
+        content: "FAST";
+    }
 }

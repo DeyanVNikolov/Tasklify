@@ -1698,7 +1698,7 @@ words = {
         "en": "Sign in with Facebook"
     },
     "youareloggedinas": {
-        "bg": "Влезнали сте като",
+        "bg": "Вие сте влезли като",
         "es": "Has iniciado sesión como",
         "de": "Sie sind angemeldet als",
         "fr": "Vous êtes connecté en tant que",
