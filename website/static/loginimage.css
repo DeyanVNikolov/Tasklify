@@ -1,0 +1,14 @@
+/* set the background image to static/wall.avif */
+body {
+    background-image: url("/static/image/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* make id image_bgb to have white semi-transparent background that is not the full width of the parent */
+#image_bgb {
+    background-color: rgba(255, 255, 255, 0.4);
+    width: 50%;
+    margin: auto;
+    padding: 10px;
+}

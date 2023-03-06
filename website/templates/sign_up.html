@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
     <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
+    <link rel="stylesheet" href="/static/loginimage.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.12.0/bootstrap-social.min.css">
@@ -21,14 +22,14 @@ content %}
             }
         }
     </script>
-    <div class="container text-center">
+     <div class="container text-center">
         <br><br><br>
-        <h3 align="center">{{ signup }}</h3>
+        <div id="image_bgb"><h3 align="center">{{ signup }}</h3>
         <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
              style="max-height:70px; width: auto;">
         <br>
         <br><br>
-        <h4 align="center">{{ alreadyhaveaccount }} <br> <a href="/auth/login">{{ loginhere }}</a></h4>
+         <h4 align="center">{{ alreadyhaveaccount }} <br> <a style="color:lightgreen" href="/auth/login">{{ loginhere }}</a></h4></div>
         <br><br>
     </div>
 

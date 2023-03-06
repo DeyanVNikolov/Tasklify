@@ -141,6 +141,11 @@
                 </div>
             </div>
 
+            <div id="audiobox">
+                <audio id="audio_ding" src="/static/ding.wav" preload="auto" hidden></audio>
+
+            </div>
+
             <div id="messagebox" style="margin-top:20px">
 
 
@@ -332,8 +337,15 @@
             let first_time = document.getElementById("first_time");
 
             if (count.value != data.length) {
-                count.value = data.length;
+
                 document.getElementById("messagebox").innerHTML = "";
+                let audio = document.getElementById("audio_ding");
+                if (count.value < data.length) {
+                    audio.play();
+                }
+                count.value = data.length;
+
+
 
 
                 for (var i = 0; i < data.length; i++) {
