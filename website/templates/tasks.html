@@ -1,255 +1,263 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 
 
-    <style>
-        .form-title {
-            font-size: 26px;
-            font-weight: 600;
-            text-align: center;
-            padding-bottom: 6px;
-            color: white;
-            text-shadow: 2px 2px 2px black;
-            border-bottom: solid 1px white;
-        }
 
-        .main-user-info {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 20px 0;
-        }
-
-        .user-input-box:nth-child(2n) {
-            justify-content: end;
-
-        }
-
-        .user-input-box {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            padding-bottom: 15px;
-        }
-
-        .user-input-box label {
-            width: 100%;
-            color: white;
-            font-size: 20px;
-            font-weight: 400;
-            margin: 5px 0;
-            text-align: center;
-        }
-
-        .user-input-box input {
-            height: 40px;
-            width: 95%;
-            border-radius: 7px;
-            outline: none;
-            border: 1px solid grey;
-            padding: 0 10px;
-        }
-
-        .gender-title {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            border-bottom: 1px solid white;
-        }
-
-        .gender-category {
-            color: white;
-        }
-
-        .form-submit-btn input {
-            cursor: pointer;
-        }
-
-        .form-submit-btn {
-            margin-top: 40px;
-        }
-
-        .form-submit-btn input {
-            display: block;
-            width: 100%;
-            margin-top: 10px;
-            font-size: 20px;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            color: rgb(209, 209, 209);
-            background: rgba(63, 114, 76, 0.7);
-        }
-
-        .form-submit-btn input:hover {
-            background: rgba(56, 204, 93, 0.7);
-            color: rgb(255, 255, 255);
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                min-width: 280px;
-            }
-
-            .user-input-box {
-                margin-bottom: 12px;
-                width: 100%;
-            }
-
-            .user-input-box:nth-child(2n) {
-                justify-content: space-between;
-            }
-
-            .gender-category {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-            }
-
-            .main-user-info {
-                max-height: 380px;
-                overflow: auto;
-            }
-
-            .main-user-info::-webkit-scrollbar {
-                width: 0;
-            }
-        }
-
-        .containerg {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 10px;
-            box-shadow: inset -2px 2px 2px white;
-        }
-
-        button {
-            background-color: #28A745;
-            color: white;
-            text-decoration: none;
-            border: 2px solid transparent;
-            font-weight: bold;
-            padding: 10px 10px;
-            border-radius: 30px;
-            transition: .4s;
-        }
-
-        button:hover {
-            background-color: transparent;
-            border: 2px solid red;
-            cursor: pointer;
-        }
-
-        .taskdiv {
-            white-space: initial;
-            border-style: dashed;
-            width: 50%;
-            transform: translateX(50%);
-        }
-
-        @media only screen and (max-width: 991px) {
-            .taskdiv {
-                width: 100%;
-                transform: translateX(0%);
-            }
-
-        }
-    </style>
     <br><br>
 
 
 
     <center>
-        <h1>{{ tasktextplural }} -</h1>
-        <button style="border-radius: 20px;" type="button" class="btn btn-warning dropdown-toggle"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ sorttext }}
-        </button>
-        <h5 style="margin-top:15px">{{ currentlysorting }}
-
-            {% if sorttype == "status" %}
-                {{ sorttypestatus }}
-            {% elif sorttype == "date" %}
-                {{ sorttypedate }}
-            {% elif sorttype == "archive" %}
-                {{ sorttypearchive }}
-            {% elif sorttype == "title" %}
-                {{ sorttypetitle }}
-            {% else %}
-                {{ nonetext }}
-            {% endif %}
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="?">{{ nonetext }}</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="?sort=date">{{ sorttypedate }}</a>
-                <a class="dropdown-item" href="?sort=title">{{ sorttypetitle }}</a>
-                <a class="dropdown-item" href="?sort=status">{{ sorttypestatus }}</a>
-                <a class="dropdown-item" href="?sort=archive">{{ sorttypearchive }}</a>
-            </div>
-        </h5>
+        <h1>{{ tasktextplural }}</h1>
     </center>
 
     <br><br>
-    {% for task in taskslist %}
-        {% set status = task.complete %}
-        {% if status == "0" %}
-            {% set status = "Not Started" %}
-        {% elif status == "1" %}
-            {% set status = "Started" %}
-        {% elif status == "2" %}
-            {% set status = "Done" %}
-        {% endif %}
-        <div class="container containerg text-center" style="{% if task.archive == True %} opacity:50%" {% else %}"
-        {% endif %}">
-        <br>
-        <h1 class="form-title">{{ tasktext }}</h1>
-        <div class="main-user-info">
 
-            <div class="user-input-box">
-                <span class="gender-title">{{ titletext }}</span>
-                <label style="margin: 15px;">{{ task.title }}</label>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/tasks.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <div class="container-fluid" style="width: 100%">
+        <div class="row">
+            <script>
+                function movecard(card, currentable, nextable) {
+                    var card = document.getElementById(card);
+                    var currentable = document.getElementById(currentable);
+                    var nextable = document.getElementById(nextable);
+                    // cardholder: currenttable -> card-body -> items
+                    var cardholder = currentable.getElementsByClassName("items")[0];
+                    cardholder.removeChild(card);
+                    var cardholder_next = nextable.getElementsByClassName("items")[0];
+                    cardholder_next.appendChild(card);
+
+
+                    if (nextable.id === "started") {
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-hidden");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-show");
+
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-hidden");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-show");
+
+                        // right arrow
+                        right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                        right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'done')");
+
+                        // left arrow
+                        left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                        left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'notdone')");
+
+                    } else if (nextable.id === "notdone") {
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-show");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-hidden");
+
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-hidden");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-show");
+
+                        // right arrow
+                        right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                        right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'started')");
+
+                        // left arrow
+                        left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                        left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'notdone')");
+                    } else if (nextable.id === "done") {
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-hidden");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-show");
+
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-show");
+                        card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-hidden");
+
+                        // right arrow
+                        right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                        right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'done')");
+
+                        // left arrow
+                        left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                        left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'started')");
+                    }
+
+                    // use ajax to update the database
+                    var taskid = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByTagName("input")[0].value;
+                    var csrf_token = "{{ csrf_token() }}"
+                    $.ajax({
+                        url: "/tasks",
+                        type: "POST",
+                        data: {
+                            task_id: taskid,
+                            typeform: nextable.id,
+                            csrf_token: csrf_token,
+                        },
+                        timeout: 5000,
+
+                    });
+
+
+                }
+            </script>
+            <style>
+                .bt-hidden {
+                    display: none;
+                    cursor: none;
+                }
+
+                .bt-show {
+                    display: block;
+                    cursor: pointer;
+                }
+            </style>
+            <div class="col-md-4 col-sm-6">
+                <div class="card" id="notdone">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-truncate py-2">{{ notdone }}</h6>
+                        <hr>
+                        <div class="items">
+                            {% for task in taskslist %}
+
+                                {% if task.complete == "0" %}
+
+                                    <div class="card-card" id="todo{{ loop.index }}">
+                                        <div class="card-body p-2">
+                                            <div class="card-title">
+
+                                                <a href="/task/{{ task.task_id }}"
+                                                   class="lead font-weight-light">({{ task.task_id }}) {{ task.title }}</a>
+                                            </div>
+                                            <p>
+                                                {{ task.task }}
+                                            </p>
+                                            <a href="/task/{{ task.task_id }}">
+                                                <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                            </a>
+                                            <br>
+                                            <div class="nav-card-task"
+                                                 style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                <a class="right-arrow-lk bt-show"
+                                                   onclick="movecard('todo{{ loop.index }}', 'notdone', 'started')"><i
+                                                        style="font-size:25px; float:right"
+                                                        class="fa-solid fa-arrow-right"></i></a>
+
+                                                <a class="left-arrow-lk bt-hidden"
+                                                   onclick="movecard('todo{{ loop.index }}', 'notdone', 'notdone')"><i
+                                                        style="font-size:25px; float:left"
+                                                        class="fa-solid fa-arrow-left"></i></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="card" id="started">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-truncate py-2">{{ started }}</h6>
+                        <hr>
+                        <div class="items">
+                            {% for task in taskslist %}
 
-            <br>
+                                {% if task.complete == "1" %}
 
-            <div class="user-input-box">
-                <span class="gender-title">{{ due }}</span>
-                <label style="margin: 15px;">{{ task.datedue }}
-                    <br>
-                    <br>
-                    {% if task.archive == False %}
-                        <a href="/task/{{ task.task_id }}">
-                            <button type="button">{{ moreinfo }}</button>
-                        </a>
-                    {% endif %}
-                </label>
+                                    <div class="card-card" id="todo{{ loop.index }}">
+                                        <div class="card-body p-2">
+                                            <div class="card-title">
+
+                                                <a href="/task/{{ task.task_id }}"
+                                                   class="lead font-weight-light">({{ task.task_id }}) {{ task.title }}</a>
+                                            </div>
+                                            <p>
+                                                {{ task.task }}
+                                            </p>
+                                            <a href="/task/{{ task.task_id }}">
+                                                <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                            </a>
+                                            <br>
+                                            <div class="nav-card-task"
+                                                 style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                <a class="right-arrow-lk bt-show"
+                                                   onclick="movecard('todo{{ loop.index }}', 'started', 'done')"><i
+                                                        style="font-size:25px; float:right"
+                                                        class="fa-solid fa-arrow-right"></i></a>
+
+                                                <a class="left-arrow-lk bt-show"
+                                                   onclick="movecard('todo{{ loop.index }}', 'started', 'notdone')"><i
+                                                        style="font-size:25px; float:left"
+                                                        class="fa-solid fa-arrow-left"></i></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="card" id="done">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-truncate py-2">{{ done }}</h6>
+                        <hr>
+                        <div class="items">
+                            {% for task in taskslist %}
 
+                                {% if task.complete == "2" %}
 
-        </div>
-        <div class="gender-details-box">
-            <span class="gender-title">{{ statustext }}</span>
-            <div class="gender-category">
-                <h4>{{ statustext }}:
-                    {% if task.archive == False %}
-                        {% if status == "Done" %}
-                            <span style="color:green">{{ completed }}</span>
-                        {% elif status == "Started" %}
-                            <span style="color:orange">{{ started }}</span>
-                        {% elif status == "Not Started" %}
-                            <span style="color:red">{{ notstarted }}</span>
-                        {% endif %}
-                    {% else %}
-                        <span style="color:grey">------</span>
-                    {% endif %}
-                </h4>
+                                    <div class="card-card" id="todo{{ loop.index }}">
+                                        <div class="card-body p-2">
+                                            <div class="card-title">
 
+                                                <a href="/task/{{ task.task_id }}"
+                                                   class="lead font-weight-light">({{ task.task_id }}) {{ task.title }}</a>
+                                            </div>
+                                            <p>
+                                                {{ task.task }}
+                                            </p>
+                                            <a href="/task/{{ task.task_id }}">
+                                                <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                            </a>
+                                            <br>
+                                            <div class="nav-card-task"
+                                                 style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                <a class="right-arrow-lk bt-hidden"
+                                                   onclick="movecard('todo{{ loop.index }}', 'done', 'done')"><i
+                                                        style="font-size:25px; float:right"
+                                                        class="fa-solid fa-arrow-right"></i></a>
+
+                                                <a class="left-arrow-lk bt-show"
+                                                   onclick="movecard('todo{{ loop.index }}', 'done', 'started')"><i
+                                                        style="font-size:25px; float:left"
+                                                        class="fa-solid fa-arrow-left"></i></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <br>
-        </div>
-        <br><br>
-    {% endfor %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+
     </div>
 
 

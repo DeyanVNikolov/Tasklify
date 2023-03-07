@@ -1,0 +1,65 @@
+.card.draggable {
+    margin-bottom: 1rem;
+    cursor: grab;
+}
+
+.droppable {
+    background-color: var(--success);
+    min-height: 120px;
+    margin-bottom: 1rem;
+}
+.card{
+    background-color: #212529;
+}
+.col-sm-6 {
+    margin-bottom: 25px;
+}
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border: 2px solid transparent;
+    font-weight: bold;
+    padding: 5px 5px;
+    border-radius: 5px;
+    transition: .4s;
+}
+.btn-delete:hover{
+    background-color: transparent;
+    border: 2px solid #212529;
+    color:black;
+    cursor: pointer;
+}
+.card-title{
+    color: white;
+    font-size: 20px;
+}
+.card-card{
+    background-color: #e6e6e6;
+    padding: 5px 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.lead{
+    color: #212519;
+}
+.btn-moreinfo{
+    background-color: #28A745;
+    color: white;
+    text-decoration: none;
+    border: 2px solid transparent;
+    font-weight: bold;
+    padding: 5px 5px;
+    border-radius: 5px;
+    transition: .4s;
+}
+.btn-moreinfo:hover{
+    background-color: transparent;
+    border: 2px solid #212529;
+    color:black;
+    cursor: pointer;
+}
+hr{
+    background-color: white;
+    height: 1px;
+}

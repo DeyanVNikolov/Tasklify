@@ -209,11 +209,25 @@ def tasks():
         if typeform == 'done':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
+            if current_user.id != task.worker_id:
+                if current_user.id != task.boss_id:
+                    return redirect(url_for('views.tasks'))
             task.complete = "2"
+            db.session.commit()
+        elif typeform == 'started':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            if current_user.id != task.worker_id:
+                if current_user.id != task.boss_id:
+                    return redirect(url_for('views.tasks'))
+            task.complete = "1"
             db.session.commit()
         elif typeform == 'notdone':
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
+            if current_user.id != taskpost.worker_id:
+                if current_user.id != taskpost.boss_id:
+                    return redirect(url_for('views.tasks'))
             taskpost.complete = "0"
             db.session.commit()
             return redirect(url_for('views.tasks'))
@@ -229,26 +243,6 @@ def tasks():
 
     taskstodisplay.sort(key=lambda x: x['datedue'], reverse=True)
 
-    for task in taskstodisplay:
-        if task['complete'] == "2":
-            taskstodisplay.remove(task)
-            taskstodisplay.append(task)
-
-    for task in taskstodisplay:
-        if task['archive'] == "1":
-            taskstodisplay.remove(task)
-            taskstodisplay.append(task)
-
-    sort = request.args.get('sort')
-    if sort == "date":
-        taskstodisplay.sort(key=lambda x: x['datedue'])
-    elif sort == "title":
-        taskstodisplay.sort(key=lambda x: x['title'].lower())
-    elif sort == "status":
-        taskstodisplay.sort(key=lambda x: x['complete'], reverse=False)
-    elif sort == "archive":
-        taskstodisplay.sort(key=lambda x: x['archive'], reverse=True)
-
     return render_template("tasks.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
@@ -260,11 +254,7 @@ def tasks():
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
                            due=getword("due", cookie), titletext=getword("titletext", cookie),
-                           chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie),
-                           sorttypestatus=getword("sorttypestatus", cookie),
-                           sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
-                           sorttypearchive=getword("sorttypearchive", cookie), nonetext=getword("nonetext", cookie),
-                           sorttext=getword("sorttext", cookie), sorttype=sort)
+                           chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie))
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
@@ -474,19 +464,19 @@ def worker(id):
         if typeform == 'done':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
-            task.complete = True
+            task.complete = "2"
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'delete':
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
-            task.archive = True
+            db.session.delete(task)
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'notdone':
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
-            taskpost.complete = False
+            taskpost.complete = "0"
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'deletefromall':
@@ -507,6 +497,12 @@ def worker(id):
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             db.session.delete(task)
+            db.session.commit()
+            return redirect(url_for(oneworkerpage, id=id))
+        elif typeform == 'started':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task.complete = "1"
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
