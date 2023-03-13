@@ -268,8 +268,6 @@ def workers():
         if current_user.accounttype == "worker":
             return redirect(url_for(homepage))
 
-    taskstodisplay = []
-
     if request.method == "POST":
         if request.form.get("typeform") == "add":
             id = request.form.get('ID')
@@ -338,19 +336,47 @@ def workers():
         elif request.form.get("typeform") == "workermenu":
             workerid = request.form.get('worker_id')
             return redirect(url_for(oneworkerpage, id=workerid))
+        elif request.form.get("typeform") == 'deletetask':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            db.session.delete(task)
+            db.session.commit()
+            return redirect(url_for(workerspage))
+        elif request.form.get("typeform") == 'started':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task.complete = "1"
+            db.session.commit()
+            return redirect(url_for(workerspage))
+        elif request.form.get("typeform") == 'notdone':
+            taskid = request.form.get('task_id')
+            taskpost = Task.query.get(taskid)
+            taskpost.complete = "0"
+            db.session.commit()
+            return redirect(url_for(workerspage))
+        elif request.form.get("typeform") == 'done':
+            taskid = request.form.get('task_id')
+            task = Task.query.get(taskid)
+            task.complete = "2"
+            db.session.commit()
+            return redirect(url_for(workerspage))
+
+    taskstodisplay = []
 
     for task in Task.query.filter_by(boss_id=current_user.id).all():
         datedue = task.datedue
         dateformat = time.strftime("%e/%m/%Y - %R", datedue.timetuple())
+        task_worker = Worker.query.filter_by(id=task.worker_id).first()
+        date_due_in_unix = int(time.mktime(datedue.timetuple()))
         taskstodisplay.append(
             {"task": task.task, "complete": task.complete, "actual_id": task.actual_id, "task_id": task.id,
-             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive})
+             "title": task.title, "ordernumber": task.ordernumber, "datedue": dateformat, "archive": task.archive,
+             "worker_name": task_worker.first_name, "worker_id": task_worker.id, "worker_email": task_worker.email,
+             "date_due_in_unix": date_due_in_unix})
 
-    taskstodisplay.sort(key=lambda x: x['archive'], reverse=False)
+    taskstodisplay = sorted(taskstodisplay, key=lambda k: k['date_due_in_unix'])
 
-    for task in taskstodisplay:
-        if task["ordernumber"] != 1:
-            taskstodisplay.remove(task)
+
 
     workerslist = []
 
@@ -398,7 +424,18 @@ def workers():
                            sorttaskstext=getword("sorttaskstext", cookie),
                            currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
                            taskstext=getword("tasksnav", cookie), search=getword("search", cookie),
-                           areyousure=getword("areyousure", cookie), chatnav=getword("chatnav", cookie))
+                           areyousure=getword("areyousure", cookie), chatnav=getword("chatnav", cookie),
+                           moreinfo=getword("moreinfo", cookie), notdone=getword("notdone", cookie),
+                           worker=worker, tasktext=getword("tasktext", cookie),
+                           statustext=getword("statustext", cookie),
+                           notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                           started=getword("started", cookie), deletefromall=getword("deletefromall", cookie),
+                           workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie),
+                           fullydelete=getword("fullydelete", cookie), workername=worker.first_name,
+                           workeremail=worker.email, workeremailtext=getword("workeremailtext", cookie),
+                           sorttypestatus=getword("sorttypestatus", cookie),
+                           sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
+                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
@@ -491,12 +528,6 @@ def worker(id):
             taskid = request.form.get('task_id')
             task = Task.query.get(taskid)
             task.archive = False
-            db.session.commit()
-            return redirect(url_for(oneworkerpage, id=id))
-        elif typeform == 'fullydelete':
-            taskid = request.form.get('task_id')
-            task = Task.query.get(taskid)
-            db.session.delete(task)
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
         elif typeform == 'started':

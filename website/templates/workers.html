@@ -1,34 +1,25 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 
-    <style>
-        @media screen and (max-width: 575px) {
-            .makesmallwhenscreengoesbrrr {
-                width: 100% !important;
-                transform: translateX(0%) !important;
-            }
-        }
 
-        .btn1 {
-            border-radius: 20px;
-        }
 
-        .btn1:hover {
-            color: #28A745 !important;
-        }
-
-        .btn2:hover {
-            background-color: #343A40 !important;
-            color: #28A745 !important;
-        }
-    </style>
     <br><br>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/tasks.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/admin.css">
 
     <div class="container text-center">
 
         <h1>{{ nowtime }}</h1>
 
-        <div class="card1 container-fluid" style="width: 100%; height: fit-content; overflow:auto">
+        <div class="container-fluid" style="width: 100%">
             <div class="heading text-truncate" style="width:100%; overflow:auto">
                 <h2>{{ adminpaneltext }}</h2>&nbsp;
                 <div class="justify-content-right">
@@ -40,7 +31,120 @@
                        href="/add/task" class="btn1 btn2">{{ addtasktext }}</a>
                 </div>
             </div>
-            <br>
+            <style>
+                {#            table class appointments make border 1px solid black#}
+                table.appointments {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                table {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                table.appointments td, table.appointments th {
+                    border: 1px solid black;
+                    padding: 8px;
+                }
+
+                table.appointments tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+
+                table.appointments tr:hover {
+                    background-color: #ddd;
+                }
+
+                table.appointments th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #28A745;
+                    color: white;
+                }
+
+                .makesmallwhenscreengoesbrrr {
+                    width: 50%;
+                    transform: translateX(50%);
+                }
+
+                .btn1 {
+                    border-radius: 20px;
+                    padding: 10px 20px;
+                    margin: 10px;
+                    color: white;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+
+                .btn2 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn2:hover {
+                    background-color: #28A745;
+                }
+
+                .btn3 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn3:hover {
+                    background-color: #28A745;
+                }
+
+                .btn4 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn4:hover {
+                    background-color: #28A745;
+                }
+
+                .btn5 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn5:hover {
+                    background-color: #28A745;
+                }
+
+                .btn6 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn6:hover {
+                    background-color: #28A745;
+                }
+
+                .btn7 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn7:hover {
+                    background-color: #28A745;
+                }
+
+                .btn8 {
+                    background-color: #28A745;
+                    border: none;
+                }
+
+                .btn8:hover {
+                    background-color: #28A745;
+                }
+            </style>
             <table class="appointments text-truncate">
                 <div class="btn-group">
                     <script>
@@ -157,6 +261,238 @@
 
                 </tbody>
             </table>
+            <br><br>
+            <div class="row">
+                <script>
+                    function movecard(card, currentable, nextable) {
+                        var card = document.getElementById(card);
+                        var currentable = document.getElementById(currentable);
+                        var nextable = document.getElementById(nextable);
+                        // cardholder: currenttable -> card-body -> items
+                        var cardholder = currentable.getElementsByClassName("items")[0];
+                        cardholder.removeChild(card);
+                        var cardholder_next = nextable.getElementsByClassName("items")[0];
+                        cardholder_next.appendChild(card);
+
+
+                        if (nextable.id === "started") {
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-hidden");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-show");
+
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-hidden");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-show");
+
+                            // right arrow
+                            right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                            right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'done')");
+
+                            // left arrow
+                            left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                            left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'notdone')");
+
+                        } else if (nextable.id === "notdone") {
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-show");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-hidden");
+
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-hidden");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-show");
+
+                            // right arrow
+                            right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                            right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'started')");
+
+                            // left arrow
+                            left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                            left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'notdone')");
+                        } else if (nextable.id === "done") {
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.remove("bt-hidden");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0].classList.add("bt-show");
+
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.remove("bt-show");
+                            card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0].classList.add("bt-hidden");
+
+                            // right arrow
+                            right_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("right-arrow-lk")[0];
+                            right_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'done')");
+
+                            // left arrow
+                            left_arrow = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByClassName("left-arrow-lk")[0];
+                            left_arrow.setAttribute("onclick", "movecard('" + card.id + "', '" + nextable.id + "', 'started')");
+                        }
+
+                        // use ajax to update the database
+                        var taskid = card.getElementsByClassName("card-body")[0].getElementsByClassName("nav-card-task")[0].getElementsByTagName("input")[0].value;
+                        var csrf_token = "{{ csrf_token() }}"
+                        $.ajax({
+                            url: "/task/" + taskid,
+                            type: "POST",
+                            data: {
+                                task_id: taskid,
+                                typeform: nextable.id,
+                                csrf_token: csrf_token,
+                            },
+                            timeout: 5000,
+
+                        });
+
+
+                    }
+                </script>
+                <style>
+                    .bt-hidden {
+                        display: none;
+                        cursor: none;
+                    }
+
+                    .bt-show {
+                        display: block;
+                        cursor: pointer;
+                    }
+                </style>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card" id="notdone">
+                        <div class="card-body">
+                            <h6 class="card-title text-uppercase text-truncate py-2">{{ notdone }}</h6>
+                            <hr>
+                            <div class="items">
+                                {% for task in taskslist %}
+
+                                    {% if task.complete == "0" %}
+
+                                        <div class="card-card" id="todo{{ loop.index }}">
+                                            <div class="card-body p-2">
+                                                <div class="card-title">
+
+                                                    <a href="/task/{{ task.task_id }}"
+                                                       class="lead font-weight-light">{{ task.worker_name }}<br><br>({{ task.task_id }}) {{ task.title }}</a>
+                                                    <p class="lead font-weight-bold">{{ task.datedue }}</p>
+                                                </div>
+                                                <p>
+                                                    {{ task.task }}
+                                                </p>
+                                                <a href="/task/{{ task.task_id }}">
+                                                    <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                                </a>
+                                                <br>
+                                                <div class="nav-card-task"
+                                                     style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                    <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                    <a class="right-arrow-lk bt-show"
+                                                       onclick="movecard('todo{{ loop.index }}', 'notdone', 'started')"><i
+                                                            style="font-size:25px; float:right"
+                                                            class="fa-solid fa-arrow-right"></i></a>
+
+                                                    <a class="left-arrow-lk bt-hidden"
+                                                       onclick="movecard('todo{{ loop.index }}', 'notdone', 'notdone')"><i
+                                                            style="font-size:25px; float:left"
+                                                            class="fa-solid fa-arrow-left"></i></a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card" id="started">
+                        <div class="card-body">
+                            <h6 class="card-title text-uppercase text-truncate py-2">{{ started }}</h6>
+                            <hr>
+                            <div class="items">
+                                {% for task in taskslist %}
+
+                                    {% if task.complete == "1" %}
+
+                                        <div class="card-card" id="todo{{ loop.index }}">
+                                            <div class="card-body p-2">
+                                                <div class="card-title">
+
+                                                    <a href="/task/{{ task.task_id }}"
+                                                       class="lead font-weight-light">{{ task.worker_name }}<br><br>({{ task.task_id }}) {{ task.title }}</a>
+                                                    <p class="lead font-weight-bold">{{ task.datedue }}</p>
+                                                </div>
+                                                <p>
+                                                    {{ task.task }}
+                                                </p>
+                                                <a href="/task/{{ task.task_id }}">
+                                                    <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                                </a>
+                                                <br>
+                                                <div class="nav-card-task"
+                                                     style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                    <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                    <a class="right-arrow-lk bt-show"
+                                                       onclick="movecard('todo{{ loop.index }}', 'started', 'done')"><i
+                                                            style="font-size:25px; float:right"
+                                                            class="fa-solid fa-arrow-right"></i></a>
+
+                                                    <a class="left-arrow-lk bt-show"
+                                                       onclick="movecard('todo{{ loop.index }}', 'started', 'notdone')"><i
+                                                            style="font-size:25px; float:left"
+                                                            class="fa-solid fa-arrow-left"></i></a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card" id="done">
+                        <div class="card-body">
+                            <h6 class="card-title text-uppercase text-truncate py-2">{{ done }}</h6>
+                            <hr>
+                            <div class="items">
+                                {% for task in taskslist %}
+
+                                    {% if task.complete == "2" %}
+
+                                        <div class="card-card" id="todo{{ loop.index }}">
+                                            <div class="card-body p-2">
+                                                <div class="card-title">
+
+                                                    <a href="/task/{{ task.task_id }}"
+                                                       class="lead font-weight-light">{{ task.worker_name }}<br><br>({{ task.task_id }}) {{ task.title }}</a>
+                                                    <p class="lead font-weight-bold">{{ task.datedue }}</p>
+                                                </div>
+                                                <p>
+                                                    {{ task.task }}
+                                                </p>
+                                                <a href="/task/{{ task.task_id }}">
+                                                    <button class="btn-moreinfo">{{ moreinfo }}</button>
+                                                </a>
+                                                <br>
+                                                <div class="nav-card-task"
+                                                     style="margin-left:10px; margin-right:10px; height:25px; margin-top:10px">
+                                                    <input type="hidden" id="taskid" value="{{ task.task_id }}">
+                                                    <a class="right-arrow-lk bt-hidden"
+                                                       onclick="movecard('todo{{ loop.index }}', 'done', 'done')"><i
+                                                            style="font-size:25px; float:right"
+                                                            class="fa-solid fa-arrow-right"></i></a>
+
+                                                    <a class="left-arrow-lk bt-show"
+                                                       onclick="movecard('todo{{ loop.index }}', 'done', 'started')"><i
+                                                            style="font-size:25px; float:left"
+                                                            class="fa-solid fa-arrow-left"></i></a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <br><br><br><br><br>
 
