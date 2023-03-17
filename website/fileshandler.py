@@ -84,6 +84,9 @@ def fileupd():
             filenametranslit = file.filename
             if not all(ord(c) < 128 for c in file.filename):
                 filenametranslit = translit(file.filename, reversed=True)
+            
+            # change all _ to -
+            filenametranslit = filenametranslit.replace("_", "-")
 
 
 
