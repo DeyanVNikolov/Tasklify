@@ -56,7 +56,6 @@ def create_app():
     csrfg.init_app(app)
     db.init_app(app)
     CAPTCHA1.init_app(app)
-    toolbar = DebugToolbarExtension(app)
     app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 
     app.jinja_env.globals.update(getword=getword)
@@ -76,7 +75,6 @@ def create_app():
     from .activationhandler import activationhandler
     from .externalcallback import externalcallback
     from .chathandler import chathandler
-    from .api.apihandler import api
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
@@ -85,9 +83,7 @@ def create_app():
     app.register_blueprint(activationhandler, url_prefix='/')
     app.register_blueprint(externalcallback, url_prefix='/')
     app.register_blueprint(chathandler, url_prefix='/')
-    app.register_blueprint(api, url_prefix='/api')
     csrfg.exempt(externalcallback)
-    csrfg.exempt(api)
     limiter.limit("200 per minute")(chathandler)
 
 
@@ -155,9 +151,9 @@ def create_app():
 
     @app.errorhandler(404)
     def page_not_found(e):
-        if request.path.startswith('/api'):
-            return jsonify({"status": "error", "error": "404 Not Found",
-                            "message": "Did you send all the required arguments?"}), 404
+        # determine wether the rquest is coming from browser or api or console
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({"error": "404 Not Found"}), 404
         else:
             return render_template('notfound.html'), 404
 
