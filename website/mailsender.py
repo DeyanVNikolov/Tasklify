@@ -1,8 +1,11 @@
 import os
+from email.utils import formataddr
+
 from dotenv import load_dotenv
 
 load_dotenv(".env")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 
 def sendregisterationemail(emailaddr, accname, regid):
     import os
@@ -15,8 +18,8 @@ def sendregisterationemail(emailaddr, accname, regid):
 
     msg = EmailMessage()
     msg['Subject'] = 'Registration Successful | Регистрацията е успешна'
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = emailaddr
+    msg['From'] = formataddr(('Tasklify', EMAIL_ADDRESS))
+    msg['To'] = formataddr((accname, emailaddr))
 
     msg.set_content('Registration Email')
 
@@ -83,8 +86,8 @@ def sendregisterationemailboss(emailaddr, accname):
 
     msg = EmailMessage()
     msg['Subject'] = 'Registration Successful | Регистрацията е успешна'
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = emailaddr
+    msg['From'] = formataddr(('Tasklify', EMAIL_ADDRESS))
+    msg['To'] = formataddr((accname, emailaddr))
 
     msg.set_content('Registration Email')
 
@@ -149,8 +152,8 @@ def sendremainder(emailaddr, accname, taskcount):
 
     msg = EmailMessage()
     msg['Subject'] = 'Task Reminder | Напомняне за задача'
-    msg['From'] = EMAIL_ADDRESS
-    msg['To'] = emailaddr
+    msg['From'] = formataddr(('Tasklify', EMAIL_ADDRESS))
+    msg['To'] = formataddr((accname, emailaddr))
 
     msg.set_content('Task Reminder Email')
 
@@ -213,7 +216,7 @@ def sendmail(name, email, message):
 
     msg = EmailMessage()
     msg['Subject'] = 'Ново съобщение от ' + name
-    msg['From'] = EMAIL_ADDRESS
+    msg['From'] = formataddr(('Tasklify', EMAIL_ADDRESS))
     msg['To'] = ['didonikolovbg@gmail.com', 'anastasov.marti@gmail.com']
 
     msg.set_content('Tasklify Contact Form')
@@ -247,6 +250,75 @@ def sendmail(name, email, message):
                 All rights reserved. © 2022</h5>
                 <h5>Available on <a href="https://tasklify.me">https://tasklify.me</a></h5>
                 
+            </center>
+        </body>
+    </html>
+    """, subtype='html')
+
+    with smtplib.SMTP_SSL('smtppro.zoho.eu', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+
+def newtaskmail(emailaddr, accname, taskname, taskdate, taskid):
+    import os
+    import smtplib
+    import imghdr
+    from email.message import EmailMessage
+
+    EMAIL_ADDRESS = "hello@tasklify.me"
+    EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+    msg = EmailMessage()
+    msg['Subject'] = 'New Task | Нова задача'
+    msg['From'] = formataddr(('Tasklify', EMAIL_ADDRESS))
+    msg['To'] = formataddr((accname, emailaddr))
+
+    msg.set_content('New Task | Нова задача')
+
+    msg.add_alternative(f"""\
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <center>
+                <br><br>
+                <img style="width: 300px; height: auto;" src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.png">
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h1 style="color:rgb(0, 0, 0); font-family: sans-serif;">New task has been assigned to you, {accname}!</h1>
+                <br><br>
+                
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Task name: <strong>{taskname}</strong></h2>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">It is due on: <strong>{taskdate}</strong></h2>
+
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Check it out on <a href="https://tasklify.me/task/{taskid}">https://tasklify.me/task/{taskid}</a></h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Нова задача ви е била зададена, {accname}!</h2>
+                                <br><br>
+                
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Име на задачата: <strong>{taskname}</strong></h2>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Тя е с краен срок до: <strong>{taskdate}</strong></h2>
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Проверете я на <a href="https://tasklify.me/task/{taskid}">https://tasklify.me/task/{taskid}</a></h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">Best regards,<br>Tasklify Team</h2>
+                <br>
+                <h2 style="color:rgb(0, 0, 0); font-family: sans-serif;">С най-добри пожелания,<br>Екипът на Tasklify</h2>
+                <br><br>
+                <hr style="text-align:left;margin-left:0">
+                <br><br>
+                <h5>Tasklify, "Studentska" Str. 1, 9000 Varna, Bulgaria <br>
+                All rights reserved. © 2022</h5>
+                <h5>Available on <a href="https://tasklify.me">https://tasklify.me</a></h5>
+
+
+
             </center>
         </body>
     </html>

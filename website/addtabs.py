@@ -16,7 +16,7 @@ from werkzeug.utils import secure_filename, send_from_directory
 
 from website import CAPTCHA1
 from . import db
-from .mailsender import sendregisterationemail
+from .mailsender import sendregisterationemail, newtaskmail
 from .models import Task
 from .models import Worker, Boss, Chat
 from .translator import getword
@@ -238,11 +238,16 @@ def add_task():
                             if filespresent:
                                 new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
                                             actual_id=acid, ordernumber=tasknum, datedue=datedue, attachments=filestring)
+
+
+
                             else:
                                 new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
                                             actual_id=acid, ordernumber=tasknum, datedue=datedue)
                             db.session.add(new_task)
                             db.session.commit()
+                            date = datedue.strftime("%H:%M:%S %d.%m.%Y")
+                            newtaskmail(workerg.email, workerg.first_name, title, date, new_task.id)
                         flash(getword("taskadded", cookie), category="success")
                         redirect(url_for(workerspage))
                     except Exception as e:
