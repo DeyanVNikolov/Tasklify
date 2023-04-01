@@ -5,12 +5,14 @@ import uuid
 from os.path import join, dirname, realpath
 
 import requests
+import transliterate
 from dateutil import parser
 from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask import abort
 from flask import current_app as app
 from flask_login import login_required, current_user
+from transliterate import translit
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename, send_from_directory
 
@@ -780,3 +782,22 @@ def privacy():
                            loginnav=getword("loginnav", cookie), profilenav=getword("profilenav", cookie),
                            signupnav=getword("signupnav", cookie), workersnav=getword("workersnav", cookie),
                            tasksnav=getword("tasksnav", cookie))
+
+
+@views.route("/videochat", methods=["GET", "POST"])
+@login_required
+def videochat():
+
+    username = current_user.first_name
+
+    if not username.isascii():
+        username = translit(username, reversed=True)
+
+    username1 = username.rstrip()
+
+    randomid = uuid.uuid4().hex
+
+    print(username1)
+    print(randomid)
+
+    return render_template("videochat.html", user=current_user, username=username1, randomid=randomid)

@@ -1,0 +1,6 @@
+/* Make dark theme but not pitch black */
+
+.dark-theme {
+    background-color: #222;
+    color: #fff;
+}
