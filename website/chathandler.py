@@ -154,20 +154,29 @@ def chat():
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])
 @login_required
 def chatapi(id, otherid):
+    print("1")
 
     if not current_user.is_authenticated:
         return "not authenticated", 401
 
+    print("2")
+
     if id != current_user.id:
         return "You are not allowed to access this page", 403
+
+    print("3")
 
     # check if id exists
     if Worker.query.get(id) is None and Boss.query.get(id) is None:
         return "User not found", 404
 
+    print("4")
+
     # check if otherid exists
     if Worker.query.get(otherid) is None and Boss.query.get(otherid) is None:
         return "User not found", 404
+
+    print("5")
 
     # check if chat exists
     chat = Chat.query.filter_by(id_creator=id, id_participant=otherid).first()
@@ -176,16 +185,24 @@ def chatapi(id, otherid):
         if chat is None:
             return "Chat not found", 404
 
+    print("6")
+
     user1 = Worker.query.filter_by(id=id).first()
     user2 = Worker.query.filter_by(id=otherid).first()
+
+    print("7")
 
     if user1 is None:
         user1 = Boss.query.filter_by(id=id).first()
     if user2 is None:
         user2 = Boss.query.filter_by(id=otherid).first()
 
+    print("8")
+
     if user1 is None or user2 is None:
         return "User not found", 404
+
+    print("9")
 
     return render_template('chatapi.html', user=current_user, userid=id, otherid=otherid, chat=chat, chatid=chat.id,
                            user1=user1, user2=user2)
