@@ -1,3 +1,5 @@
+import random
+
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Sequence
@@ -7,7 +9,6 @@ import uuid
 import datetime
 import sqlalchemy.dialects.postgresql as postgresql
 import time
-
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +35,7 @@ class Task(db.Model):
 class Worker(db.Model, UserMixin):
     # string with utf-8 encoding
     id = db.Column(db.String(150), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True)
+    number = db.Column(db.Integer, default=lambda : int(time.time()) + random.randint(100000, 999999), unique=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
@@ -50,6 +52,7 @@ class Worker(db.Model, UserMixin):
 
 class Boss(db.Model, UserMixin):
     id = db.Column(db.String(150), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True)
+    number = db.Column(db.Integer, default=lambda : int(time.time()) + random.randint(100000, 999999), unique=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))

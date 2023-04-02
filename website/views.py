@@ -1,5 +1,6 @@
 import datetime
 import os
+import random
 import time
 import uuid
 from os.path import join, dirname, realpath
@@ -8,7 +9,7 @@ import requests
 import transliterate
 from dateutil import parser
 from email_validator import validate_email, EmailNotValidError
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask import abort
 from flask import current_app as app
 from flask_login import login_required, current_user
@@ -787,6 +788,8 @@ def privacy():
 @views.route("/videochat", methods=["GET", "POST"])
 @login_required
 def videochat():
+    from website.token.RtcTokenBuilder import RtcTokenBuilder
+
 
     username = current_user.first_name
 
@@ -795,9 +798,47 @@ def videochat():
 
     username1 = username.rstrip()
 
-    randomid = uuid.uuid4().hex
 
-    print(username1)
-    print(randomid)
+    randomid = current_user.first_name
+    randomid = randomid.replace(" ", "")
+    randomid = randomid.lower()
+    randomid = randomid + "-|-" + str(current_user.number)
 
-    return render_template("videochat.html", user=current_user, username=username1, randomid=randomid)
+    if not randomid.isascii():
+        randomid = translit(randomid, reversed=True)
+
+
+    current_unix_timestamp = int(time.time())
+    hours_from_now = current_unix_timestamp + 24 * 60 * 60
+
+
+    token = RtcTokenBuilder.buildTokenWithUid("8b975af4453648a3b932f332d4501db8", "6c4beaa4ecf54e8b9d8ed547fd2c3d76",
+                                              "Hey", randomid, "1", hours_from_now)
+
+    print(token)
+
+
+
+    return render_template("videochat.html", user=current_user, username=username1, randomid=randomid, token=token)
+
+
+@views.route("/getname/videochat/<id>", methods=["GET", "POST"])
+@login_required
+def getname(id):
+    username = id
+    firstpart = username.split("-|-")[0]
+    secondpart = username.split("-|-")[1]
+    if len(username.split("-|-")) > 2:
+        return jsonify({"status": "error", "message": "Invalid username"})
+    else:
+        user = Worker.query.filter_by(number=secondpart).first()
+        if user is None:
+            user = Boss.query.filter_by(number=secondpart).first()
+            if user is None:
+                return jsonify({"status": "error", "message": "Invalid username"})
+
+        name = user.first_name
+        if not name.isascii():
+            name = translit(name, reversed=True)
+
+        return jsonify({"status": "success", "name": name, "id": user.id})

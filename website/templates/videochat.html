@@ -245,6 +245,7 @@
 
 <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
 <script>
+
     window.onbeforeunload = function () {
         client.leave();
     };
@@ -254,7 +255,7 @@
     //#2
     let config = {
         appid: '8b975af4453648a3b932f332d4501db8',
-        token: "007eJxTYAgOqz54av41uZfqP54EtFf+4q4Un7rBU81kGrfT1YrrfywVGCySLM1NE9NMTEyNzUwsEo2TLI2N0oyNjVJMTA0MU5IsLjiqpzQEMjKY1LxlYIRCEJ+ZwSO1koEBAEMwHrg=",
+        token: "{{ token }}",
         uid: null,
         channel: "Hey",
         realname: null
@@ -277,7 +278,7 @@
 
 
     document.getElementById('join-btn').addEventListener('click', async () => {
-        config.uid = "{{randomid}}"
+        config.uid = "{{ randomid }}"
         config.realname = "{{username}}"
         let button = document.getElementById('join-btn')
         button.innerHTML = "<img src='/static/assets/loading-gif.gif' style='width: 100px; height: auto'/><br> Connecting..."
@@ -302,8 +303,7 @@
                 console.error('Connection Timed Out. Please try again')
                 button.disabled = true
                 await client.leave()
-            }
-            else if (error.message === 'Timeout') {
+            } else if (error.message === 'Timeout') {
                 button.innerHTML = 'Connection Timed Out. Please try again'
                 console.error('Connection Timed Out. Please try again')
                 button.disabled = true
@@ -400,7 +400,7 @@
 
         //#6 - Set and get back tracks for local user
         [config.uid, config.realname, localTracks.audioTrack, localTracks.videoTrack] = await Promise.all([
-            client.join(config.appid, config.channel, config.token || null, config.realname || null), config.realname, AgoraRTC.createMicrophoneAudioTrack(), AgoraRTC.createCameraVideoTrack()
+            client.join(config.appid, config.channel, config.token || null, config.uid || null), config.realname, AgoraRTC.createMicrophoneAudioTrack(), AgoraRTC.createCameraVideoTrack()
 
         ])
 
@@ -440,12 +440,21 @@
                 player.remove()
             }
 
-            player = `<div class="video-containers" id="video-wrapper-${user.uid}">
-                        <p class="user-uid"><img class="volume-icon" id="volume-${user.uid}" src="/static/assets/volume-on.svg" /> ${user.uid}</p>
+            url = "/getname/videochat/" + user.uid
+
+            let namet = "None"
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    namet = data.name
+                    player = `<div class="video-containers" id="video-wrapper-${user.uid}">
+                        <p class="user-uid"><img class="volume-icon" id="volume-${user.uid}" src="/static/assets/volume-on.svg" /> ${namet}</p>
                         <div  class="video-player player" id="stream-${user.uid}"></div>
                       </div>`
-            document.getElementById('user-streams').insertAdjacentHTML('beforeend', player);
-            user.videoTrack.play(`stream-${user.uid}`)
+                    document.getElementById('user-streams').insertAdjacentHTML('beforeend', player);
+                    user.videoTrack.play(`stream-${user.uid}`)
+                })
 
 
         }
