@@ -1685,7 +1685,55 @@ words = {
         "de": "TASCHENVERTEILUNG MACHEN",
         "fr": "FAIRE UNE ALLOCATION DE TÂCHES",
         "ru": "СДЕЛАТЬ РАСПРЕДЕЛЕНИЕ ЗАДАЧ"
-    }
+    },
+    "enteridofchatpartner": {
+        "en": "Enter ID of the person you want to chat with",
+        "bg": "Въведете ID на човека, с когото искате да разговаряте",
+        "es": "Ingrese la identificación de la persona con la que desea chatear",
+        "de": "Geben Sie die ID der Person ein, mit der Sie chatten möchten",
+        "fr": "Entrez l'identifiant de la personne avec laquelle vous souhaitez discuter",
+        "ru": "Введите идентификатор человека, с которым вы хотите поболтать"
+    },
+    "idislocatedinprofilepage": {
+        "en": "ID is located in the profile page",
+        "bg": "ID се намира в страницата с профила",
+        "es": "La identificación se encuentra en la página de perfil",
+        "de": "Die ID befindet sich auf der Profilseite",
+        "fr": "L'identifiant se trouve sur la page de profil",
+        "ru": "Идентификатор находится на странице профиля"
+    },
+    "idisnotvalid": {
+        "en": "ID is not valid",
+        "bg": "ID не е валиден",
+        "es": "La identificación no es válida",
+        "de": "Die ID ist nicht gültig",
+        "fr": "L'identifiant n'est pas valide",
+        "ru": "Идентификатор недействителен"
+    },
+    "chatcreated": {
+        "en": "Chat created",
+        "bg": "Чатът е създаден",
+        "es": "Chat creado",
+        "de": "Chat erstellt",
+        "fr": "Chat créé",
+        "ru": "Чат создан"
+    },
+    "otherpersoncanclosethechatatanytime": {
+        "en": "The other person can close the chat at any time",
+        "bg": "Другия човек може да затвори чата по всяко време",
+        "es": "La otra persona puede cerrar el chat en cualquier momento",
+        "de": "Die andere Person kann den Chat jederzeit schließen",
+        "fr": "L'autre personne peut fermer le chat à tout moment",
+        "ru": "Другой человек может закрыть чат в любое время"
+    },
+    "createchat": {
+        "en": "Create chat",
+        "bg": "Създай чат",
+        "es": "Crear chat",
+        "de": "Chat erstellen",
+        "fr": "Créer un chat",
+        "ru": "Создать чат"
+    },
 }
 
 

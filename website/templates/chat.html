@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Change Password{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Chat{% endblock %} {% block content %}
 
     <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/chat.css">
     <script>
@@ -24,6 +24,14 @@
                             <header>
                             </header>
                             <ul>
+                                <script>
+                                    function showModal() {
+                                        $('#exampleModalCenter').modal('show');
+
+                                    }
+                                </script>
+                                <button onclick="showModal()" class="btn btn-success" style="font-size:30px">+</button>
+                                <br><br>
                                 {% for chat in chats %}
                                     <a href="/chat?{{ loop.index }}" id="{{ loop.index }}">
                                         <input type="hidden" value="{{ chat.id }}">
@@ -83,6 +91,27 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6>{{enteridofchatpartner}}</h6>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <p>{{ idislocatedinprofilepage }}</p>
+                    <br>
+                    <input type="text" id="chatpartnerid" name="chatpartnerid" class="form-control" placeholder="ID">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="typeform" value="createchat">
+                    <br><br>
+                    <button type="submit" class="btn btn-primary">{{createchat}}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <br><br>
 
     <input type="hidden" id="emptychats" value="0">
@@ -100,7 +129,7 @@
         }
 
         if (numchats == 0) {
-             let iframe = document.getElementById('Iframe');
+            let iframe = document.getElementById('Iframe');
             document.getElementById('emptychats').value = 1;
             iframe.src = '/static/emptychats.html';
 

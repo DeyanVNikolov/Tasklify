@@ -138,6 +138,9 @@
                             <a href="#!" class="nav-link" style="color:white">{{user2.first_name}}</a>
                         </li>
                         <a href="/videochat" target="_blank" class="nav-link" style="color:white"><i class="fa-solid fa-phone"></i></a>
+                        <li class="nav-item float:right float-right justify-content-end">
+                        <a onclick="window.top.location.reload()" href="/chat/block/{{ user2.id }}"><i style="float:right; color:white; margin-left: 100px; font-size:25px" class="fa-solid fa-ban"></i></a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import time
 import uuid
 from os.path import join, dirname, realpath
 
+import transliterate
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask import abort
 from flask_login import login_required, current_user
@@ -66,15 +67,14 @@ def messageget(id, otherid):
         def datetostring(date):
             return date.strftime("%d.%m.%Y %H:%M:%S")
 
-        messagelist.append({"id": message.idmessage, "sender": is_sender(), "date": message.date,
-                            "message": message.message})
+        messagelist.append(
+            {"id": message.idmessage, "sender": is_sender(), "date": message.date, "message": message.message})
 
     # sort messages by date, make sure the newest message is at the bottom and that month is also sorted
     messagelist = sorted(messagelist, key=lambda k: k['date'])
 
     for message in messagelist:
         message['date'] = datetostring(message['date'])
-
 
     return messagelist, 200
 
@@ -85,7 +85,7 @@ def chat():
     id = current_user.id
 
     if 'locale' in request.cookies:
-        cookie =  request.cookies.get('locale')
+        cookie = request.cookies.get('locale')
     else:
         cookie = 'en'
 
@@ -112,6 +112,50 @@ def chat():
             if message is not None:
                 db.session.delete(message)
                 db.session.commit()
+        elif request.form.get('typeform') == 'createchat':
+            useridtoadd = request.form.get('chatpartnerid')
+            if useridtoadd == current_user.id:
+                return redirect(url_for('chathandler.chat'))
+            if Worker.query.get(useridtoadd) is None and Boss.query.get(useridtoadd) is None:
+                return redirect(url_for('chathandler.chat'))
+
+            chat = Chat.query.filter_by(id_creator=current_user.id, id_participant=useridtoadd).first()
+            if chat is None:
+                chat = Chat.query.filter_by(id_creator=useridtoadd, id_participant=current_user.id).first()
+                if chat is None:
+                    if Worker.query.get(useridtoadd) is not None:
+                        current_user_name = current_user.first_name
+                        if not current_user_name.isascii():
+                            current_user_name= transliterate.translit(current_user_name, reversed=True)
+                        current_user_name = current_user_name.rstrip()
+
+                        usertoadd_name = Worker.query.get(useridtoadd).first_name
+                        if not usertoadd_name.isascii():
+                            usertoadd_name= transliterate.translit(usertoadd_name, reversed=True)
+                        usertoadd_name = usertoadd_name.rstrip()
+
+                        newchat = Chat(id_creator=current_user.id, id_participant=useridtoadd,
+                                       name_creator=current_user_name,
+                                       name_participant=usertoadd_name)
+                    else:
+                        current_user_name = current_user.first_name
+                        if not current_user_name.isascii():
+                            current_user_name = transliterate.translit(current_user_name, reversed=True)
+                        current_user_name = current_user_name.rstrip()
+
+                        usertoadd_name = Boss.query.get(useridtoadd).first_name
+                        if not usertoadd_name.isascii():
+                            usertoadd_name = transliterate.translit(usertoadd_name, reversed=True)
+                        usertoadd_name = usertoadd_name.rstrip()
+
+                        newchat = Chat(id_creator=current_user.id, id_participant=useridtoadd,
+                                       name_creator=current_user_name, name_participant=usertoadd_name)
+
+                    db.session.add(newchat)
+                    db.session.commit()
+                    return redirect(url_for('chathandler.chat'))
+                else:
+                    return redirect(url_for('chathandler.chat'))
 
     chats = []
 
@@ -132,7 +176,6 @@ def chat():
                       'image_participant': '/static/pfp/' + chat.id_participant + '.png',
                       'image_creator': '/static/pfp/' + chat.id_creator + '.png', 'is_creator': is_creator})
 
-
     print(chats)
 
     basepath = None
@@ -142,13 +185,18 @@ def chat():
     else:
         basepath = 'https://www.tasklify.me'
 
-
     return render_template('chat.html', user=current_user, userid=id, chats=chats,
                            profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
-                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie), chatnav=getword("chatnav", cookie),
-                           basepath=basepath)
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           chatnav=getword("chatnav", cookie), basepath=basepath,
+                           enteridofchatpartner=getword("enteridofchatpartner", cookie),
+                           idislocatedinprofilepage=getword("idislocatedinprofilepage", cookie),
+                           idisnotvalid=getword("idisnotvalid", cookie), chatcreated=getword("chatcreated", cookie),
+                           otherpersoncanclosethechatatanytime=getword("otherpersoncanclosethechatatanytime", cookie),
+                           createchat=getword("createchat", cookie), chatpartner=getword("chatpartner", cookie),
+                           chatpartnerid=getword("chatpartnerid", cookie))
 
 
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])
@@ -206,3 +254,50 @@ def chatapi(id, otherid):
 
     return render_template('chatapi.html', user=current_user, userid=id, otherid=otherid, chat=chat, chatid=chat.id,
                            user1=user1, user2=user2)
+
+
+@chathandler.route("/chat/block/<id>", methods=['GET', 'POST'])
+@login_required
+def block(id):
+
+    if not current_user.is_authenticated:
+        abort(403)
+
+    if id == current_user.id:
+        return redirect(url_for('chathandler.chat'))
+
+    if Worker.query.get(id) is None and Boss.query.get(id) is None:
+        return redirect(url_for('chathandler.chat'))
+
+    if Worker.query.get(current_user.id) is None and Boss.query.get(current_user.id) is None:
+        return redirect(url_for('chathandler.chat'))
+
+    if Worker.query.get(id) is not None:
+        otheruser = Worker.query.get(id)
+    else:
+        otheruser = Boss.query.get(id)
+
+    if otheruser is None:
+        return redirect(url_for('chathandler.chat'))
+
+    if current_user.accounttype == "worker":
+        if current_user.boss_id == otheruser.id:
+            flash("You can't block your employer", category="error")
+            return redirect(url_for('chathandler.chat'))
+
+    if current_user.accounttype == "boss":
+        if otheruser.boss_id == current_user.id:
+            flash("You can't block your employee", category="error")
+            return redirect(url_for('chathandler.chat'))
+
+    chat = Chat.query.filter_by(id_creator=current_user.id, id_participant=otheruser.id).first()
+    if chat is None:
+        chat = Chat.query.filter_by(id_creator=otheruser.id, id_participant=current_user.id).first()
+        if chat is None:
+            return redirect(url_for('chathandler.chat'))
+
+    db.session.delete(chat)
+    db.session.commit()
+
+    flash("Chat blocked", category="success")
+    return redirect(url_for('chathandler.chat'))
