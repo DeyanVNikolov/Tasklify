@@ -43,10 +43,15 @@ def getcookie(request):
     else:
         return 'en'
 
+def gettheme(request):
+    if 'theme' in request.cookies:
+        return request.cookies.get('theme')
+    else:
+        return 'light'
+
 
 @views.route('/', methods=['GET'])
 def home():
-
     cookie = getcookie(request)
     return render_template("home.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -65,7 +70,7 @@ def home():
                            youareloggedinas=getword("youareloggedinas", cookie), idtext=getword("idtext", cookie),
                            welcometotasklify=getword("welcometotasklify", cookie),
                            getstartednow=getword("getstartednow", cookie),
-                           maketaskalloc=getword("maketaskalloc", cookie), cookiet=cookie)
+                           maketaskalloc=getword("maketaskalloc", cookie), cookiet=cookie, theme=gettheme(request))
 
 
 @views.route("/home", methods=['GET'])
@@ -106,7 +111,7 @@ def profile():
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
                            myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
                            chatnav=getword("chatnav", cookie), idtext=getword("idtext", cookie),
-                           changeprofilepicture=getword("changeprofilepicture", cookie))
+                           changeprofilepicture=getword("changeprofilepicture", cookie), theme=gettheme(request))
 
 
 @views.route('/profile/pfp', methods=['GET', 'POST'])
@@ -438,7 +443,7 @@ def workers():
                            workeremail=worker.email, workeremailtext=getword("workeremailtext", cookie),
                            sorttypestatus=getword("sorttypestatus", cookie),
                            sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
-                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie))
+                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie), theme=gettheme(request))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
