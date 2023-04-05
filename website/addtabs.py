@@ -19,7 +19,7 @@ from . import db
 from .mailsender import sendregisterationemail, newtaskmail
 from .models import Task
 from .models import Worker, Boss, Chat
-from .translator import getword
+from .translator import getword, gettheme
 
 addtabs = Blueprint('addtabs', __name__)
 
@@ -28,7 +28,6 @@ workerspage = "views.workers"
 oneworkerpage = "views.worker"
 
 global csrfg
-
 
 
 def checkmaintenance():
@@ -66,7 +65,8 @@ def employ_signup():
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                                   homenav=getword("homenav", cookie), user=current_user, chatnav=getword("chatnav", cookie))
+                                   homenav=getword("homenav", cookie), user=current_user,
+                                   chatnav=getword("chatnav", cookie))
 
         if not CAPTCHA1.verify(c_text, c_hash):
             flash(getword("captchawrong", cookie), category='error')
@@ -129,7 +129,9 @@ def employ_signup():
                            databeingproccessed=getword("databeingproccessed", cookie),
                            employreccode=getword("employreccode", cookie),
                            addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
-                           worker=getword("worker", cookie), boss=getword("boss", cookie), goback=getword("goback", cookie), chatnav=getword("chatnav", cookie))
+                           worker=getword("worker", cookie), boss=getword("boss", cookie),
+                           goback=getword("goback", cookie), chatnav=getword("chatnav", cookie),
+                           theme=gettheme(request))
 
 
 @addtabs.route("/add/employee", methods=["GET", "POST"])
@@ -156,7 +158,8 @@ def add_employee():
                 else:
                     if worker.boss_id is None:
                         worker.boss_id = current_user.id
-                        newchat = Chat(id_creator=current_user.id, id_participant=worker.id, name_creator=current_user.first_name, name_participant=worker.first_name)
+                        newchat = Chat(id_creator=current_user.id, id_participant=worker.id,
+                                       name_creator=current_user.first_name, name_participant=worker.first_name)
                         db.session.add(newchat)
                         db.session.commit()
                         flash(getword("workeradded", cookie), category="success")
@@ -172,7 +175,8 @@ def add_employee():
                            addemployeeinfo=getword("addemployeeinfo", cookie), enterid=getword("enterid", cookie),
                            submit=getword("submit", cookie), databeingproccessed=getword("databeingproccessed", cookie),
                            addemployeeinfosignup=getword("addemployeeinfosignup", cookie),
-                           addworker=getword("addworker", cookie), goback=getword("goback", cookie), chatnav=getword("chatnav", cookie))
+                           addworker=getword("addworker", cookie), goback=getword("goback", cookie),
+                           chatnav=getword("chatnav", cookie), theme=gettheme(request))
 
 
 @addtabs.route("/add/task", methods=["GET", "POST"])
@@ -205,7 +209,6 @@ def add_task():
             for i in range(int(filecount)):
                 filestring = filestring + current_user.id + "_" + request.form.get('file' + str(i)) + "|FILESEPARATOR|"
 
-
         if request.form.get("typeform") == "task":
             date = request.form.get('date')
 
@@ -237,13 +240,14 @@ def add_task():
                             tasknum += 1
                             if filespresent:
                                 new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
-                                            actual_id=acid, ordernumber=tasknum, datedue=datedue, attachments=filestring)
+                                                actual_id=acid, ordernumber=tasknum, datedue=datedue,
+                                                attachments=filestring)
 
 
 
                             else:
                                 new_task = Task(task=task, title=title, worker_id=workerg.id, boss_id=current_user.id,
-                                            actual_id=acid, ordernumber=tasknum, datedue=datedue)
+                                                actual_id=acid, ordernumber=tasknum, datedue=datedue)
                             db.session.add(new_task)
                             db.session.commit()
                             date = datedue.strftime("%H:%M:%S %d.%m.%Y")
@@ -257,14 +261,12 @@ def add_task():
     for file in os.listdir(app.config['UPLOAD_FOLDER']):
         file1 = file.split("_")
         if str(file1[0]) == str(current_user.id):
-                myfiles.append(file)
-
+            myfiles.append(file)
 
     myfileswithoutid = []
     for file in myfiles:
         file1 = file.split("_")
         myfileswithoutid.append(file1[1])
-
 
     return render_template("add_task.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
@@ -279,5 +281,6 @@ def add_task():
                            selectworkers=getword("selectworkers", cookie), signupemploy=getword("signupemploy", cookie),
                            here=getword("here", cookie), myfiles=getword("empmyfiles", cookie),
                            addtasktext=getword("addtask", cookie), goback=getword("goback", cookie),
-                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie), chatnav=getword("chatnav", cookie),
-                           myfileswithoutid=myfileswithoutid, myfilesd=myfiles)
+                           tasktext1=getword("tasktext", cookie), titletext1=getword("titletext", cookie),
+                           chatnav=getword("chatnav", cookie), myfileswithoutid=myfileswithoutid, myfilesd=myfiles,
+                           theme=gettheme(request))

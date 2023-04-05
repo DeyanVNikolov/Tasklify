@@ -19,7 +19,7 @@ from . import db
 from .mailsender import sendregisterationemail
 from .models import Task
 from .models import Worker, Boss
-from .translator import getword
+from .translator import getword, gettheme
 
 fileshandler = Blueprint('fileshandler', __name__)
 
@@ -228,4 +228,4 @@ def files(id):
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
                            user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie),
                            chatnav=getword("chatnav", cookie), uploadtext=getword("uploadtext", cookie),
-                           myfiles=getword("myfiles", cookie), fileuploadtext=getword("fileuploadtext", cookie))
+                           myfiles=getword("myfiles", cookie), fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request))

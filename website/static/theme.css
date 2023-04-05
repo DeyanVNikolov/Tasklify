@@ -1,6 +1,57 @@
 /* Make dark theme but not pitch black */
 
+* {
+    box-shadow: none !important;
+}
+
+.dark-theme .modal h3, .dark-theme .modal h4, .dark-theme .modal h5, .dark-theme .modal h6, .dark-theme .modal h1, .dark-theme .modal h2 {
+    color: #222 !important;
+}
+
+.dark-theme .rounded-background-signup {
+    background-color: #222 !important;
+    color: #fff !important;
+}
 .dark-theme {
+    background-color: #222 !important;
+    color: #fff !important;
+}
+
+/*apply effects only if .dark-theme*/
+.dark-theme table.appointments tr:nth-child(even) {
+                    background-color: #3d3d3d !important;
+                }
+
+.dark-theme table thead tr td{
+    color: #fff !important;
+}
+
+.dark-theme .trr:hover {
+    background-color: #3d3d3d !important;
+}
+.dark-theme table.appointments tr:nth-child(even):hover {
+                    background-color: #505050 !important;
+}
+
+.dark-theme .card-card {
+    background-color: #383838 !important;
+    color: #fff !important;
+}
+
+/*remove color attributes from .lead*/
+.dark-theme .lead {
+    color: #fff !important;
+}
+
+.dark-theme .lead:hover {
+    color: #37c1ff !important;
+}
+
+.dark-theme .dark-theme-profile {
     background-color: #222;
     color: #fff;
+}
+
+.dark-theme h1, .dark-theme h2, .dark-theme h3, .dark-theme h4, .dark-theme h5, .dark-theme h6 {
+    color: #fff !important;
 }

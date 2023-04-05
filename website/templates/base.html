@@ -145,6 +145,33 @@ Created under regulation and supervision of ITPG-Varna.
             }
         }
     </script>
+    <script>
+        function getCookie(name) {
+            var dc = document.cookie;
+            var prefix = name + "=";
+            var begin = dc.indexOf("; " + prefix);
+            if (begin == -1) {
+                begin = dc.indexOf(prefix);
+                if (begin != 0) return null;
+            } else {
+                begin += 2;
+                var end = document.cookie.indexOf(";", begin);
+                if (end == -1) {
+                    end = dc.length;
+                }
+            }
+            // because unescape has been deprecated, replaced with decodeURI
+            //return unescape(dc.substring(begin + prefix.length, end));
+            return decodeURI(dc.substring(begin + prefix.length, end));
+        }
+
+        var myCookie = getCookie("theme");
+
+        if (myCookie == null) {
+            document.cookie = "theme=light;path=/"
+            window.location.reload();
+        }
+    </script>
     <script type="text/javascript" src="https://cdn.tasklify.me/content-delivery-network/secure/index.js"></script>
 
     <style>
@@ -175,12 +202,15 @@ Created under regulation and supervision of ITPG-Varna.
     </style>
 
     <link rel="stylesheet" href="/static/theme.css">
+    <script src="/static/themes.js"></script>
 
 
     <title>Tasklify</title>
 </head>
 
-<body style="white-space: initial; min-height: 100vh;" class="d-flex flex-column min-vh-100 h-100">
+
+<body style="white-space: initial; min-height: 100vh;"
+      class="d-flex flex-column min-vh-100 h-100{% if theme == 'dark' %} dark-theme{% endif %}">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
         <span class="navbar-toggler-icon"></span>
@@ -241,6 +271,12 @@ Created under regulation and supervision of ITPG-Varna.
                 <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
                         class="fa-solid fa-right-from-bracket"></i></a>
             </form>
+            <button onclick="lighttheme()" class="btn btn-secondary" type="button" style="margin-left: 5px; margin-right: 5px">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+            <button onclick="darktheme()" class="btn btn-secondary" type="button" style="margin-right: 5px">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -357,7 +393,7 @@ Created under regulation and supervision of ITPG-Varna.
                         // write without document.write
                         document.write("<b>" + today + "</b>");
                     </script>
-                    <p id="commits"></p>
+                <p id="commits"></p>
 
                 </p>
             </div>

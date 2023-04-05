@@ -14,7 +14,7 @@ from .models import Worker
 from .models import Boss
 from .models import Message
 from .models import Chat
-from .translator import getword
+from .translator import getword, gettheme
 
 chathandler = Blueprint('chathandler', __name__)
 
@@ -196,7 +196,8 @@ def chat():
                            idisnotvalid=getword("idisnotvalid", cookie), chatcreated=getword("chatcreated", cookie),
                            otherpersoncanclosethechatatanytime=getword("otherpersoncanclosethechatatanytime", cookie),
                            createchat=getword("createchat", cookie), chatpartner=getword("chatpartner", cookie),
-                           chatpartnerid=getword("chatpartnerid", cookie))
+                           chatpartnerid=getword("chatpartnerid", cookie),
+                           theme=gettheme(request))
 
 
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])

@@ -1757,4 +1757,9 @@ def loadtime():
     return time.strftime("%d/%m/%Y %H:%M:%S", time.localtime())
 
 
+def gettheme(request):
+    if 'theme' in request.cookies:
+        return request.cookies.get('theme')
+    else:
+        return 'light'
 

@@ -13,6 +13,7 @@ from .models import Worker, Boss
 from .translator import getword
 from flask import session
 from flask_session import Session
+from .translator import gettheme
 
 auth = Blueprint('auth', __name__)
 global csrfg
@@ -92,7 +93,7 @@ def login():
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
                            worker=getword("worker", cookie), boss=getword("boss", cookie),
                            loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
-                           signinwithgoogle=getword("signinwithgoogle", cookie), signinwithfacebook=getword("signinwithfacebook", cookie))
+                           signinwithgoogle=getword("signinwithgoogle", cookie), signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request))
 
 
 @auth.route('/logout')
@@ -227,7 +228,7 @@ def sign_up():
                            signupas=getword("signupas", cookie), worker=getword("worker", cookie),
                            boss=getword("boss", cookie), signupwith=getword("signupwith", cookie),
                            emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb, signinwithgithub=getword("signinwithgithub", cookie),
-                           signinwithfacebook=getword("signinwithfacebook", cookie), signinwithgoogle=getword("signinwithgoogle", cookie))
+                           signinwithfacebook=getword("signinwithfacebook", cookie), signinwithgoogle=getword("signinwithgoogle", cookie), theme=gettheme(request))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
@@ -271,7 +272,7 @@ def delete_account():
                            homenav=getword("homenav", cookie), user=current_user,
                            deleteaccount=getword("deleteaccount", cookie), confirmtext=getword("confirmdelete", cookie),
                            password=getword("password", cookie), enterpassword=getword("enterpassword", cookie),
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie), theme=gettheme(request))
 
 
 @auth.route('/change-password', methods=['GET', 'POST'])
@@ -333,7 +334,7 @@ def change_password():
                            changepassword=getword("changepassword", cookie), oldpassword=getword("oldpassword", cookie),
                            newpassword=getword("newpassword", cookie), cnewpassword=getword("cnewpassword", cookie),
                            confirmtext=getword("confirm", cookie), enterpassword=getword("enterpassword", cookie),
-                           chatnav=getword("chatnav", cookie))
+                           chatnav=getword("chatnav", cookie), theme=gettheme(request))
 
 
 @auth.errorhandler(CSRFError)

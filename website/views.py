@@ -25,7 +25,7 @@ from .models import Worker, Boss
 from .translator import getword
 from .addtabs import addtabs
 from .fileshandler import fileshandler
-
+from .translator import gettheme
 from .translator import getword
 
 views = Blueprint('views', __name__)
@@ -43,11 +43,7 @@ def getcookie(request):
     else:
         return 'en'
 
-def gettheme(request):
-    if 'theme' in request.cookies:
-        return request.cookies.get('theme')
-    else:
-        return 'light'
+
 
 
 @views.route('/', methods=['GET'])
@@ -172,7 +168,7 @@ def profilepfp():
                            deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
                            myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
                            chatnav=getword("chatnav", cookie), uploadfilebtn=getword("uploadfilebtn", cookie),
-                           submit=getword("submit", cookie))
+                           submit=getword("submit", cookie), theme=gettheme(request))
 
 
 @views.route('/boss')
@@ -197,7 +193,7 @@ def boss():
                            user=current_user, boss=getword("boss", cookie),
                            accessmessage=getword("accessmessage", cookie), youridtext=getword("youridtext", cookie),
                            id=getword("idemail", cookie), idd=current_user.registrationid, link=link,
-                           copy=getword("copy", cookie), chatnav=getword("chatnav", cookie))
+                           copy=getword("copy", cookie), chatnav=getword("chatnav", cookie), theme=gettheme(request))
 
 
 @views.route('/tasks', methods=['GET', 'POST'])
@@ -262,7 +258,7 @@ def tasks():
                            tasktextplural=getword("tasktextplural", cookie), notstarted=getword("NotStarted", cookie),
                            completed=getword("completed", cookie), started=getword("started", cookie),
                            due=getword("due", cookie), titletext=getword("titletext", cookie),
-                           chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie))
+                           chatnav=getword("chatnav", cookie), currentlysorting=getword("currentlysorting", cookie), theme=gettheme(request))
 
 
 @views.route('/workers/', methods=['GET', 'POST'])
@@ -384,8 +380,6 @@ def workers():
 
     taskstodisplay = sorted(taskstodisplay, key=lambda k: k['date_due_in_unix'])
 
-
-
     workerslist = []
 
     for worker in Worker.query.filter_by(boss_id=current_user.id).all():
@@ -433,9 +427,8 @@ def workers():
                            currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
                            taskstext=getword("tasksnav", cookie), search=getword("search", cookie),
                            areyousure=getword("areyousure", cookie), chatnav=getword("chatnav", cookie),
-                           moreinfo=getword("moreinfo", cookie), notdone=getword("notdone", cookie),
-                           worker=worker, tasktext=getword("tasktext", cookie),
-                           statustext=getword("statustext", cookie),
+                           moreinfo=getword("moreinfo", cookie), notdone=getword("notdone", cookie), worker=worker,
+                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
                            notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
                            started=getword("started", cookie), deletefromall=getword("deletefromall", cookie),
                            workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie),
@@ -443,7 +436,8 @@ def workers():
                            workeremail=worker.email, workeremailtext=getword("workeremailtext", cookie),
                            sorttypestatus=getword("sorttypestatus", cookie),
                            sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
-                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie), theme=gettheme(request))
+                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie),
+                           theme=gettheme(request))
 
 
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
@@ -564,7 +558,7 @@ def worker(id):
                            sorttypestatus=getword("sorttypestatus", cookie),
                            sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
                            sorttypearchive=getword("sorttypearchive", cookie), nonetext=getword("nonetext", cookie),
-                           sorttext=getword("sorttext", cookie), sorttype=sort)
+                           sorttext=getword("sorttext", cookie), sorttype=sort, theme=gettheme(request))
 
 
 @views.route('/task/<string:id>', methods=["GET", "POST"])
@@ -709,7 +703,7 @@ def task(id):
                            datedue=dateformat, due=getword("due", cookie), fileuploader=getword("fileuploader", cookie),
                            titletext=getword("titletext", cookie), desctext=getword("desctext", cookie),
                            chatnav=getword("chatnav", cookie), comment=getword("comment", cookie), myfiles=myfiles,
-                           myfileswithoutid=myfileswithoutid, attachements=attachements1)
+                           myfileswithoutid=myfileswithoutid, attachements=attachements1, theme=gettheme(request))
 
 
 @views.route('/urlout/<path:url>', methods=["GET", "POST"])
@@ -758,7 +752,7 @@ def contact():
                            contactname=getword("contactname", cookie), contactemail=getword("contactemail", cookie),
                            contactname2=getword("contactname2", cookie), contactemail2=getword("contactemail2", cookie),
                            name=getword("name", cookie), email=getword("email", cookie),
-                           message=getword("message", cookie), chatnav=getword("chatnav", cookie))
+                           message=getword("message", cookie), chatnav=getword("chatnav", cookie), theme=gettheme(request))
 
 
 @views.route("/cookies-disabled", methods=["GET"])
@@ -787,7 +781,7 @@ def privacy():
                            chatnav=getword("chatnav", cookie), homenav=getword("homenav", cookie),
                            loginnav=getword("loginnav", cookie), profilenav=getword("profilenav", cookie),
                            signupnav=getword("signupnav", cookie), workersnav=getword("workersnav", cookie),
-                           tasksnav=getword("tasksnav", cookie))
+                           tasksnav=getword("tasksnav", cookie), theme=gettheme(request))
 
 
 @views.route("/videochat", methods=["GET", "POST"])
@@ -795,14 +789,12 @@ def privacy():
 def videochat():
     from website.token.RtcTokenBuilder import RtcTokenBuilder
 
-
     username = current_user.first_name
 
     if not username.isascii():
         username = translit(username, reversed=True)
 
     username1 = username.rstrip()
-
 
     randomid = current_user.first_name
     randomid = randomid.replace(" ", "")
@@ -812,17 +804,13 @@ def videochat():
     if not randomid.isascii():
         randomid = translit(randomid, reversed=True)
 
-
     current_unix_timestamp = int(time.time())
     hours_from_now = current_unix_timestamp + 24 * 60 * 60
-
 
     token = RtcTokenBuilder.buildTokenWithUid("8b975af4453648a3b932f332d4501db8", "6c4beaa4ecf54e8b9d8ed547fd2c3d76",
                                               "Hey", randomid, "1", hours_from_now)
 
     print(token)
-
-
 
     return render_template("videochat.html", user=current_user, username=username1, randomid=randomid, token=token)
 
