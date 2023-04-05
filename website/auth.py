@@ -1,7 +1,8 @@
 import uuid
 
-from email_validator import validate_email, EmailNotValidError
+from email_validator import validate_email
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import session
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,27 +11,13 @@ from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail, sendregisterationemailboss
 from .models import Worker, Boss
-from .translator import getword
-from flask import session
-from flask_session import Session
 from .translator import gettheme
+from .translator import getword
 
 auth = Blueprint('auth', __name__)
 global csrfg
 
 
-
-def redirect_on_status_denied1(error):
-    flash("")
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie)), 403
-
-
-def checkmaintenance():
-    pass
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -99,7 +86,6 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    checkmaintenance()
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -114,7 +100,7 @@ def logout():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
-    checkmaintenance()
+
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -234,7 +220,7 @@ def sign_up():
 @auth.route('/delete-account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
-    checkmaintenance()
+
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:
@@ -278,7 +264,7 @@ def delete_account():
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
-    checkmaintenance()
+
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
     else:

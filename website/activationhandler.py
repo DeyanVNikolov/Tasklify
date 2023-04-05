@@ -1,27 +1,9 @@
-import datetime
-import os
-import time
-import uuid
-from os.path import join, dirname, realpath
-
-import requests
-from dateutil import parser
-from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask import abort
-from flask import current_app as app
-from flask_login import login_required, current_user
-from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename, send_from_directory
+from flask_login import current_user
 
-from website import CAPTCHA1
 from . import db
-from .mailsender import sendregisterationemail
-from .models import Task
-from .models import Worker, Boss, Chat
+from .models import Worker, Chat
 from .translator import getword
-from .addtabs import addtabs
-from .fileshandler import fileshandler
 
 activationhandler = Blueprint('activationhandler', __name__)
 

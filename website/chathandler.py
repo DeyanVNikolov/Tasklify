@@ -1,19 +1,13 @@
-import time
-import uuid
-from os.path import join, dirname, realpath
-
 import transliterate
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask import abort
 from flask_login import login_required, current_user
-from werkzeug.utils import secure_filename
 
 from . import db
-from .models import Task
-from .models import Worker
 from .models import Boss
-from .models import Message
 from .models import Chat
+from .models import Message
+from .models import Worker
 from .translator import getword, gettheme
 
 chathandler = Blueprint('chathandler', __name__)

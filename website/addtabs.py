@@ -1,24 +1,19 @@
 import datetime
 import os
-import time
 import uuid
-from os.path import join, dirname, realpath
 
-import requests
 from dateutil import parser
 from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask import abort
 from flask import current_app as app
-from flask_login import login_required, current_user
+from flask_login import current_user
 from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename, send_from_directory
 
 from website import CAPTCHA1
 from . import db
 from .mailsender import sendregisterationemail, newtaskmail
 from .models import Task
-from .models import Worker, Boss, Chat
+from .models import Worker, Chat
 from .translator import getword, gettheme
 
 addtabs = Blueprint('addtabs', __name__)
@@ -28,20 +23,6 @@ workerspage = "views.workers"
 oneworkerpage = "views.worker"
 
 global csrfg
-
-
-def checkmaintenance():
-    # Not in use
-    pass
-
-
-def redirect_on_status_denied(error):
-    print(error)
-    return render_template("maintenance.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie)), 403
 
 
 @addtabs.route("/employ/sign-up", methods=["GET", "POST"])

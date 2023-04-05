@@ -1,14 +1,12 @@
+import datetime
 import random
+import time
+import uuid
 
 from flask_login import UserMixin
-from sqlalchemy.sql import func
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Sequence
-from sqlalchemy.dialects.postgresql import UUID
+
 from . import db
-import uuid
-import datetime
-import sqlalchemy.dialects.postgresql as postgresql
-import time
+
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)

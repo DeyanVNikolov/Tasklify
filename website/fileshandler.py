@@ -1,23 +1,12 @@
-import datetime
 import os
-import time
-import uuid
 from os.path import join, dirname, realpath
 
 import requests
-from dateutil import parser
-from email_validator import validate_email, EmailNotValidError
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask import abort
 from flask import current_app as app
 from flask_login import login_required, current_user
-from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename, send_from_directory
 
-from website import CAPTCHA1
-from . import db
-from .mailsender import sendregisterationemail
-from .models import Task
 from .models import Worker, Boss
 from .translator import getword, gettheme
 
@@ -30,9 +19,6 @@ oneworkerpage = "views.worker"
 global csrfg
 
 
-def checkmaintenance():
-    # Not in use
-    pass
 
 
 # no potential security issue
@@ -102,7 +88,7 @@ def fileupd():
 
 @fileshandler.route('/uploaded_file/<filename>')
 def uploaded_file(filename):
-    checkmaintenance()
+
 
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
