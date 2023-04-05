@@ -252,6 +252,12 @@ Created under regulation and supervision of ITPG-Varna.
                 <a href="/auth/logout" class="btn btn-danger my-2 my-sm-0 mr-sm-2"><i
                         class="fa-solid fa-right-from-bracket"></i></a>
             </form>
+                        <button onclick="lighttheme()" class="btn btn-secondary" type="button" style="margin-left: 5px; margin-right: 5px">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+            <button onclick="darktheme()" class="btn btn-secondary" type="button" style="margin-right: 5px">
+                <i class="fa-solid fa-moon"></i>
+            </button>
             <div class="dropdown dropleft">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -293,6 +299,12 @@ Created under regulation and supervision of ITPG-Varna.
             </div>
         {% endif %}
     {% else %}
+                    <button onclick="lighttheme()" class="btn btn-secondary" type="button" style="margin-left: 5px; margin-right: 5px">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+            <button onclick="darktheme()" class="btn btn-secondary" type="button" style="margin-right: 5px">
+                <i class="fa-solid fa-moon"></i>
+            </button>
         <div class="dropdown dropleft">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
