@@ -706,21 +706,6 @@ def task(id):
                            myfileswithoutid=myfileswithoutid, attachements=attachements1, theme=gettheme(request))
 
 
-@views.route('/urlout/<path:url>', methods=["GET", "POST"])
-def urlout(url):
-    abort(403)
-    cookie = getcookie(request)
-    return render_template("urlout.html", profilenav=getword("profilenav", cookie),
-                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
-                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
-                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
-                           homenav=getword("homenav", cookie), url=url, user=current_user,
-                           youllberedirectedto=getword("youllberedirectedto", cookie), here=getword("here", cookie),
-                           ifyourenotredirected=getword("ifyourenotredirected", cookie),
-                           oryoucango=getword("oryoucango", cookie), home=getword("home", cookie),
-                           thirdpartylink=getword("thirdpartylink", cookie),
-                           infiveseconds=getword("infiveseconds", cookie), chatnav=getword("chatnav", cookie))
-
 
 @views.route('/contact', methods=["GET", "POST"])
 def contact():
