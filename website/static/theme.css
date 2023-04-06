@@ -7,6 +7,9 @@
 .dark-theme .modal h3, .dark-theme .modal h4, .dark-theme .modal h5, .dark-theme .modal h6, .dark-theme .modal h1, .dark-theme .modal h2 {
     color: #222 !important;
 }
+.dark-theme .modal, .dark-theme .modal-body {
+    color: #222 !important;
+}
 
 .dark-theme .rounded-background-signup {
     background-color: #222 !important;
