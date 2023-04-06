@@ -31,6 +31,9 @@ def getcookie(request):
 
 
 
+@views.route('/banned', methods=['GET'])
+def banned():
+    return render_template("banned.html")
 
 @views.route('/', methods=['GET'])
 def home():

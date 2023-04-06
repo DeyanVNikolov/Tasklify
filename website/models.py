@@ -43,6 +43,7 @@ class Worker(db.Model, UserMixin):
     tasks = db.relationship('Task')
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
+    banned = db.Column(db.String(2), default="0")
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}
@@ -60,6 +61,7 @@ class Boss(db.Model, UserMixin):
     tasks = db.relationship('Task')
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
+    banned = db.Column(db.String(2), default="0")
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}

@@ -2,12 +2,12 @@ import os
 import os.path as op
 from os import path
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, logout_user
 from .captchahandler.captchahandler import CAPTCHA
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
@@ -204,3 +204,16 @@ def undonetasks(id=None):
 
 
 app = create_app()
+
+
+@app.before_request
+def before_request():
+    # check if route is /banned
+    if request.path == "/banned":
+        if current_user.is_authenticated:
+            if current_user.banned == "0":
+                return redirect(url_for('views.home'))
+        return
+    if current_user.is_authenticated:
+        if current_user.banned == "1":
+            return redirect(url_for('views.banned'))
