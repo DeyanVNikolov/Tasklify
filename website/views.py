@@ -381,15 +381,21 @@ def workers():
             elif sort == "email":
                 workerslist = sorted(workerslist, key=lambda k: k['email'])
             elif sort == "tasks":
+                print("1 " + str(type(worker)))
                 undonetasksl = {}
-                for worker in workerslist:
+                print("1 " + str(type(worker)))
+                for worker1 in workerslist:
                     from . import undonetasks
-                    undonetasksl[worker["id"]] = undonetasks(worker["id"])
+                    undonetasksl[worker1["id"]] = undonetasks(worker1["id"])
                 workerslist = sorted(workerslist, key=lambda k: undonetasksl[k['id']], reverse=True)
-
+                
     if search is not None:
         workerslist = [worker for worker in workerslist if
                        search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
+
+
+    # print type of "worker" object
+    print(type(worker))
 
     return render_template("workers.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
