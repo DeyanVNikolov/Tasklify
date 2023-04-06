@@ -1734,6 +1734,14 @@ words = {
         "fr": "Créer un chat",
         "ru": "Создать чат"
     },
+    "inyourorganization": {
+        "en": "In your organization",
+        "bg": "Във вашата организация",
+        "es": "En tu organización",
+        "de": "In deinem Unternehmen",
+        "fr": "Dans votre organisation",
+        "ru": "В вашей организации"
+    }
 }
 
 

@@ -388,7 +388,7 @@ def workers():
                     from . import undonetasks
                     undonetasksl[worker1["id"]] = undonetasks(worker1["id"])
                 workerslist = sorted(workerslist, key=lambda k: undonetasksl[k['id']], reverse=True)
-                
+
     if search is not None:
         workerslist = [worker for worker in workerslist if
                        search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]

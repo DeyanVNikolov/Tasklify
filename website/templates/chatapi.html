@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
     <style>
         a.nav-link {
             color: #343a40;
@@ -74,325 +76,344 @@
 </head>
 
 
-
-
-
 <body style="height: fit-content; background-color:#343a40">
-    <style>
-        .messages {
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            background-color: #f5f5f5;
+<style>
+    .messages {
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        background-color: #f5f5f5;
+    }
+</style>
+
+<input type="hidden" id="count" value="0">
+<input type="hidden" id="first_time" value="0">
+<input type="hidden" id="errorgiven" value="0">
+
+<script>
+
+    function delete_message(id, csrf_token, userid, id_receiver) {
+        console.log(id);
+        if (id == null || id == 0 || id == '') {
+            console.log('id is null');
+            return;
         }
-    </style>
-
-    <input type="hidden" id="count" value="0">
-    <input type="hidden" id="first_time" value="0">
-    <input type="hidden" id="errorgiven" value="0">
-
-    <script>
-        
-        function delete_message(id, csrf_token, userid, id_receiver) {
-            console.log(id);
-            if (id == null || id == 0 || id == '') {
-                console.log('id is null');
-                return;
+        let data = new FormData(form); // create a FormData object
+        data.append('idmessage', id); // append the message to the FormData object
+        data.append('csrf_token', csrf_token); // append the csrf token to the FormData object
+        data.append('userid', userid); // append the userid to the FormData object
+        data.append('id_receiver', id_receiver); // append the id_receiver to the FormData object
+        data.append('typeform', 'delete')
+        fetch('/chat', { // make a POST request to the server
+            method: 'POST',
+            body: data
+        }).then(function (response) {
+            if (response.status === 200) {
+                console.log('OK');
+                document.getElementById('message').value = '';
+            } else {
+                console.log('Error sending message');
+                window.location.reload();
             }
-            let data = new FormData(form); // create a FormData object
-            data.append('idmessage', id); // append the message to the FormData object
-            data.append('csrf_token', csrf_token); // append the csrf token to the FormData object
-            data.append('userid', userid); // append the userid to the FormData object
-            data.append('id_receiver', id_receiver); // append the id_receiver to the FormData object
-            data.append('typeform', 'delete')
-            fetch('/chat', { // make a POST request to the server
-                method: 'POST',
-                body: data
-            }).then(function (response) {
-                if (response.status === 200) {
-                    console.log('OK');
-                    document.getElementById('message').value = '';
-                } else {
-                    console.log('Error sending message');
-                    window.location.reload();
-                }
-            });
-        }
-    </script>
+        });
+    }
+</script>
 
-    <div class="container mt-4 justify-content-center" style="max-width:100%; width: 100%; margin-left:0px; margin-right:0px; justify-content: center; background-color: #343a40">
-        <div class="card mx-auto" style="width:100% !important; background-color: #343a40; border: 0px;">
-            <div class="card-header fixed-top" style="border: 0px; background-color: #343a40" >
-                <div class="navbar navbar-expand p-0">
-                    <ul class="navbar-nav me-auto align-items-center">
-                        <li class="nav-item">
-                            <a href="#!" class="nav-link">
-                                <div class="position-relative"
-                                    style="width:50px; height: 50px; border-radius: 50%; border: 2px solid #000000; padding: 2px">
-                                    <img src="/static/pfp/{{ user2.id }}.png" onerror="this.src='/static/blank-profile.png'" class="img-fluid rounded-circle" alt="">
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#!" class="nav-link" style="color:white">{{user2.first_name}}</a>
-                        </li>
-                        <a href="/videochat" target="_blank" class="nav-link" style="color:white"><i class="fa-solid fa-phone"></i></a>
-                        <li class="nav-item float:right float-right justify-content-end">
-                        <a onclick="window.top.location.reload()" href="/chat/block/{{ user2.id }}"><i style="float:right; color:white; margin-left: 100px; font-size:25px" class="fa-solid fa-ban"></i></a>
-                        </li>
-                    </ul>
-                </div>
+
+<div class="container mt-4 justify-content-center"
+     style="max-width:100%; width: 100%; margin-left:0px; margin-right:0px; justify-content: center; background-color: #343a40">
+    <div class="card mx-auto" style="width:100% !important; background-color: #343a40; border: 0px;">
+        <div class="card-header fixed-top" style="border: 0px; background-color: #343a40">
+            <div class="navbar navbar-expand p-0">
+                <ul class="navbar-nav me-auto align-items-center">
+                    <li class="nav-item">
+                        <a href="#!" class="nav-link">
+                            <div class="position-relative"
+                                 style="width:50px; height: 50px; border-radius: 50%; border: 2px solid #000000; padding: 2px">
+                                <img src="/static/pfp/{{ user2.id }}.png" onerror="this.src='/static/blank-profile.png'"
+                                     class="img-fluid rounded-circle" alt="">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#!" class="nav-link" style="color:white">{{ user2.first_name }}</a>
+                    </li>
+                    <a href="/videochat" target="_blank" class="nav-link" style="color:white"><i
+                            class="fa-solid fa-phone"></i></a>
+                    <li class="nav-item float:right float-right justify-content-end">
+                        <script>
+                            function reload() {
+                                $('#exampleModalCenter').modal('show');
+                            }
+                        </script>
+                        <a onclick="reload()" href="/chat/block/{{ user2.id }}"><i
+                                style="float:right; color:white; margin-left: 100px; font-size:25px"
+                                class="fa-solid fa-ban"></i></a>
+                    </li>
+                </ul>
             </div>
+        </div>
 
-            <div id="audiobox">
-                <audio id="audio_ding" src="/static/ding.wav" preload="auto" hidden></audio>
-
-            </div>
-            <br><br>
-
-            <div id="messagebox" style="margin-top:20px">
-
-
-            </div>
+        <div id="audiobox">
+            <audio id="audio_ding" src="/static/ding.wav" preload="auto" hidden></audio>
 
         </div>
-        <br>
-        <br>
-        <br>
+        <br><br>
+
+        <div id="messagebox" style="margin-top:20px">
 
 
+        </div>
 
-        <div class="card-footer bg-transparent fixed-bottom"
-            style="padding-bottom: 10px !important; border-top:0px !important;">
-            <div class="input-group">
-                <input type="text" id="message" name="message" class="form-control" placeholder="Type your message">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-                <form method="post" id="chat-form">
-                    <input type="hidden" id="userid" name="userid" value="{{ userid }}">
-                    <input type="hidden" id="id_receiver" name="id_receiver" value="{{ otherid }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                </form>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Deleting...</h5>
             </div>
-
+            <div class="modal-body">
+                Please wait...
+            </div>
         </div>
     </div>
+</div>
 
-    <script>
-        let form = document.getElementById('chat-form'); // get the form element
-        let button = document.getElementById('button-addon2'); // get the button element
-        let message = document.getElementById('message'); // get the message element
-        let csrf_token = document.getElementsByName('csrf_token')[0].value;
-        let userid = document.getElementById('userid').value;
-        let id_receiver = document.getElementById('id_receiver').value;
-        let chat_id = '{{chatid}}'
 
-        button.addEventListener('click', function (e) {
-            e.preventDefault(); // prevent the form from submitting
-            let data = new FormData(form); // create a FormData object
-            data.append('message', message.value); // append the message to the FormData object
-            data.append('csrf_token', csrf_token); // append the csrf token to the FormData object
-            data.append('userid', userid); // append the userid to the FormData object
-            data.append('id_receiver', id_receiver); // append the id_receiver to the FormData object
-            data.append('typeform', 'message')
-            data.append('chat_id', chat_id)
-            fetch('/chat', { // make a POST request to the server
-                method: 'POST',
-                body: data
-            }).then(function (response) {
-                if (response.status === 200) {
-                    console.log('OK');
-                    document.getElementById('message').value = '';
+    <div class="card-footer bg-transparent fixed-bottom"
+         style="padding-bottom: 10px !important; border-top:0px !important;">
+        <div class="input-group">
+            <input type="text" id="message" name="message" class="form-control" placeholder="Type your message">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+            <form method="post" id="chat-form">
+                <input type="hidden" id="userid" name="userid" value="{{ userid }}">
+                <input type="hidden" id="id_receiver" name="id_receiver" value="{{ otherid }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let form = document.getElementById('chat-form'); // get the form element
+    let button = document.getElementById('button-addon2'); // get the button element
+    let message = document.getElementById('message'); // get the message element
+    let csrf_token = document.getElementsByName('csrf_token')[0].value;
+    let userid = document.getElementById('userid').value;
+    let id_receiver = document.getElementById('id_receiver').value;
+    let chat_id = '{{chatid}}'
+
+    button.addEventListener('click', function (e) {
+        e.preventDefault(); // prevent the form from submitting
+        let data = new FormData(form); // create a FormData object
+        data.append('message', message.value); // append the message to the FormData object
+        data.append('csrf_token', csrf_token); // append the csrf token to the FormData object
+        data.append('userid', userid); // append the userid to the FormData object
+        data.append('id_receiver', id_receiver); // append the id_receiver to the FormData object
+        data.append('typeform', 'message')
+        data.append('chat_id', chat_id)
+        fetch('/chat', { // make a POST request to the server
+            method: 'POST',
+            body: data
+        }).then(function (response) {
+            if (response.status === 200) {
+                console.log('OK');
+                document.getElementById('message').value = '';
+            } else {
+                console.log('Error sending message');
+                window.location.reload();
+            }
+        });
+    });
+
+    // detect when the user presses the enter key and fire the button click event
+    message.addEventListener('keydown', function (e) {
+        if (e.keyCode === 13) {
+            button.click();
+        }
+    });
+</script>
+
+
+<script>
+    function scrolltobottom() {
+        // scroll whole page to bottom instantly
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            left: 0,
+            behavior: "instant"
+        })
+    }
+
+    function preparemessage_sender(message, date, id) {
+
+        var div = document.createElement("div");
+        div.className = "d-flex align-items-baseline text-end justify-content-end mb-4";
+        div.id = id;
+
+        var div2 = document.createElement("div");
+        div2.className = "pe-2";
+
+        var div3 = document.createElement("div");
+
+        var div4 = document.createElement("div");
+        div4.className = "card-b card card-text d-inline-block p-2 px-3 m-1";
+        div4.innerHTML = message;
+
+        // place i in div4 that is the delete button and uses delete_message function
+
+
+        div3.appendChild(div4);
+
+        var div5 = document.createElement("div");
+
+        var div6 = document.createElement("div");
+        div6.className = "small";
+        div6.style = "margin-right: 12px; color: #7a7a7a";
+        div6.innerHTML = date;
+
+        var i = document.createElement("i");
+        i.className = "fa-solid fa-trash-can";
+        i.style = "float: right; margin-top: 5px; margin-left: 5px; cursor: pointer;";
+        i.onclick = function () {
+            delete_message(id, "{{csrf_token}}", "{{userid}}", "{{otherid}}");
+        };
+
+        div6.appendChild(i);
+
+        div5.appendChild(div6);
+
+        div2.appendChild(div3);
+
+        div2.appendChild(div5);
+
+        div.appendChild(div2);
+
+        return div;
+
+    }
+
+    function preparemessage_reciver(message, date, id) {
+
+        var div = document.createElement("div");
+        div.className = "d-flex align-items-baseline mb-4";
+        div.id = id;
+
+        var div2 = document.createElement("div");
+        div2.className = "pe-2";
+
+        var div3 = document.createElement("div");
+
+        var div4 = document.createElement("div");
+        div4.className = "card-s card card-text d-inline-block p-2 px-3 m-1";
+        div4.innerHTML = message;
+
+        div3.appendChild(div4);
+
+        var div5 = document.createElement("div");
+
+        var div6 = document.createElement("div");
+        div6.className = "small";
+        div6.style = "margin-left: 12px; color: #7a7a7a";
+        div6.innerHTML = date;
+
+        div5.appendChild(div6);
+
+        div2.appendChild(div3);
+
+        div2.appendChild(div5);
+
+        div.appendChild(div2);
+
+        return div;
+
+    }
+
+    function loaddata() {
+
+        let data = getdata("{{ userid }}", "{{ otherid }}")
+        console.log(data)
+
+        if (data === "No data could be retrieved! Web server is down or not responding.") {
+            document.getElementById("errorgiven").value = "1";
+            document.getElementById("messagebox").innerHTML = "";
+            document.getElementById("messagebox").appendChild(preparemessage_reciver("No data could be retrieved! Web server is down or not responding.", "XX:XX - TASKLIFY OFFICIAL ERROR - CONTACT SUPPORT", 0));
+            document.getElementById("messagebox").appendChild(preparemessage_sender("This error is not your fault, please wait a few minutes and try again. If the problem persists, please contact support.", "XX:XX - TASKLIFY OFFICIAL ERROR - CONTACT SUPPORT", 0));
+            return;
+        }
+
+        let errorgiven = document.getElementById("errorgiven")
+        if (errorgiven.value === "1") {
+            window.location.reload();
+        }
+
+
+        let count = document.getElementById("count");
+        let first_time = document.getElementById("first_time");
+
+        if (count.value !== data.length) {
+
+            document.getElementById("messagebox").innerHTML = "";
+            let audio = document.getElementById("audio_ding");
+            if (count.value < data.length) {
+                audio.play();
+            }
+            count.value = data.length;
+
+
+            for (const element of data) {
+                if (element.sender === true) {
+                    // remove all children
+                    document.getElementById("messagebox").appendChild(preparemessage_sender(element.message, element
+                        .date, element.id));
                 } else {
-                    console.log('Error sending message');
-                    window.location.reload();
-                }
-            });
-        });
-
-        // detect when the user presses the enter key and fire the button click event
-        message.addEventListener('keydown', function (e) {
-            if (e.keyCode === 13) {
-                button.click();
-            }
-        });
-    </script>
-
-
-
-
-
-    <script>
-        function scrolltobottom() {
-            // scroll whole page to bottom instantly
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                left: 0,
-                behavior: "instant"
-            })
-        }
-
-        function preparemessage_sender(message, date, id) {
-
-            var div = document.createElement("div");
-            div.className = "d-flex align-items-baseline text-end justify-content-end mb-4";
-            div.id = id;
-
-            var div2 = document.createElement("div");
-            div2.className = "pe-2";
-
-            var div3 = document.createElement("div");
-
-            var div4 = document.createElement("div");
-            div4.className = "card-b card card-text d-inline-block p-2 px-3 m-1";
-            div4.innerHTML = message;
-
-            // place i in div4 that is the delete button and uses delete_message function
-            
-
-
-            div3.appendChild(div4);
-
-            var div5 = document.createElement("div");
-
-            var div6 = document.createElement("div");
-            div6.className = "small";
-            div6.style = "margin-right: 12px; color: #7a7a7a";
-            div6.innerHTML = date;
-
-            var i = document.createElement("i");
-            i.className = "fa-solid fa-trash-can";
-            i.style = "float: right; margin-top: 5px; margin-left: 5px; cursor: pointer;";
-            i.onclick = function () {
-                delete_message(id, "{{csrf_token}}", "{{userid}}", "{{otherid}}");
-            };
-
-            div6.appendChild(i);
-
-            div5.appendChild(div6);
-
-            div2.appendChild(div3);
-
-            div2.appendChild(div5);
-
-            div.appendChild(div2);
-
-            return div;
-
-        }
-
-        function preparemessage_reciver(message, date, id) {
-
-            var div = document.createElement("div");
-            div.className = "d-flex align-items-baseline mb-4";
-            div.id = id;
-
-            var div2 = document.createElement("div");
-            div2.className = "pe-2";
-
-            var div3 = document.createElement("div");
-
-            var div4 = document.createElement("div");
-            div4.className = "card-s card card-text d-inline-block p-2 px-3 m-1";
-            div4.innerHTML = message;
-
-            div3.appendChild(div4);
-
-            var div5 = document.createElement("div");
-
-            var div6 = document.createElement("div");
-            div6.className = "small";
-            div6.style = "margin-left: 12px; color: #7a7a7a";
-            div6.innerHTML = date;
-
-            div5.appendChild(div6);
-
-            div2.appendChild(div3);
-
-            div2.appendChild(div5);
-
-            div.appendChild(div2);
-
-            return div;
-
-        }
-
-        function loaddata() {
-
-            let data = getdata("{{ userid }}", "{{ otherid }}")
-            console.log(data)
-
-            if (data === "No data could be retrieved! Web server is down or not responding.") {
-                document.getElementById("errorgiven").value = "1";
-                document.getElementById("messagebox").innerHTML = "";
-                document.getElementById("messagebox").appendChild(preparemessage_reciver("No data could be retrieved! Web server is down or not responding.", "XX:XX - TASKLIFY OFFICIAL ERROR - CONTACT SUPPORT", 0));
-                document.getElementById("messagebox").appendChild(preparemessage_sender("This error is not your fault, please wait a few minutes and try again. If the problem persists, please contact support.", "XX:XX - TASKLIFY OFFICIAL ERROR - CONTACT SUPPORT", 0));
-                return;
-            }
-
-            let errorgiven = document.getElementById("errorgiven")
-            if (errorgiven.value == "1") {
-                window.location.reload();
-            }
-
-
-            let count = document.getElementById("count");
-            let first_time = document.getElementById("first_time");
-
-            if (count.value != data.length) {
-
-                document.getElementById("messagebox").innerHTML = "";
-                let audio = document.getElementById("audio_ding");
-                if (count.value < data.length) {
-                    audio.play();
-                }
-                count.value = data.length;
-
-
-
-
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].sender === true) {
-                        // remove all children
-                        document.getElementById("messagebox").appendChild(preparemessage_sender(data[i].message, data[i]
-                            .date, data[i].id));
-                    } else {
-                        // remove all children
-                        document.getElementById("messagebox").appendChild(preparemessage_reciver(data[i].message, data[
-                                i]
-                            .date, data[i].id));
-                    }
-
+                    // remove all children
+                    document.getElementById("messagebox").appendChild(preparemessage_reciver(element.message, element
+                        .date, element.id));
                 }
 
-                scrolltobottom()
-
             }
 
-            let datalenght = data.length;
-            let messagebox_child_count = document.getElementById("messagebox").childElementCount;
-
-
-            if (datalenght !== messagebox_child_count) {
-                window.location.reload();
-            }
-
-            if (first_time.value == 0) {
-                console.log("first time")
-                scrolltobottom();
-                count.value = data.length;
-                first_time.value = 1;
-            }
-
-
-
-
+            scrolltobottom()
 
         }
 
-        loaddata();
-        setInterval(loaddata, 1000);
-    </script>
+        let datalenght = data.length;
+        let messagebox_child_count = document.getElementById("messagebox").childElementCount;
+
+
+        if (datalenght !== messagebox_child_count) {
+            window.location.reload();
+        }
+
+        if (first_time.value === 0) {
+            console.log("first time")
+            scrolltobottom();
+            count.value = data.length;
+            first_time.value = 1;
+        }
+
+
+    }
+
+    loaddata();
+    setInterval(loaddata, 1000);
+</script>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+</script>

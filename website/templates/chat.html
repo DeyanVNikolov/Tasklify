@@ -1,4 +1,9 @@
-{% extends "base.html" %} {% block title %}Chat{% endblock %} {% block content %}
+{% if redirect == "reload" %}
+    <script>
+        window.top.location.href = "/chat";
+    </script>
+{% else %}
+    {% extends "base.html" %} {% block title %}Chat{% endblock %} {% block content %}
 
     <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/chat.css">
     <script>
@@ -13,6 +18,8 @@
         }
 
     </script>
+
+
     <div>
         <br><br>
         <div class="content">
@@ -96,17 +103,41 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6>{{enteridofchatpartner}}</h6>
+                    <h6>{{ enteridofchatpartner }}</h6>
                 </div>
                 <div class="modal-body">
+                    {% if coworkers != None %}
+                        <div class="coworkers">
+                            {{ inyourorganization }}
+                            {% for cw in coworkers %}
+                                <form method="post" style="border: 1px solid black; margin-bottom: 5px;">
+                                    <input type="hidden" id="chatpartnerid" name="chatpartnerid" class="form-control"
+                                           value="{{ cw.id }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="typeform" value="createchat">
+
+                                    <p style="margin-top:10px; margin-left:5px"><img src='/static/pfp/{{ cw.id }}.png'
+                                                     onerror="this.src='/static/blank-profile.png' "
+                                                     style="height: 55px; width:55px; border-radius: 50%"
+                                                     alt=""> {{ cw.name }}
+                                        <button type="submit" class="btn btn-primary">{{ createchat }}</button>
+                                    </p>
+
+                                </form>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <form method="post">
+                        <br>
+                        <br>
                         <p>{{ idislocatedinprofilepage }}</p>
-                    <br>
-                    <input type="text" id="chatpartnerid" name="chatpartnerid" class="form-control" placeholder="ID">
+                        <br>
+                        <input type="text" id="chatpartnerid" name="chatpartnerid" class="form-control"
+                               placeholder="ID">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="typeform" value="createchat">
-                    <br><br>
-                    <button type="submit" class="btn btn-primary">{{createchat}}</button>
+                        <br><br>
+                        <button type="submit" class="btn btn-primary">{{ createchat }}</button>
                     </form>
                 </div>
             </div>
@@ -169,4 +200,6 @@
     </body>
 
 
+
 {% endblock %}
+{% endif %}

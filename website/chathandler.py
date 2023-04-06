@@ -73,9 +73,13 @@ def messageget(id, otherid):
     return messagelist, 200
 
 
+# make <redirect> optional
+
+@chathandler.route('/chat/<redirect>', methods=['GET', 'POST'])
 @chathandler.route('/chat', methods=['GET', 'POST'])
 @login_required
-def chat():
+def chat(redirect=None):
+
     id = current_user.id
 
     if 'locale' in request.cookies:
@@ -147,9 +151,7 @@ def chat():
 
                     db.session.add(newchat)
                     db.session.commit()
-                    return redirect(url_for('chathandler.chat'))
-                else:
-                    return redirect(url_for('chathandler.chat'))
+                    flash('Chat created', category='success')
 
     chats = []
 
@@ -179,6 +181,17 @@ def chat():
     else:
         basepath = 'https://www.tasklify.me'
 
+
+    coworkers =[]
+    if current_user.accounttype == "worker":
+        coworkers_list = Worker.query.filter_by(boss_id=current_user.boss_id).all()
+        for coworker in coworkers_list:
+            if coworker.id != current_user.id:
+                coworkers.append({"id": coworker.id, "name": coworker.first_name})
+    else:
+        coworkers = None
+
+
     return render_template('chat.html', user=current_user, userid=id, chats=chats,
                            profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -191,7 +204,7 @@ def chat():
                            otherpersoncanclosethechatatanytime=getword("otherpersoncanclosethechatatanytime", cookie),
                            createchat=getword("createchat", cookie), chatpartner=getword("chatpartner", cookie),
                            chatpartnerid=getword("chatpartnerid", cookie),
-                           theme=gettheme(request))
+                           theme=gettheme(request), coworkers=coworkers, redirect=redirect, inyourorganization=getword("inyourorganization", cookie))
 
 
 @chathandler.route('/chatapi/<id>/<otherid>', methods=['GET'])
@@ -273,26 +286,26 @@ def block(id):
         otheruser = Boss.query.get(id)
 
     if otheruser is None:
-        return redirect(url_for('chathandler.chat'))
+        return redirect(url_for('chathandler.chat', redirect="reload"))
 
     if current_user.accounttype == "worker":
         if current_user.boss_id == otheruser.id:
             flash("You can't block your employer", category="error")
-            return redirect(url_for('chathandler.chat'))
+            return redirect(url_for('chathandler.chat', redirect="reload"))
 
     if current_user.accounttype == "boss":
         if otheruser.boss_id == current_user.id:
             flash("You can't block your employee", category="error")
-            return redirect(url_for('chathandler.chat'))
+            return redirect(url_for('chathandler.chat', redirect="reload"))
 
     chat = Chat.query.filter_by(id_creator=current_user.id, id_participant=otheruser.id).first()
     if chat is None:
         chat = Chat.query.filter_by(id_creator=otheruser.id, id_participant=current_user.id).first()
         if chat is None:
-            return redirect(url_for('chathandler.chat'))
+            return redirect(url_for('chathandler.chat', redirect="reload"))
 
     db.session.delete(chat)
     db.session.commit()
 
     flash("Chat blocked", category="success")
-    return redirect(url_for('chathandler.chat'))
+    return redirect(url_for('chathandler.chat', redirect="reload"))
