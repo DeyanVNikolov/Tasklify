@@ -1,3 +1,4 @@
+import datetime
 import os
 import os.path as op
 from os import path
@@ -48,6 +49,7 @@ def create_app():
     app.config['GOOGLE_CLIENT_ID'] = "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
     app.secret_key = '234e34f6-cca4-40d9-8387-304149e6e8e5'
     app.config['SESSION_TYPE'] = 'filesystem'
+    app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(seconds=3600)
 
     global CAPTCHA1
     CAPTCHA1 = CAPTCHA(config=app.config)
@@ -208,12 +210,24 @@ app = create_app()
 
 @app.before_request
 def before_request():
-    # check if route is /banned
     if request.path == "/banned":
         if current_user.is_authenticated:
             if current_user.banned == "0":
                 return redirect(url_for('views.home'))
         return
-    if current_user.is_authenticated:
-        if current_user.banned == "1":
-            return redirect(url_for('views.banned'))
+
+    if session.get('email') is not None:
+        from .models import Worker, Boss
+        user = Worker.query.filter_by(email=session['email']).first()
+        if user is None:
+            user = Boss.query.filter_by(email=session['email']).first()
+            if user is None:
+                pass
+            else:
+                if user.twofactorneeded == "0":
+                    if request.path != "/auth/2fa":
+                        return redirect(url_for('auth.two_factor'))
+        else:
+            if user.twofactorneeded == "0":
+                if request.path != "/auth/2fa" and not request.path.startswith("/static/"):
+                    return redirect(url_for('auth.two_factor'))

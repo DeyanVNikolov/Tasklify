@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %}set2fa{% endblock %} {% block content %}
+
+<br><br>
+    <center>
+<div class="container container-fluid" style="font-size: 50px">
+    Your 2FA status is: {% if factor != None %} <p style="color: limegreen"><b>ON</b></p> {% else %} <p style="color:indianred"><b>OFF</b></p> {% endif %}
+
+
+    {% if factor != None %}
+    <div class="container">
+    <button class="btn btn-primary" onclick="window.location.href='/auth/2fa/disable'">Disable 2FA</button>
+    </div>
+    {% else %}
+    <div class="container">
+    <button class="btn btn-primary" onclick="window.location.href='/auth/2fa/enable'">Enable 2FA</button>
+    </div>
+    {% endif %}
+</div></center>
+
+{% endblock %}

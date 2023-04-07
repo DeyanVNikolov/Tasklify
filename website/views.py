@@ -160,6 +160,30 @@ def profilepfp():
                            submit=getword("submit", cookie), theme=gettheme(request))
 
 
+@views.route('/profile/set2fa', methods=['GET', 'POST'])
+@login_required
+def profileset2fa():
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    return render_template("profileset2fa.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user,
+                           emailtext=getword("emailshort", request.cookies.get('locale')),
+                           nametext=getword("name", request.cookies.get('locale')),
+                           profiletext=getword("profiletext", request.cookies.get('locale')),
+                           changepassword=getword("changepassword", request.cookies.get('locale')),
+                           deleteaccount=getword("deleteaccount", request.cookies.get('locale')),
+                           myfiles=getword("myfiles", request.cookies.get('locale')), id=current_user.id,
+                           chatnav=getword("chatnav", cookie), uploadfilebtn=getword("uploadfilebtn", cookie),
+                           submit=getword("submit", cookie), theme=gettheme(request), factor=current_user.factor)
+
+
 @views.route('/boss')
 @login_required
 def boss():

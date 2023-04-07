@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %} enable2fa {% endblock %} {% block content %}
+
+
+<div class="container container-fluid">
+<img src="/static/qr/{{ uuid }}{{ uuid }}{{ uuid }}.png" alt="QR Code" style="width: 200px; height: 200px; margin-left: 40%; margin-top: 10%; margin-bottom: 10%;">
+
+<form action="/auth/2fa/enable" method="post">
+    <div class="form-group">
+        <input type="hidden" name="typeform" value="Confirm">
+        <input type="hidden" name="old_factor" id="old_factor" value="{{ factor }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </div>
+    <button type="submit" class="btn btn-primary">I'm ready</button>
+</form>
+</div>
+
+
+{% endblock %}

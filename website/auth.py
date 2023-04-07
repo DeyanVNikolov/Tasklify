@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from email_validator import validate_email
@@ -13,11 +14,10 @@ from .mailsender import sendregisterationemail, sendregisterationemailboss
 from .models import Worker, Boss
 from .translator import gettheme
 from .translator import getword
+from .twofactor import verifyfactor, verifyuser
 
 auth = Blueprint('auth', __name__)
 global csrfg
-
-
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -53,8 +53,16 @@ def login():
                     # Проверяваме дали паролата е вярна
                     if check_password_hash(user.password, password):
                         # Ако е вярна, логваме потребителя
-                        flash(getword("loggedinsuccess", cookie), category='success')
-                        login_user(user, remember=True)
+                        # use rstrip
+                        if user.factor is not None:
+                            if user.factor.rstrip() != "":
+                                session['email'] = email
+                                session['password'] = password
+                                user.twofactorneeded = "1"
+                                return redirect(url_for('auth.two_factor'))
+                        else:
+                            flash(getword("loggedinsuccess", cookie), category='success')
+                            login_user(user, remember=False)
                         if user.accounttype == 'worker':
                             return redirect(url_for('views.boss'))
                         else:
@@ -80,7 +88,183 @@ def login():
                            registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
                            worker=getword("worker", cookie), boss=getword("boss", cookie),
                            loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
-                           signinwithgoogle=getword("signinwithgoogle", cookie), signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request))
+                           signinwithgoogle=getword("signinwithgoogle", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request))
+
+
+@auth.route("/2fa", methods=['GET', 'POST'])
+def two_factor():
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if session.get("email") is None or session.get("password") is None:
+        flash("Token mismatch, make sure your cookies are enabled", category="error")
+        return redirect(url_for('auth.logout'))
+
+    if request.method == 'POST':
+        if request.form.get("typeform") == "submit2fa":
+            if request.form.get("code") is not None and request.form.get("code").rstrip() != "":
+                if len(request.form.get("code").rstrip()) < 3:
+                    flash("Invalid code", category="error")
+                    return redirect(url_for('auth.two_factor'))
+                user = Worker.query.filter_by(email=session.get("email")).first()
+                if user is None:
+                    user = Boss.query.filter_by(email=session.get("email")).first()
+                    if user is None:
+                        flash("Token mismatch, make sure your cookies are not tampered with", category="error")
+                        return redirect(url_for('auth.logout'))
+                verification = verifyuser(user.id, user.id.replace("-", ""), request.form.get("code").rstrip())
+                if verification != "403":
+                    if verification.status == "approved":
+                        newuser = Worker.query.filter_by(email=session.get("email")).first()
+                        if newuser is None:
+                            newuser = Boss.query.filter_by(email=session.get("email")).first()
+                            if newuser is None:
+                                flash("Token mismatch, make sure your cookies are not tampered with", category="error")
+                                return redirect(url_for('auth.logout'))
+                        if check_password_hash(newuser.password, session.get("password")):
+                            flash(getword("loggedinsuccess", cookie), category='success')
+                            session.pop("email")
+                            session.pop("password")
+                            newuser.twofactorneeded = "1"
+                            login_user(newuser, remember=False)
+                            if newuser.accounttype == 'worker':
+                                return redirect(url_for('views.boss'))
+                            else:
+                                return redirect(url_for('views.home'))
+                    else:
+                        flash("Invalid code", category="error")
+                        print("invalid code")
+                        return redirect(url_for('auth.two_factor'))
+
+    return render_template("2fa.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user, emailtext=getword("email", cookie),
+                           passwordtext=getword("password", cookie), logintext=getword("login", cookie),
+                           enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
+                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie),
+                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithgoogle=getword("signinwithgoogle", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request))
+
+
+@auth.route("/2fa/enable", methods=['GET', 'POST'])
+@login_required
+def enable_two_factor():
+    from .twofactor import generate_new_factor
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    if current_user.factor is not None:
+        if current_user.factor.rstrip() != "":
+            flash("2FA already enabled", category='error')
+            return redirect(url_for('views.home'))
+
+    uuid = current_user.id
+    # remove dashes, hex
+    uuid = uuid.replace("-", "")
+
+    old_factor = request.form.get("old_factor")
+
+    print("OLD:" + str(old_factor))
+
+    if old_factor is None or old_factor.rstrip() == "":
+        new_factor = generate_new_factor(current_user.first_name, current_user.id.replace("-", ""), current_user.id)
+
+    if request.method == "POST":
+        if request.form.get("typeform") == "Confirm":
+            if old_factor is not None and old_factor.rstrip() != "":
+                current_user.factor = old_factor
+                db.session.commit()
+                return redirect(url_for('auth.confirm_two_factor', factor=old_factor))
+
+    return render_template("enable2fa.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, emailtext=getword("email", cookie),
+                           passwordtext=getword("password", cookie), logintext=getword("login", cookie),
+                           enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
+                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie),
+                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithgoogle=getword("signinwithgoogle", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request), uuid=uuid,
+                           factor=new_factor.sid)
+
+
+@auth.route("/2fa/confirm/<factor>", methods=['GET', 'POST'])
+@login_required
+def confirm_two_factor(factor):
+
+    if 'locale' in request.cookies:
+        cookie = request.cookies.get('locale')
+    else:
+        cookie = 'en'
+
+    uuid = current_user.id.replace("-", "")
+
+    if current_user.factor != factor:
+        flash("Token mismatch", category='error')
+        return redirect(url_for('views.home'))
+
+    if request.method == "POST" and request.form.get("typeform") == "Code":
+        print(request.form.get("code"))
+        verification = verifyfactor(current_user.id, uuid, request.form.get("code"))
+        if verification == "403":
+            flash("2FA failed. Try again", category='error')
+            # delete file in static/qr
+            current_user.factor = None
+            db.session.commit()
+            os.remove(
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/qr/" + uuid + uuid + uuid + ".png"))
+            return redirect(url_for('views.home'))
+
+        print(verification.status)
+
+        if verification.status == "verified":
+            flash("2FA enabled", category='success')
+            return redirect(url_for('views.home'))
+        else:
+            flash("2FA failed. Try again", category='error')
+            current_user.factor = None
+            db.session.commit()
+            os.remove(
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/qr/" + uuid + uuid + uuid + ".png"))
+
+            return redirect(url_for('views.home'))
+
+    return render_template("confirm2fa.html", profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, emailtext=getword("email", cookie),
+                           passwordtext=getword("password", cookie), logintext=getword("login", cookie),
+                           enterpassword=getword("enterpassword", cookie), enteremail=getword("enteremail", cookie),
+                           registerhere=getword("registerhere", cookie), notregistered=getword("notregistered", cookie),
+                           worker=getword("worker", cookie), boss=getword("boss", cookie),
+                           loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithgoogle=getword("signinwithgoogle", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request), uuid=uuid)
+
+
+@auth.route("/2fa/disable", methods=['GET', 'POST'])
+@login_required
+def disable_two_factor():
+
+    current_user.factor = None
+    db.session.commit()
+    flash("2FA disabled", category='success')
+    return redirect(url_for('views.profileset2fa'))
 
 
 @auth.route('/logout')
@@ -112,7 +296,6 @@ def sign_up():
         else:
             return redirect(url_for('views.home'))
 
-
     captcha = CAPTCHA1.create()
     if request.method == 'POST':
         accounttype = request.form.get('accounttype')
@@ -133,7 +316,6 @@ def sign_up():
         if not CAPTCHA1.verify(c_text, c_hash):
             flash(getword("captchawrong", cookie), category='error')
             return redirect(url_for('auth.sign_up'))
-
 
         email = request.form.get('email')
 
@@ -193,7 +375,6 @@ def sign_up():
                 sendregisterationemailboss(email, first_name)
                 return redirect(url_for('views.home'))
 
-
     emailb = session.get('emailb', None)
     passwordb = session.get('passwordb', None)
     accounttypeb = session.get('accounttypeb', None)
@@ -212,9 +393,11 @@ def sign_up():
                            loginhere=getword("loginhere", cookie),
                            databeingproccessed=getword("databeingproccessed", cookie),
                            signupas=getword("signupas", cookie), worker=getword("worker", cookie),
-                           boss=getword("boss", cookie), signupwith=getword("signupwith", cookie),
-                           emailb=emailb, passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb, signinwithgithub=getword("signinwithgithub", cookie),
-                           signinwithfacebook=getword("signinwithfacebook", cookie), signinwithgoogle=getword("signinwithgoogle", cookie), theme=gettheme(request))
+                           boss=getword("boss", cookie), signupwith=getword("signupwith", cookie), emailb=emailb,
+                           passwordb=passwordb, acctypeb=accounttypeb, nameb=nameb,
+                           signinwithgithub=getword("signinwithgithub", cookie),
+                           signinwithfacebook=getword("signinwithfacebook", cookie),
+                           signinwithgoogle=getword("signinwithgoogle", cookie), theme=gettheme(request))
 
 
 @auth.route('/delete-account', methods=['GET', 'POST'])
