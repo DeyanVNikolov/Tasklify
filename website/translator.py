@@ -1045,11 +1045,11 @@ words = {
     },
     "registeryouremployee": {
         "en": "Register your employee",
-        "bg": "Регистрирай нов служителя",
+        "bg": "Регистрирай нов служител",
         "es": "Registra a tu empleado",
         "de": "Melden Sie Ihren Mitarbeiter an",
         "fr": "Inscrivez votre employé",
-        "ru": "Зарегистрируйте своего сотрудника"
+        "ru": "Зарегистрируйте нового сотрудника"
     },
     "addtasktext": {
         "en": "Add task",
