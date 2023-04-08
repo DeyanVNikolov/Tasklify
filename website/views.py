@@ -782,6 +782,7 @@ def privacy():
                            privacypolicytext11=getword("privacypolicytext11", cookie),
                            privacypolicytext12=getword("privacypolicytext12", cookie),
                            privacypolicytext13=getword("privacypolicytext13", cookie),
+                            privacypolicytext14=getword("privacypolicytext14", cookie),
                            chatnav=getword("chatnav", cookie), homenav=getword("homenav", cookie),
                            loginnav=getword("loginnav", cookie), profilenav=getword("profilenav", cookie),
                            signupnav=getword("signupnav", cookie), workersnav=getword("workersnav", cookie),

@@ -1757,6 +1757,34 @@ words = {
         "de": "Dieses Konto ist durch 2FA geschützt",
         "fr": "Ce compte est protégé par 2FA",
         "ru": "Этот аккаунт защищен 2FA"
+    },
+    "privacypolicytext14": {
+        "en": " uses certain Google API services to provide you with a seamless and efficient user experience."
+              " We want you to know that we take your privacy seriously, and as such, any information received from Google APIs will be used and transferred in compliance with Google API Services User Data Policy, including the Limited Use requirements."
+              " This means that we will only collect and use the data necessary for the specific purposes for which the APIs were authorized and will not use the data for any other purposes without obtaining additional consent from you."
+              " By using Tasklify, you consent to our collection, use, and transfer of your information as described in this policy.",
+        "bg": " използва определени услуги на Google API, за да ви предостави непрекъснато и ефективно потребителско изживяване."
+                "Искаме да ви кажем, че сериозно се занимаваме с вашата поверителност и, като такъв, всички получени от Google API информация ще бъдат използвани и прехвърляни в съответствие с Политиката за данни на потребителите на услугите на Google API, включително изискванията за ограничено използване."
+                "Това означава, че ще събираме и използваме само данните, необходими за конкретните цели, за които са упълномощени API-та, и няма да използваме данните за други цели без да получите допълнително съгласие от вас."      
+                "Използвайки Tasklify, вие се съгласявате със събирането, използването и прехвърлянето на вашата информация, както е описано в тази политика.",
+        "es": " usa ciertos servicios de API de Google para brindarle una experiencia de usuario sin problemas y eficiente."
+                "Queremos que sepa que tomamos su privacidad en serio y, por lo tanto, cualquier información recibida de las API de Google se utilizará y transferirá de conformidad con la Política de datos de usuarios de servicios de API de Google, incluidos los requisitos de uso limitado."
+                "Esto significa que solo recopilaremos y utilizaremos los datos necesarios para los fines específicos para los que se autorizaron las API y no utilizaremos los datos para ningún otro propósito sin obtener su consentimiento adicional."
+                "Al usar Tasklify, usted consiente el uso de su información como se describe en esta política.",
+        "de": " verwendet bestimmte Google API-Dienste, um Ihnen eine reibungslose und effiziente Benutzererfahrung zu bieten."
+                "Wir möchten, dass Sie wissen, dass wir Ihre Privatsphäre ernst nehmen und daher alle von Google APIs erhaltenen Informationen gemäß der Datenschutzrichtlinie für Google API Services User Data Policy, einschließlich der Anforderungen für eine eingeschränkte Nutzung, verwenden und übertragen."
+                "Dies bedeutet, dass wir nur die Daten sammeln und verwenden, die für die spezifischen Zwecke erforderlich sind, für die die APIs autorisiert wurden, und die Daten nicht für andere Zwecke verwenden werden, ohne Ihre zusätzliche Zustimmung einzuholen."
+                "Durch die Verwendung von Tasklify stimmen Sie unserer Sammlung, Verwendung und Übertragung Ihrer Informationen gemäß dieser Richtlinie zu.",
+        "fr": " utilise certaines API Google pour vous fournir une expérience utilisateur fluide et efficace."
+                "Nous voulons que vous sachiez que nous prenons au sérieux votre vie privée et, par conséquent, toutes les informations reçues des API Google seront utilisées et transférées conformément à la politique de données des utilisateurs des services API Google, y compris les exigences d'utilisation limitée."
+                "Cela signifie que nous ne collecterons et n'utiliserons que les données nécessaires aux fins spécifiques pour lesquelles les API ont été autorisées et n'utiliserons pas les données à d'autres fins sans obtenir votre consentement supplémentaire."
+                "En utilisant Tasklify, vous consentez à notre collecte, utilisation et transfert de vos informations conformément à cette politique.",
+        "ru": " использует определенные услуги Google API для обеспечения вам беспрепятственного и эффективного пользовательского опыта."
+                "Мы хотим, чтобы вы знали, что мы серьезно относимся к вашей конфиденциальности, и, как следствие, любая информация, полученная от API Google, будет использоваться и передаваться в соответствии с Политикой конфиденциальности пользователей услуг API Google, включая требования ограниченного использования."
+                "Это означает, что мы будем собирать и использовать только те данные, которые необходимы для конкретных целей, для которых были авторизованы API, и не будем использовать данные для каких-либо других целей без получения вашего дополнительного согласия."
+                "Используя Tasklify, вы соглашаетесь с нашей сбором, использованием и передачей ваших данных в соответствии с этой политикой."
+
+
     }
 }
 
