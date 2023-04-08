@@ -1,10 +1,11 @@
 function darktheme() {
-    document.cookie = "theme=dark";
+    document.cookie = "theme=dark; path=/";
     window.location.reload();
 }
 
 function lighttheme() {
-    document.cookie = "theme=light";
+    // get cookie from the / path
+    document.cookie = "theme=light; path=/";
     window.location.reload();
 }
 
