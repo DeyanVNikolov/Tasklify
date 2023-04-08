@@ -6,75 +6,155 @@
             }
         }
 
-        }
     </style>
-    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css">
+    <link
+            rel="stylesheet"
+            href="/static/files.css"
+    />
 
+    <br/><br/><br/><br/>
 
-    <br><br><br><br>
+    <script></script>
 
-<div class="container containersign text-center" style="width: 100% !important; margin: 0px 0px 0px 0px; max-width: 100%">
-<h1 style="color:white">{{ myfiles }}</h1>
-    <hr style="color:white">
-            <div class="main-user-info" style="width: 105% !important;">
-                <div class="user-input-box" style="width: 105% !important">
-                    <style>
-                        h4 {
-                            width: 95%;
-                            color: white;
-                            font-size: 20px;
-                            font-weight: 400;
-                            margin: 5px 0;
-                        }
-                        .form-control {
-                            height: auto !important;
-                            background-color: #28A745;
-                            border-radius: 20px;
-                        }
-                    </style>
-                    <label><h3>{{ fileuploadtext }}</h3></label>
-                </div>
-            </div>
-            <div class="gender-details-box">
-                <span class="gender-title">{{ signupas }}</span>
-                <div class="gender-category" style="font-size: 25px;">
-
-                    <form action="/file/upld" method="post" enctype="multipart/form-data">
-                        <div class="mb-3" style="width: 65%; justify-content: center; text-align: center; margin: auto">
-                            <input class="form-control" type="file" id="file" name="file">
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-lg-6 col-xl-6">
+                                <h1 class="header-title m-b-30">Моите файлове</h1>
+                                <br/>
+                            </div>
                         </div>
-                        <input type="submit" class="btn btn-success" value="{{ uploadtext }}" name="submit">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    </form>
+
+                        {% for file, split in files.items() %}
+                            {% if loop.index0 % 4 == 0 %}
+                                <div class="row">
+                            {% endif %}
+
+                        <div class="col-lg-3 col-xl-3">
+                            <div class="file-man-box">
+                                <script>
+                                    function deleteItem(file) {
+
+                                        let confirm = window.confirm("Сигурни ли сте, че искате да изтриете този файл?");
+
+                                        if (!confirm) {
+                                            return;
+                                        }
+
+                                        let csrftoken = '{{ csrf_token() }}';
+                                        let typeform = 'delete';
+                                        let data = new FormData();
+                                        // current url after the host
+                                        let currenturl = window.location.pathname;
+                                        data.append('csrf_token', csrftoken);
+                                        data.append('typeform', typeform);
+                                        data.append('file', file);
+
+                                        console.log(data);
+
+                                        fetch(currenturl, {
+                                            method: 'POST',
+                                            body: data
+                                        }).then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Something went wrong ...');
+                                            }
+                                        }).then(data => {
+                                            console.log(data);
+                                            window.location.reload();
+                                        });
+                                    }
+                                </script>
+                                <a onclick="deleteItem('{{ file }}')" href="#" class="file-close"
+                                ><i class="fa fa-times-circle"></i
+                                ></a>
+                                <div class="file-img-box">
+                                    <img style="width: 100% !important; height: auto !important;" onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
+                                         src="{{ url_for('fileshandler.uploaded_file', filename=file) }}"
+                                         alt="uploaded file"/>
+                                </div>
+                                <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" class="file-download"
+                                ><i class="fa fa-download"></i
+                                ></a>
+                                <div class="file-man-title">
+                                    <h5 class="mb-0 text-overflow">{{ split }}</h5>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <br/>
+                        </div>
+
+                        {% if loop.index0 % 4 == 3 or loop.last %}
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+
+
+
+                        <div style="margin-top:50px !important;" class="text-center mt-3">
+                            <div class="">
+                                <div>
+                                    <div
+                                            class="container containersign text-center"
+                                            style="width: 100% !important; margin: 0px 0px 0px 0px; max-width: 100%"
+                                    >
+                                        <style>
+                                            h4 {
+                                                width: 95%;
+                                                color: white;
+                                                font-size: 20px;
+                                                font-weight: 400;
+                                                margin: 5px 0;
+                                            }
+
+                                            .form-control {
+                                                height: auto !important;
+                                                background-color: #28a745;
+                                                border-radius: 20px;
+                                            }
+                                        </style>
+                                        <div class="gender-details-box">
+                                            <span class="gender-title">{{ signupas }}</span>
+                                            <div class="gender-category" style="font-size: 25px">
+                                                <form action="/file/upld" method="post" enctype="multipart/form-data">
+                                                    <div
+                                                            class="mb-3"
+                                                            style="
+                                                                   width: 65%;
+                                                                   justify-content: center;
+                                                                   text-align: center;
+                                                                   margin: auto;
+                                                                 "
+                                                    >
+                                                        <input class="form-control" type="file" id="file" name="file"/>
+                                                    </div>
+                                                    <input
+                                                            type="submit"
+                                                            class="btn btn-success"
+                                                            value="{{ uploadtext }}"
+                                                            name="submit"
+                                                    />
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                </form>
+                                            </div>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <br>
             </div>
+        </div>
     </div>
-
-    <br>
-
-
-
-    {% for file, split in files.items() %}
-        <hr>
-        <br>
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="typeform" value="delete"/>
-            <input type="hidden" name="file" value="{{ file }}"/>
-            <div class="container containertobesized text-center" style="max-width:50%">
-                <h3>{{ split }}</h3>
-                <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" target="_blank">
-                    <img onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
-                         class="img-fluid" style="max-width: 100%; border: 5px solid #555; margin-bottom: 10px;"
-                         src="{{ url_for('fileshandler.uploaded_file', filename=file) }}" alt="uploaded file"></a>
-                <button class="btn btn-danger" type="submit">{{ delete }}</button>
-            </div>
-        </form>
-        <br>
-        <br>
-    {% endfor %}
-
-
+    </div>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript"></script>
 
 {% endblock %}
