@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content %}
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <link rel="stylesheet" href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css?h=060323215300">
+    <link rel="stylesheet"
+          href="https://cdn.tasklify.me/content-delivery-network/secure/custom-style/signup.css?h=060323215300">
     <link rel="stylesheet" href="/static/loginimage.css">
 
     <link rel="stylesheet"
@@ -12,27 +13,38 @@
             nonce="2tKFmaiE"></script>
     <div class="container text-center">
         <br><br><br>
-    <div id="image_bgb"><h3 align="center">{{ logintext }}</h3>
-        <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
-             style="max-height:70px; width: auto;">
-        <br>
-        <br><br>
-        <h4 align="center" style="color:white">{{ notregistered }} <br> <a style="color:lightgreen" href="/auth/sign-up">{{ registerhere }}</a></h4></div>
+        <div id="image_bgb"><h3 align="center">{{ logintext }}</h3>
+            <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
+                 style="max-height:70px; width: auto;">
+            <br>
+            <br><br>
+            <h4 align="center" style="color:black">{{ gate2fa }}</div>
         <br><br>
     </div>
-    <div class="container containersign text-center">
+    <div class="container containersign text-center" style="padding-right: 0px">
 
-        <form method="POST">
+        <form method="POST" id="twofactorform">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="typeform" value="submit2fa">
-            <div class="main-user-info">
-                <div class="user-input-box">
-                    <label for="code">2FA Token</label>
-                    <input type="text" class="form-control" id="code" name="code" placeholder="2FA Token"/>
+            <div class="main-user-info"
+                 style="width: 100% !important; padding-left: 0px !important; padding-right: 0px !important;">
+                <div class="user-input-box"
+                     style="width: 100% !important; padding-left: 0px !important; padding-right: 0px !important;">
+                    <label for="code">{{ enter2fa }}</label>
+                    <input style="margin-top:15px " type="text" class="form-control" id="code" name="code"
+                           placeholder="2FA Token"/>
                 </div>
+
             </div>
 
         </form>
+        <script>
+            function submit2fa() {
+                document.getElementById("twofactorform").submit();
+            }
+        </script>
+        <button onclick="submit2fa()" class="btn btn-success">{{ loginnav }}</button>
+        <button onclick="window.location.href='/auth/2fa/logout'" class="btn btn-danger">{{ logout }}</button>
     </div>
     <br><br><br><br><br>
     <br><br><br>

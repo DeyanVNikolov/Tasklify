@@ -107,7 +107,9 @@ def two_factor():
     if request.method == 'POST':
         if request.form.get("typeform") == "submit2fa":
             if request.form.get("code") is not None and request.form.get("code").rstrip() != "":
-                if len(request.form.get("code").rstrip()) < 3:
+                if len(request.form.get("code").rstrip()) < 3 or len(
+                        request.form.get("code").rstrip()) > 6 or not request.form.get(
+                        "code").rstrip().isdigit() or len(request.form.get("code").rstrip()) <= 1:
                     flash("Invalid code", category="error")
                     return redirect(url_for('auth.two_factor'))
                 user = Worker.query.filter_by(email=session.get("email")).first()
@@ -139,6 +141,9 @@ def two_factor():
                         flash("Invalid code", category="error")
                         print("invalid code")
                         return redirect(url_for('auth.two_factor'))
+            else:
+                flash("Invalid code", category="error")
+                return redirect(url_for('auth.two_factor'))
 
     return render_template("2fa.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
@@ -151,7 +156,23 @@ def two_factor():
                            worker=getword("worker", cookie), boss=getword("boss", cookie),
                            loginwith=getword("loginwith", cookie), signinwithgithub=getword("signinwithgithub", cookie),
                            signinwithgoogle=getword("signinwithgoogle", cookie),
-                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request))
+                           signinwithfacebook=getword("signinwithfacebook", cookie), theme=gettheme(request),
+                           logout=getword("logout", cookie), enter2fa=getword("enter2fa", cookie),
+                           submit=getword("submit", cookie), gate2fa=getword("gate2fa", cookie))
+
+
+@auth.route("/2fa/logout", methods=['GET', 'POST'])
+def logout_two_factor():
+    print("logout")
+    if session.get("email") is not None:
+        print("email")
+        session.pop("email")
+    if session.get("password") is not None:
+        print("password")
+        session.pop("password")
+    logout_user()
+
+    return redirect(url_for('auth.login'))
 
 
 @auth.route("/2fa/enable", methods=['GET', 'POST'])

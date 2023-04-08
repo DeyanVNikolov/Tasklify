@@ -225,9 +225,11 @@ def before_request():
                 pass
             else:
                 if user.twofactorneeded == "0":
-                    if request.path != "/auth/2fa":
-                        return redirect(url_for('auth.two_factor'))
+                    if request.path != "/auth/2fa" and not request.path.startswith("/static/"):
+                        if request.path != "/auth/2fa/logout":
+                            return redirect(url_for('auth.two_factor'))
         else:
             if user.twofactorneeded == "0":
                 if request.path != "/auth/2fa" and not request.path.startswith("/static/"):
-                    return redirect(url_for('auth.two_factor'))
+                    if request.path != "/auth/2fa/logout":
+                        return redirect(url_for('auth.two_factor'))

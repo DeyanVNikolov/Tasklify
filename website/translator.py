@@ -1741,6 +1741,22 @@ words = {
         "de": "In deinem Unternehmen",
         "fr": "Dans votre organisation",
         "ru": "В вашей организации"
+    },
+    "enter2fa": {
+        "en": "Please enter the 2FA code provided by your authenticator app",
+        "bg": "Моля, въведете 2FA кода, предоставен от приложението за удостоверяване",
+        "es": "Ingrese el código 2FA proporcionado por su aplicación de autenticación",
+        "de": "Bitte geben Sie den 2FA-Code ein, der von Ihrer Authentifizierungs-App bereitgestellt wird",
+        "fr": "Veuillez saisir le code 2FA fourni par votre application d'authentification",
+        "ru": "Пожалуйста, введите код 2FA, предоставленный вашим приложением для аутентификации"
+    },
+    "gate2fa": {
+        "en": "This account is protected by 2FA",
+        "bg": "Този акаунт е защитен с 2FA",
+        "es": "Esta cuenta está protegida por 2FA",
+        "de": "Dieses Konto ist durch 2FA geschützt",
+        "fr": "Ce compte est protégé par 2FA",
+        "ru": "Этот аккаунт защищен 2FA"
     }
 }
 
