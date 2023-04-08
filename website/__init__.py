@@ -216,6 +216,10 @@ def before_request():
                 return redirect(url_for('views.home'))
         return
 
+    if current_user.is_authenticated:
+        if current_user.banned == "1":
+            return redirect(url_for('views.banned'))
+
     if session.get('email') is not None:
         from .models import Worker, Boss
         user = Worker.query.filter_by(email=session['email']).first()
