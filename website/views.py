@@ -420,10 +420,6 @@ def workers():
         workerslist = [worker for worker in workerslist if
                        search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
 
-
-    # print type of "worker" object
-    print(type(worker))
-
     return render_template("workers.html", profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
