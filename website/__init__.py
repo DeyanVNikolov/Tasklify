@@ -3,6 +3,7 @@ import os
 import os.path as op
 from os import path
 
+import requests
 from flask import Flask, render_template, redirect, url_for
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.fileadmin import FileAdmin
@@ -28,6 +29,52 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 
 
+def getofficialmessage():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['en']
+    else:
+        return None
+
+
+def getofficialmessagebg():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['bg']
+    else:
+        return None
+
+
+def getofficialmessagefr():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['fr']
+    else:
+        return None
+
+
+def getofficialmessagees():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['es']
+    else:
+        return None
+
+
+def getofficialmessagede():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['de']
+    else:
+        return None
+
+
+def getofficialmessageru():
+    message = requests.get("https://pastebin.com/raw/vzCrN1Z5")
+    if message.json()['status'] != "None":
+        return message.json()['message']['ru']
+    else:
+        return None
 
 
 def create_app():
@@ -88,10 +135,14 @@ def create_app():
     csrfg.exempt(externalcallback)
     limiter.limit("200 per minute")(chathandler)
 
-
+    app.jinja_env.globals.update(getofficialmessage=getofficialmessage)
+    app.jinja_env.globals.update(getofficialmessagebg=getofficialmessagebg)
+    app.jinja_env.globals.update(getofficialmessagees=getofficialmessagees)
+    app.jinja_env.globals.update(getofficialmessageru=getofficialmessageru)
+    app.jinja_env.globals.update(getofficialmessagefr=getofficialmessagefr)
+    app.jinja_env.globals.update(getofficialmessagede=getofficialmessagede)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
-
 
     class MyModelView(ModelView):
         def is_accessible(self):

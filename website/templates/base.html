@@ -341,6 +341,28 @@ Created under regulation and supervision of ITPG-Varna.
     </div>
 {% endif %} {% endfor %} {% endif %} {% endwith %}
 
+{% if getofficialmessage() != None %}
+    <div class="alert alert-warning alter-dismissable fade show" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {% if cookie == "bg" %}
+            {{ getofficialmessagebg() }}
+        {% elif cookie == "es" %}
+            {{ getofficialmessagees() }}
+        {% elif cookie == "de" %}
+            {{ getofficialmessagede() }}
+        {% elif cookie == "fr" %}
+            {{ getofficialmessagefr() }}
+        {% elif cookie == "ru" %}
+            {{ getofficialmessageru() }}
+        {% else %}
+            {{ getofficialmessage() }}
+        {% endif %}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+
 <div class="container">{% block content %} {% endblock %}</div>
 <footer class="footer-07 mt-auto" style="width: 100% !important;">
     <div class="container">
