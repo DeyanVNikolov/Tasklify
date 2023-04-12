@@ -269,10 +269,7 @@ def before_request():
 
     if current_user.is_authenticated:
         if current_user.banned == "1":
-            print(str(current_user.email) + " Banned")
             return redirect(url_for('views.banned'))
-        else:
-            print(str(current_user.email) + " Not Banned")
 
     if session.get('email') is not None:
         from .models import Worker, Boss
