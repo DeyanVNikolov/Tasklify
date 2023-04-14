@@ -1,0 +1,22 @@
+    <script>
+        // Check if the screen width is smaller than the height
+        console.log(window.innerWidth);
+        console.log(window.innerHeight);
+        if (window.innerWidth < window.innerHeight) {
+            alert("Please switch to landscape mode for the best experience.");
+            location.href = "/x"
+        }
+    </script>
+
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <head>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+
+
+
+    {{ plot|safe }}
+
+
+{% endblock %}

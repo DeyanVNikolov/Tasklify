@@ -456,6 +456,61 @@ def workers():
                            theme=gettheme(request))
 
 
+@views.route("/calendar", methods=["GET", "POST"])
+@login_required
+def calendar():
+
+    cookie = getcookie(request)
+
+    import plotly.figure_factory as ff
+    import plotly.offline as pyo
+
+    tasks = [dict(Task="Task 1", Start='2023-04-01', Finish='2023-04-05'),
+        dict(Task="Task 2", Start='2023-04-06', Finish='2023-04-09'),
+        dict(Task="Task 3", Start='2023-04-10', Finish='2023-04-12'), ]
+    fig = ff.create_gantt(tasks, colors=['#008080', '#FFA500', '#6B8E23'], index_col='Task', show_colorbar=False,
+                          bar_width=0.2, height=400, group_tasks=True, title='Task Schedule', showgrid_x=True,
+                          showgrid_y=True, show_hover_fill=True)
+    fig.update_layout(xaxis_title='Dates', yaxis_title='Tasks', font=dict(family='Arial', size=14, color='#333'),
+        plot_bgcolor='#f8f8f8', paper_bgcolor='#f8f8f8', margin=dict(l=80, r=30, t=60, b=30),
+        hoverlabel=dict(bgcolor='#FFF', font_size=12, font_family='Arial'), autosize=True)
+    plot = pyo.plot(fig, output_type='div')
+
+    return render_template("calendar.html", cookie=getcookie(request), plot=plot,
+                           profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
+                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
+                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
+                           user=current_user, idtext=getword("idtext", cookie), addworker=getword("addworker", cookie),
+                           delete=getword("delete", cookie), workertext=getword("workertext", cookie),
+                           addtask=getword("addtask", cookie), email=getword("email", cookie),
+                           name=getword("name", cookie), selectall=getword("selectall", cookie),
+                           deselectall=getword("deselectall", cookie), workermenu=getword("workermenu", cookie),
+                           submit=getword("submit", cookie), selectworkers=getword("selectworkers", cookie),
+                           signupemploy=getword("signupemploy", cookie), here=getword("here", cookie),
+                           myfiles=getword("empmyfiles", cookie), adminpaneltext=getword("adminpaneltext", cookie),
+                           addemployeebutton=getword("addemployeebutton", cookie),
+                           registeryouremployee=getword("registeryouremployee", cookie),
+                           addtasktext=getword("addtasktext", cookie), actiontext=getword("actiontext", cookie),
+                           sorttext=getword("sorttext", cookie), sortnametext=getword("sortnametext", cookie),
+                           sortemailtext=getword("sortemailtext", cookie),
+                           sorttaskstext=getword("sorttaskstext", cookie),
+                           currentlysorting=getword("currentlysorting", cookie), nonetext=getword("nonetext", cookie),
+                           taskstext=getword("tasksnav", cookie), search=getword("search", cookie),
+                           areyousure=getword("areyousure", cookie), chatnav=getword("chatnav", cookie),
+                           moreinfo=getword("moreinfo", cookie), notdone=getword("notdone", cookie),
+                           tasktext=getword("tasktext", cookie), statustext=getword("statustext", cookie),
+                           notstarted=getword("NotStarted", cookie), completed=getword("completed", cookie),
+                           started=getword("started", cookie), deletefromall=getword("deletefromall", cookie),
+                           workeridtext=getword("workeridtext", cookie), unarchive=getword("unarchive", cookie),
+                           fullydelete=getword("fullydelete", cookie),
+                           workeremailtext=getword("workeremailtext", cookie),
+                           sorttypestatus=getword("sorttypestatus", cookie),
+                           sorttypedate=getword("sorttypedate", cookie), sorttypetitle=getword("sorttypetitle", cookie),
+                           sorttypearchive=getword("sorttypearchive", cookie), done=getword("done", cookie),
+                           theme=gettheme(request))
+
+
 @views.route('/worker/<string:id>', methods=["GET", "POST"])
 @login_required
 def worker(id):
