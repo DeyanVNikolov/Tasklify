@@ -469,7 +469,6 @@ def calendar():
 
 
 
-
     fig = ff.create_gantt(tasks, colors=['#008080', '#FFA500', '#6B8E23'], index_col='Task', show_colorbar=False,
                           bar_width=0.2, height=400, group_tasks=True, title='Task Schedule', showgrid_x=True,
                           showgrid_y=True, show_hover_fill=True)
