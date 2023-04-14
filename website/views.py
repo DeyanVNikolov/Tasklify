@@ -465,9 +465,11 @@ def calendar():
     import plotly.figure_factory as ff
     import plotly.offline as pyo
 
-    tasks = [dict(Task="Task 1", Start='2023-04-01', Finish='2023-04-05'),
-        dict(Task="Task 2", Start='2023-04-06', Finish='2023-04-09'),
-        dict(Task="Task 3", Start='2023-04-10', Finish='2023-04-12'), ]
+    tasks = []
+
+
+
+
     fig = ff.create_gantt(tasks, colors=['#008080', '#FFA500', '#6B8E23'], index_col='Task', show_colorbar=False,
                           bar_width=0.2, height=400, group_tasks=True, title='Task Schedule', showgrid_x=True,
                           showgrid_y=True, show_hover_fill=True)

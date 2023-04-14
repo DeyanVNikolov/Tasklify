@@ -18,6 +18,7 @@ class Task(db.Model):
     ordernumber = db.Column(db.Integer)
     actual_id = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.String(100))
+    datecreated = db.Column(db.DateTime, default=datetime.datetime.now())
     datedue = db.Column(db.DateTime, default=datetime.datetime.now())
     notified = db.Column(db.Boolean, default=False)
     archive = db.Column(db.Boolean, default=False)
