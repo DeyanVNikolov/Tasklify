@@ -42,7 +42,7 @@ def employ_signup():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html", profilenav=getword("profilenav", cookie),
+            return render_template("hash_error.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie),
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -96,7 +96,7 @@ def employ_signup():
             sendregisterationemail(email, first_name, key)
             return redirect(url_for('views.workers'))
 
-    return render_template("employ_signup.html", profilenav=getword("profilenav", cookie),
+    return render_template("employ_signup.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -147,7 +147,7 @@ def add_employee():
                     else:
                         flash(getword("workeralreadyadded", cookie), category="error")
 
-    return render_template("add_employee.html", profilenav=getword("profilenav", cookie),
+    return render_template("add_employee.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -249,7 +249,7 @@ def add_task():
         file1 = file.split("_")
         myfileswithoutid.append(file1[1])
 
-    return render_template("add_task.html", profilenav=getword("profilenav", cookie),
+    return render_template("add_task.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),

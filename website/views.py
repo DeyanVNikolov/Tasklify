@@ -1,6 +1,9 @@
+import datetime
 import os
+import random
 import time
 import uuid
+from random import randint
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask import current_app as app
@@ -38,7 +41,7 @@ def banned():
 @views.route('/', methods=['GET'])
 def home():
     cookie = getcookie(request)
-    return render_template("home.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("home.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -84,7 +87,7 @@ def profile():
 
     cookie = getcookie(request)
 
-    return render_template("profile.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("profile.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -145,7 +148,7 @@ def profilepfp():
                 image.save(os.path.join(app.config["PFP_UPLOADS"], str(current_user.id) + ".png"))
                 return redirect(url_for('views.profile'))
 
-    return render_template("profilepfp.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("profilepfp.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -169,7 +172,7 @@ def profileset2fa():
     else:
         cookie = 'en'
 
-    return render_template("profileset2fa.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("profileset2fa.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -199,7 +202,7 @@ def boss():
 
     link = "https://tasklify.me/a/" + current_user.registrationid
 
-    return render_template("boss.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("boss.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -260,7 +263,7 @@ def tasks():
 
     taskstodisplay.sort(key=lambda x: x['datedue'], reverse=True)
 
-    return render_template("tasks.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("tasks.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -421,7 +424,7 @@ def workers():
         workerslist = [worker for worker in workerslist if
                        search.lower() in worker["name"].lower() or search.lower() in worker["email"].lower()]
 
-    return render_template("workers.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("workers.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -468,16 +471,57 @@ def calendar():
     tasks = []
 
 
+    if current_user.accounttype == "boss":
+        for task in Task.query.filter_by(boss_id=current_user.id).all():
 
-    fig = ff.create_gantt(tasks, colors=['#008080', '#FFA500', '#6B8E23'], index_col='Task', show_colorbar=False,
-                          bar_width=0.2, height=400, group_tasks=True, title='Task Schedule', showgrid_x=True,
-                          showgrid_y=True, show_hover_fill=True)
-    fig.update_layout(xaxis_title='Dates', yaxis_title='Tasks', font=dict(family='Arial', size=14, color='#333'),
+            taskdue = str(task.datedue)
+            taskdue = str(datetime.datetime.strptime(taskdue, "%Y-%m-%d %H:%M:%S"))
+            taskdue = taskdue.split(" ||| ")[0]
+
+            taskstart = str(task.datecreated)
+            taskstart = str(datetime.datetime.strptime(taskstart, "%Y-%m-%d %H:%M:%S"))
+            taskdue = taskdue.split(" ||| ")[0]
+
+            taskworker = Worker.query.filter_by(id=task.worker_id).first()
+
+            tasks.append({"Task": task.title + " (" + taskworker.first_name + ")", "Start": taskstart, "Finish": taskdue})
+    elif current_user.accounttype == "worker":
+        for task in Task.query.filter_by(worker_id=current_user.id).all():
+
+            taskdue = str(task.datedue)
+            taskdue = str(datetime.datetime.strptime(taskdue, "%Y-%m-%d %H:%M:%S"))
+            taskdue = taskdue.split(" ||| ")[0]
+
+            taskstart = str(task.datecreated)
+            taskstart = str(datetime.datetime.strptime(taskstart, "%Y-%m-%d %H:%M:%S"))
+            taskdue = taskdue.split(" ||| ")[0]
+
+
+            tasks.append(
+                {"Task": task.title, "Start": taskstart, "Finish": taskdue})
+
+    colors = []
+    for task in tasks:
+        taskT = task['Task']
+        start = task['Start']
+        finish = task['Finish']
+        if not taskT.isascii():
+            taskT = translit(taskT, reversed=True)
+
+        seed = taskT + start + finish + taskT + finish + start
+        random.seed(seed)
+        colors.append('#%06X' % random.randint(0, 0xFFFFFF))
+
+    fig = ff.create_gantt(tasks, colors=colors, index_col='Task', show_colorbar=False, bar_width=0.2, height=400,
+                          group_tasks=False, title=getword("taskschedule", cookie), showgrid_x=True, showgrid_y=True,
+                          show_hover_fill=True)
+
+    fig.update_layout(xaxis_title=getword("dates", cookie), yaxis_title=getword("tasks", cookie), font=dict(family='Arial', size=14, color='#333'),
         plot_bgcolor='#f8f8f8', paper_bgcolor='#f8f8f8', margin=dict(l=80, r=30, t=60, b=30),
-        hoverlabel=dict(bgcolor='#FFF', font_size=12, font_family='Arial'), autosize=True)
+        hoverlabel=dict(bgcolor='#FFF', font_size=14, font_family='Arial'), autosize=True)
     plot = pyo.plot(fig, output_type='div')
 
-    return render_template("calendar.html", cookie=getcookie(request), plot=plot,
+    return render_template("calendar.html",calendar=getword("calendar", cookie), cookie=getcookie(request), plot=plot,
                            profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
@@ -611,7 +655,7 @@ def worker(id):
             db.session.commit()
             return redirect(url_for(oneworkerpage, id=id))
 
-    return render_template("worker.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("worker.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -755,7 +799,7 @@ def task(id):
         if attachement != "":
             attachements1.append(attachement)
 
-    return render_template("task.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("task.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -800,7 +844,7 @@ def contact():
             flash(getword("emailsent", cookie), category="success")
             return redirect(url_for('views.contact'))
 
-    return render_template("contact.html", cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("contact.html",calendar=getword("calendar", cookie), cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -822,7 +866,7 @@ def cookies_disabled():
 def privacy():
     cookie = getcookie(request)
 
-    return render_template("privacy.html", cookie=getcookie(request), user=current_user,
+    return render_template("privacy.html",calendar=getword("calendar", cookie), cookie=getcookie(request), user=current_user,
                            privacypolicytitle=getword("privacypolicytitle", cookie),
                            privacypolicytext1=getword("privacypolicytext1", cookie),
                            privacypolicytext2=getword("privacypolicytext2", cookie),

@@ -85,7 +85,7 @@ def login():
                 flash(getword("emailnotfound", cookie), category='error')
 
     # Показваме формата за логване
-    return render_template("login.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+    return render_template("login.html", calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
@@ -152,7 +152,7 @@ def two_factor():
                 flash("Invalid code", category="error")
                 return redirect(url_for('auth.two_factor'))
 
-    return render_template("2fa.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+    return render_template("2fa.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
@@ -215,7 +215,7 @@ def enable_two_factor():
                 db.session.commit()
                 return redirect(url_for('auth.confirm_two_factor', factor=old_factor))
 
-    return render_template("enable2fa.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("enable2fa.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -271,7 +271,7 @@ def confirm_two_factor(factor):
 
             return redirect(url_for('views.home'))
 
-    return render_template("confirm2fa.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("confirm2fa.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -330,7 +330,7 @@ def sign_up():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+            return render_template("hash_error.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -408,7 +408,7 @@ def sign_up():
     accounttypeb = session.get('accounttypeb', None)
     nameb = session.get('nameb', None)
 
-    return render_template("sign_up.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("sign_up.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -462,7 +462,7 @@ def delete_account():
         else:
             flash(getword("youmustconfirmdelete", cookie), category='error')
 
-    return render_template("delete_account.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("delete_account.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -488,7 +488,7 @@ def change_password():
         c_hash = request.form.get('captcha-hash')
         c_text = request.form.get('captcha-text')
         if c_hash is None:
-            return render_template("hash_error.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+            return render_template("hash_error.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                                    loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                                    tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                                    adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
@@ -523,7 +523,7 @@ def change_password():
             else:
                 flash(getword("incorrectpass", cookie), category='error')
 
-    return render_template("change_password.html",cookie=getcookie(request), profilenav=getword("profilenav", cookie),
+    return render_template("change_password.html",calendar=getword("calendar", cookie),cookie=getcookie(request), profilenav=getword("profilenav", cookie),
                            loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
                            tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
                            adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),

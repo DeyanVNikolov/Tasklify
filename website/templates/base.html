@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<!-- 
+<!--
 
 Tasklify is a copyrighted product of Deyan Nikolov & Martin Anastasov. All rights reserved.
 
 As per criteria of competitions and olympiads that this platform may be presented at,
  it is freely usable under the conditions of the GNU General Public License v3.0.
- 
+
 
 The source code is available at https://github.com/deyanvnikolov/tasklify
 
@@ -19,11 +16,21 @@ Copyright © 2022 Deyan Nikolov & Martin Anastasov. All rights reserved.
 Available under the GNU General Public License v3.0.
 Created under regulation and supervision of ITPG-Varna.
 
+!!!
 
-!!! It is not recommended to edit this file in Inspector. !!!
+!!! WARNING !!!
+!!! It is not recommended to edit this file in inspector. !!!
+!!! Doing so may cause the platform to malfunction. !!!
+!!! Tasklify is not responsible for any damage caused by editing this file. !!!
+!!! Editing this file or pasting code in the console may cause the platform to malfunction or expose your confidential data. !!!
 
+!!!!!
 
 -->
+
+
+<!DOCTYPE html>
+<html>
 
 
 <head>
@@ -232,12 +239,16 @@ Created under regulation and supervision of ITPG-Varna.
                 <a class="nav-item nav-link" id="tasks" href="/tasks"><i class="fa-solid fa-list-check"></i>
                     {{ tasksnav }} <span style="font-size:1.2em" class="badge badge-light">{{ undonetasks() }}</span>
                 </a>
+                <a class="nav-item nav-link" id="workers" href="/calendar"><i class="fa-solid fa-calendar-days"></i>
+                    {{ calendar }}</a>
                 <a class="nav-item nav-link" id="workers" href="/chat"><i class="fa-solid fa-comment-dots"></i>
                     {{ chatnav }}</a>
             {% endif %}
             {% if user.accounttype == "boss" %}
                 <a class="nav-item nav-link" id="workers" href="/workers"><i class="fa-sharp fa-solid fa-users"></i>
                     {{ workersnav }}</a>
+                <a class="nav-item nav-link" id="workers" href="/calendar"><i class="fa-solid fa-calendar-days"></i>
+                    {{ calendar }}</a>
                 <a class="nav-item nav-link" id="workers" href="/chat"><i class="fa-solid fa-comment-dots"></i>
                     {{ chatnav }}</a>
             {% endif %}

@@ -208,7 +208,7 @@ def files(id):
                 return redirect(url_for("fileshandler.files", id=id))
             return redirect(url_for("fileshandler.files", id=id))
 
-    return render_template("files.html", profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
+    return render_template("files.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
                            logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),

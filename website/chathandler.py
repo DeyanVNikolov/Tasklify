@@ -192,7 +192,7 @@ def chat(redirect=None):
         coworkers = None
 
 
-    return render_template('chat.html', user=current_user, userid=id, chats=chats,
+    return render_template('chat.html', calendar=getword("calendar", cookie), user=current_user, userid=id, chats=chats,
                            profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
                            signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
                            workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),

@@ -1785,7 +1785,39 @@ words = {
                 "Используя Tasklify, вы соглашаетесь с нашей сбором, использованием и передачей ваших данных в соответствии с этой политикой."
 
 
-    }
+    },
+    "dates": {
+        "en": "Dates",
+        "bg": "Дати",
+        "es": "Fechas",
+        "de": "Termine",
+        "fr": "Dates",
+        "ru": "Даты"
+    },
+    "tasks": {
+        "en": "Tasks",
+        "bg": "Задачи",
+        "es": "Tareas",
+        "de": "Aufgaben",
+        "fr": "Tâches",
+        "ru": "Задачи"
+    },
+    "taskschedule": {
+        "en": "Task Schedule",
+        "bg": "Разписание на задачите",
+        "es": "Programación de tareas",
+        "de": "Aufgabenplan",
+        "fr": "Planification des tâches",
+        "ru": "Расписание задач"
+    },
+    "calendar": {
+        "en": "Calendar",
+        "bg": "Календар",
+        "es": "Calendario",
+        "de": "Kalender",
+        "fr": "Calendrier",
+        "ru": "Календарь"
+    },
 }
 
 
