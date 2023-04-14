@@ -38,3 +38,4 @@ website\flask_session\*
 website/flask_session/*
 website/flask_session/
 testfactors.py
+test.ts
