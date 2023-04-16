@@ -5,7 +5,7 @@ import uuid
 
 import requests
 from dotenv import load_dotenv
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask import abort
 from flask import current_app as app
 from flask_login import current_user, login_user
@@ -23,63 +23,50 @@ check_url = "https://oauth2.googleapis.com/tokeninfo?id_token="
 
 @externalcallback.route('/googlecallback', methods=['GET', 'POST'])
 def googlelogin():
-    if request.method == 'POST':
-        csrf_token_cookie = request.cookies.get('g_csrf_token')
-        if not csrf_token_cookie:
-            abort(403)
-        csrf_token_body = request.form.get('g_csrf_token')
-        if not csrf_token_body:
-            abort(403)
-        if csrf_token_cookie != csrf_token_body:
-            abort(403)
-
-        credentials = request.form.get('credential')
+    print(request.method)
+    if request.method == 'GET':
+        credentials = request.args.get('code')
         if not credentials:
             abort(403)
 
-        response = requests.get(check_url + credentials)
-        if response.status_code != 200:
-            abort(403)
+        token_endpoint = 'https://oauth2.googleapis.com/token'
+        params = {'code': credentials, 'client_id': "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com",
+                  'client_secret': "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", 'redirect_uri': "https://127.0.0.1:5000/googlecallback",
+            'grant_type': 'authorization_code', }
+        response = requests.post(token_endpoint, data=params)
+        response_data = response.json()
+        access_token = response_data.get('access_token')
+        if not access_token:
+            return 'Error: Failed to retrieve access token'
 
-        data = response.json()
-        if data['aud'] != app.config['GOOGLE_CLIENT_ID']:
-            abort(403)
+        # Store the access token in the session for future use
+        session['access_token'] = access_token
 
-        email = data['email']
-        if not email:
-            abort(403)
+        # Use the access token to retrieve the user's email address
+        userinfo_endpoint = 'https://www.googleapis.com/oauth2/v3/userinfo'
+        headers = {'Authorization': f'Bearer {access_token}'}
+        userinfo_response = requests.get(userinfo_endpoint, headers=headers)
+        userinfo = userinfo_response.json()
+        email = userinfo.get('email')
 
-        email_verified = data['email_verified']
-        if not email_verified:
-            abort(403)
 
-        exp = data['exp']
-        if not exp:
-            abort(403)
-
-        # check if exp is in the past
-        if float(exp) < time.time():
-            abort(403)
-
-        iss = data['iss']
-        if not iss:
-            abort(403)
-
-        if iss != "accounts.google.com" and iss != "https://accounts.google.com":
-            abort(403)
-
-        sub = data['sub']
-        if not sub:
+        if email is None:
             abort(403)
 
         user = Worker.query.filter_by(email=email).first()
-        if not user:
+        if user is None:
             user = Boss.query.filter_by(email=email).first()
-            if not user:
+            if user is None:
                 return redirect(url_for('auth.sign_up'))
+            else:
+                login_user(user)
+                session.pop('access_token', None)
+                return redirect(url_for('views.home'))
+        else:
+            login_user(user)
+            session.pop('access_token', None)
+            return redirect(url_for('views.home'))
 
-        login_user(user, remember=True)
-        return redirect(url_for('views.home'))
 
     return redirect(url_for('auth.login'))
 
@@ -131,6 +118,9 @@ def googlesignup():
                 abort(403)
             if csrf_token_cookie != csrf_token_body:
                 abort(403)
+
+    for data in request.form:
+        print(data)
 
     credentials = request.form.get('credential')
     if not credentials:

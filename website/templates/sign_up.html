@@ -22,14 +22,15 @@ content %}
             }
         }
     </script>
-     <div class="container text-center">
+    <div class="container text-center">
         <br><br><br>
         <div id="image_bgb"><h3 align="center">{{ signup }}</h3>
-        <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
-             style="max-height:70px; width: auto;">
-        <br>
-        <br><br>
-         <h4 align="center">{{ alreadyhaveaccount }} <br> <a style="color:lightgreen" href="/auth/login">{{ loginhere }}</a></h4></div>
+            <img src="https://cdn.tasklify.me/content-delivery-network/secure/image/default-monochrome-black.svg"
+                 style="max-height:70px; width: auto;">
+            <br>
+            <br><br>
+            <h4 align="center">{{ alreadyhaveaccount }} <br> <a style="color:lightgreen"
+                                                                href="/auth/login">{{ loginhere }}</a></h4></div>
         <br><br>
     </div>
 
@@ -103,18 +104,33 @@ content %}
         <br>
         <hr style="color:white">
         <h4 style="color:white">{{ signupwith }}</h4>
+        <style>
+            .login-with-google-btn {
+                transition: background-color .3s, box-shadow .3s;
+
+                padding: 12px 16px 12px 42px;
+                border: none;
+                border-radius: 3px;
+                box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+
+                color: #757575;
+                font-size: 14px;
+                font-weight: 500;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+                background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+                background-color: white;
+                background-repeat: no-repeat;
+                background-position: 12px 13px;
+            }
+        </style>
         <center>
             <h1>
-                <div id="g_id_onload"
-                     data-client_id="305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com"
-                     data-context="signin" data-ux_mode="redirect" data-login_uri="https://tasklify.me/googlesignup"
-                     data-auto_prompt="false">
-                </div>
+                <button onclick="window.location.href='https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com&redirect_uri=https://127.0.0.1:5000/googlecallback&scope=email+https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/calendar.acls+https://www.googleapis.com/auth/calendar.calendarlist+https://www.googleapis.com/auth/calendar.calendars+https://www.googleapis.com/auth/calendar.events+https://www.googleapis.com/auth/calendar.events.owned+https://www.googleapis.com/auth/documents+https://www.googleapis.com/auth/spreadsheets+https://www.googleapis.com/auth/presentations&access_type=offline&include_granted_scopes=true&prompt=consent&openid.realm&login_hint&nonce=1234567890&state=12345&openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.return_to=https://127.0.0.1:5000/googlecallback&openid.realm=http://localhost&openid.ax.required=email,http://axschema.org/namePerson&openid.ns.ax=http://openid.net/srv/ax/1.0'"
+                        type="button" class="login-with-google-btn">
+                    Sign in with Google
+                </button>
 
-                <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
-                     data-text="signin_with"
-                     data-size="large" data-logo_alignment="center">
-                </div>
 
                 <a style="color:white; border-color: white; border-width: 2px; margin-top:10px; font-size: 17px"
                    class="btn btn-block" href="/github/login">
