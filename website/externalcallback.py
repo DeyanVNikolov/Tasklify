@@ -31,9 +31,10 @@ def googlelogin():
 
         token_endpoint = 'https://oauth2.googleapis.com/token'
         params = {'code': credentials, 'client_id': "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com",
-                  'client_secret': os.getenv("GOOGLE_SECRET"), 'redirect_uri': "https://127.0.0.1:5000/googlecallback",
+                  'client_secret': os.getenv("GOOGLE_SECRET"), 'redirect_uri': "https://tasklify.me/googlecallback",
             'grant_type': 'authorization_code', }
         response = requests.post(token_endpoint, data=params)
+        print("AUTH: " + str(response.status_code))
         response_data = response.json()
         access_token = response_data.get('access_token')
         if not access_token:
