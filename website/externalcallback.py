@@ -30,9 +30,10 @@ def googlelogin():
             abort(403)
 
         token_endpoint = 'https://oauth2.googleapis.com/token'
-        params = {'code': credentials, 'client_id': "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com",
+        params = {'code': credentials,
+                  'client_id': "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com",
                   'client_secret': os.getenv("GOOGLE_SECRET"), 'redirect_uri': "https://tasklify.me/googlecallback",
-            'grant_type': 'authorization_code', }
+                  'grant_type': 'authorization_code', }
         response = requests.post(token_endpoint, data=params)
         print("AUTH: " + str(response.status_code))
         response_data = response.json()
@@ -50,7 +51,6 @@ def googlelogin():
         userinfo = userinfo_response.json()
         email = userinfo.get('email')
 
-
         if email is None:
             abort(403)
 
@@ -67,7 +67,6 @@ def googlelogin():
             login_user(user)
             session.pop('access_token', None)
             return redirect(url_for('views.home'))
-
 
     return redirect(url_for('auth.login'))
 
@@ -363,7 +362,6 @@ def facebookcallback():
     with open(f"static/pfp/TEMP-{emailwithnoat}.png", "wb") as f:
         f.write(response.content)
 
-
     return render_template("facebooksignup.html", user=current_user, worker=getword("worker", cookie),
                            boss=getword("boss", cookie), emailrequest=email, namerequest=name,
                            enterpassword=getword("enterpassword", cookie))
@@ -378,7 +376,6 @@ def facebookauthorize():
     cookie = request.cookies.get('locale')
 
     emailwithnoat = email.replace("@", "")
-
 
     if request.method == 'POST':
         if accounttype == 'worker':
