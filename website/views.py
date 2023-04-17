@@ -14,8 +14,7 @@ from werkzeug.utils import secure_filename
 from . import db
 from .models import Task
 from .models import Worker, Boss
-from .translator import gettheme
-from .translator import getword
+from .translator import getword, gettheme, sharefile
 
 views = Blueprint('views', __name__)
 
@@ -743,24 +742,52 @@ def task(id):
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
             file = request.form.get('file')
-            filename = current_user.id + "_" + file
+            if "GOOGLEDOC???" not in file:
+                filename = current_user.id + "_" + file
+            else:
+                filename = file
             if file is None or file == "" or file == " ":
                 flash(getword("fileisnone", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
-            if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
+            if "GOOGLEDOC???" not in file:
+                if os.path.isfile(os.path.join(app.config['UPLOAD_FOLDER'], filename)):
+                    attachements1 = taskpost.attachments
+                    for attachement in attachements1.split("|FILESEPARATOR|"):
+                        if attachement == filename:
+                            flash(getword("filealreadyattached", cookie), category="error")
+                            return redirect(url_for('views.task', id=id))
+                    currnetattachments = taskpost.attachments
+                    taskpost.attachments = currnetattachments + '|FILESEPARATOR|' + filename
+                    db.session.commit()
+            else:
                 attachements1 = taskpost.attachments
                 for attachement in attachements1.split("|FILESEPARATOR|"):
                     if attachement == filename:
                         flash(getword("filealreadyattached", cookie), category="error")
                         return redirect(url_for('views.task', id=id))
                 currnetattachments = taskpost.attachments
-                taskpost.attachments = currnetattachments + '|FILESEPARATOR|' + filename
-                db.session.commit()
+                try:
+                    taskpost.attachments = currnetattachments + '|FILESEPARATOR|' + filename
+                    db.session.commit()
+                    idd = file.split("GOOGLEDOC???")[1]
+                    if current_user.accounttype == "boss":
+                        otheruser = Worker.query.get(taskpost.worker_id)
+                    else:
+                        otheruser = Boss.query.get(taskpost.boss_id)
+                    sharefile(idd, otheruser.email)
+                except Exception as e:
+                    flash("Fail", category="error")
+                    return redirect(url_for('views.task', id=id))
+
+
         elif typeform == "deleteattachment":
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)
             file = request.form.get('file')
-            filename = current_user.id + "_" + file
+            if "GOOGLEDOC???" not in file:
+                filename = current_user.id + "_" + file
+            else:
+                filename = file
             if file is None or file == "" or file == " ":
                 flash(getword("fileisnone", cookie), category="error")
                 return redirect(url_for('views.task', id=id))
@@ -790,6 +817,14 @@ def task(id):
     for file in myfiles:
         file1 = file.split("_")
         myfileswithoutid.append(file1[1])
+
+
+    for file in str(current_user.googlefiles).split("|GOOGLEDOCSFILESEPARATOR|"):
+        print(file)
+        if file.rstrip() != "" and file is not None and file != "None":
+            newfile = "GOOGLEDOC???" + file
+            myfileswithoutid.append(newfile)
+
 
     attachements = taskdata.attachments
     attachements = attachements.split("|FILESEPARATOR|")

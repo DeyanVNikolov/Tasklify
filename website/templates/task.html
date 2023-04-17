@@ -284,59 +284,119 @@
                             <div class="card-deck row row-cols-1 row-cols-md-3"
                                  style="width: 100% !important; padding: 0px 0px 0px 0px !important; margin: 0px 0px 0px 0px !important;">
                                 {% for file in attachements %}
-                                    {% set fileslist = file.split('_') %}
-                                    <div class="col mb-4" style="width: 100% !important;">
+                                    {% set parts = file|split("???") %}
+                                    {% set firstpart = parts[0] %}
+                                    {% if not "GOOGLEDOC" == parts[0] %}
+                                        {% set fileslist = file.split('_') %}
+                                        <div class="col mb-4" style="width: 100% !important;">
 
-                                        <div class="card h-100">
-                                            <div class="card-title">
-                                                <p style="color:black" class="card-text">{{ fileslist[1] }}</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <a href="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
-                                                   target="_blank"><img class="img-fluid mx-auto d-block"
-                                                                        style="max-width: 100%px; max-height: auto;"
-                                                                        src="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
-                                                                        class="card-img-top" alt="..."
-                                                                        onerror="this.src='/static/image/nopreview.jpg'"></a>
-                                            </div>
-                                            <div class="card-footer">
-                                                <input type="hidden" name="typeform" value="deleteattachment"/>
-                                                <input type="hidden" name="csrf_token" id="csrf_token_del_attch"
-                                                       value="{{ csrf_token() }}"/>
-                                                <input type="hidden" name="task_id" id="task_id_attch"
-                                                       value="{{ taskid }}"/>
-                                                <input type="hidden" name="file" id="file_attch"
-                                                       value="{{ file }}"/>
-                                                <button type="submit" id="deleteattachbtn" class="buttondanger">
-                                                    Изтрий
-                                                </button>
+                                            <div class="card h-100">
+                                                <div class="card-title">
+                                                    <p style="color:black" class="card-text">{{ fileslist[1] }}</p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <a href="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                       target="_blank"><img class="img-fluid mx-auto d-block"
+                                                                            style="max-width: 100%px; max-height: auto;"
+                                                                            src="/uploaded_file/{{ fileslist[0] }}_{{ fileslist[1] }}"
+                                                                            class="card-img-top" alt="..."
+                                                                            onerror="this.src='/static/image/nopreview.jpg'"></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <input type="hidden" name="typeform" value="deleteattachment"/>
+                                                    <input type="hidden" name="csrf_token" id="csrf_token_del_attch"
+                                                           value="{{ csrf_token() }}"/>
+                                                    <input type="hidden" name="task_id" id="task_id_attch"
+                                                           value="{{ taskid }}"/>
+                                                    <input type="hidden" name="file" id="file_attch"
+                                                           value="{{ file }}"/>
+                                                    <button type="submit" id="deleteattachbtn" class="buttondanger">
+                                                        Изтрий
+                                                    </button>
 
-                                                <script>
-                                                    let button = document.getElementById("deleteattachbtn");
-                                                    button.addEventListener("click", function () {
-                                                        let csrf_token = document.getElementById("csrf_token_del_attch").value;
-                                                        let task_id = document.getElementById("task_id_attch").value;
-                                                        let file = document.getElementById("file_attch").value;
-                                                        let data = new FormData();
-                                                        data.append("typeform", "deleteattachment");
-                                                        data.append("csrf_token", csrf_token);
-                                                        data.append("task_id", task_id);
-                                                        data.append("file", file);
-                                                        fetch("/task/{{ taskid }}", {
-                                                            method: "POST",
-                                                            body: data
-                                                            // reload
-                                                        }).then(function (response) {
-                                                            location.reload();
+                                                    <script>
+                                                        let button = document.getElementById("deleteattachbtn");
+                                                        button.addEventListener("click", function () {
+                                                            let csrf_token = document.getElementById("csrf_token_del_attch").value;
+                                                            let task_id = document.getElementById("task_id_attch").value;
+                                                            let file = document.getElementById("file_attch").value;
+                                                            let data = new FormData();
+                                                            data.append("typeform", "deleteattachment");
+                                                            data.append("csrf_token", csrf_token);
+                                                            data.append("task_id", task_id);
+                                                            data.append("file", file);
+                                                            fetch("/task/{{ taskid }}", {
+                                                                method: "POST",
+                                                                body: data
+                                                                // reload
+                                                            }).then(function (response) {
+                                                                location.reload();
+                                                            });
+
                                                         });
+                                                    </script>
+                                                </div>
 
-                                                    });
-                                                </script>
+                                            </div>
+
+                                        </div>
+                                    {% else %}
+
+                                        <div class="col mb-4" style="width: 100% !important;">
+
+                                            <div class="card h-100">
+                                                <div class="card-title">
+                                                    {% set idd = parts[1] %}
+                                                    <p style="color:black" class="card-text">{{ getdocumentname(idd) }}</p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <a href="https://docs.google.com/document/d/{{ idd }}"
+                                                       target="_blank"><img class="img-fluid mx-auto d-block"
+                                                                            style="max-width: 100%px; max-height: auto;"
+                                                                            src="/static/image/nopreview.jpg"
+                                                                            class="card-img-top" alt="..."
+                                                                            onerror="this.src='/static/image/nopreview.jpg'"></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <input type="hidden" name="typeform" value="deleteattachment"/>
+                                                    <input type="hidden" name="csrf_token" id="csrf_token_del_attch"
+                                                           value="{{ csrf_token() }}"/>
+                                                    <input type="hidden" name="task_id" id="task_id_attch"
+                                                           value="{{ taskid }}"/>
+                                                    <input type="hidden" name="file" id="file_attch"
+                                                           value="{{parts[0]}}???{{ parts[1] }}"/>
+                                                    <button type="submit" id="deleteattachbtn" class="buttondanger">
+                                                        Изтрий
+                                                    </button>
+
+                                                    <script>
+                                                        let button = document.getElementById("deleteattachbtn");
+                                                        button.addEventListener("click", function () {
+                                                            let csrf_token = document.getElementById("csrf_token_del_attch").value;
+                                                            let task_id = document.getElementById("task_id_attch").value;
+                                                            let file = document.getElementById("file_attch").value;
+                                                            let data = new FormData();
+                                                            data.append("typeform", "deleteattachment");
+                                                            data.append("csrf_token", csrf_token);
+                                                            data.append("task_id", task_id);
+                                                            data.append("file", file);
+                                                            fetch("/task/{{ taskid }}", {
+                                                                method: "POST",
+                                                                body: data
+                                                                // reload
+                                                            }).then(function (response) {
+                                                                location.reload();
+                                                            });
+
+                                                        });
+                                                    </script>
+                                                </div>
+
                                             </div>
 
                                         </div>
 
-                                    </div>
+                                    {% endif %}
                                 {% endfor %}
 
                             </div>
@@ -440,9 +500,9 @@
                         </div>
 
                         <div class="user-input-box">
-                        <div class="user-input-box" style="margin-top:20px !important;">
-                            <span class="gender-title">{{ comment }}</span>
-                        </div>
+                            <div class="user-input-box" style="margin-top:20px !important;">
+                                <span class="gender-title">{{ comment }}</span>
+                            </div>
                             <label>
                                 <br>
                                 <h3>{{ task1.comment }}</h3>
@@ -484,10 +544,15 @@
                 <div class="modal-body">
                     <div class="card-deck row row-cols-1 row-cols-md-3">
                         {% for file in myfileswithoutid %}
+                            {% set parts = file|split("???") %}
+                            {% set firstpart = parts[0] %}
+                            {% if "GOOGLEDOC" == parts[0] %}
+                            {% set file5 = parts[1] %}
+                            {% endif %}
                             <div class="col mb-4">
                                 <div class="card h-100">
                                     <div class="card-title">
-                                        <p class="card-text">{{ file }}</p>
+                                        <p class="card-text">{% if "GOOGLEDOC" == parts[0] %}{% set idd = parts[1] %}{{ getdocumentname(idd) }}{% else %}{{ file }}{% endif %}</p>
                                     </div>
                                     <div class="card-body">
                                         <img class="img-fluid mx-auto d-block"

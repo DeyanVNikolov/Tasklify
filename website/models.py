@@ -32,7 +32,6 @@ class Task(db.Model):
 
 
 class Worker(db.Model, UserMixin):
-    # string with utf-8 encoding
     id = db.Column(db.String(150), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True)
     number = db.Column(db.Integer, default=lambda : int(time.time()) + random.randint(100000, 999999), unique=True)
     email = db.Column(db.String(150), unique=True)
@@ -47,6 +46,10 @@ class Worker(db.Model, UserMixin):
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
     banned = db.Column(db.String(2), default="0")
+    googleauthed = db.Column(db.String(2), default="0")
+    google_access_token = db.Column(db.String(1500))
+    google_refresh_token = db.Column(db.String(1500))
+    googlefiles = db.Column(db.Text(9000000))
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}
@@ -67,6 +70,10 @@ class Boss(db.Model, UserMixin):
     plan = db.Column(db.String(150))
     token = db.Column(db.String(150), default=lambda: str(uuid.uuid4().hex), unique=True)
     banned = db.Column(db.String(2), default="0")
+    googleauthed = db.Column(db.String(2), default="0")
+    google_access_token = db.Column(db.String(1500))
+    google_refresh_token = db.Column(db.String(1500))
+    googlefiles = db.Column(db.Text(9000000))
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password" and c.name != "token" and c.name != "plan"}

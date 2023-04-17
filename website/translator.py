@@ -1,4 +1,8 @@
 import time
+
+import requests
+from flask_login import current_user
+
 words = {
     "email": {
         "en": "Email Address",
@@ -1846,3 +1850,44 @@ def gettheme(request):
     else:
         return 'light'
 
+
+def sharefile(id, email):
+    access_token = current_user.google_access_token
+    file_id = id
+    email = email
+    headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json", }
+    body = {"role": "writer",  # The role the user should have (writer, reader, owner, etc.)
+            "type": "user",  # The type of user you want to share with (user, group, domain, etc.)
+            "emailAddress": email,  # The email address of the user you want to share with
+            }
+    response = requests.post(f"https://www.googleapis.com/drive/v3/files/{file_id}/permissions", headers=headers,
+                             json=body)
+
+    if response.status_code == 200:
+        print(f"File shared with {email} successfully!")
+    else:
+        print(f"Error sharing file with {email}: {response.text}")
+
+
+def getgdoctype(id):
+    import requests
+
+    access_token = current_user.google_access_token
+    file_id = id
+
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    url = f'https://www.googleapis.com/drive/v3/files/{file_id}'
+
+    params = {'fields': 'mimeType'}
+
+    response = requests.get(url, headers=headers, params=params).json()
+
+    if response['mimeType'] == 'application/vnd.google-apps.document':
+        return 'document'
+    elif response['mimeType'] == 'application/vnd.google-apps.spreadsheet':
+        return 'spreadsheet'
+    elif response['mimeType'] == 'application/vnd.google-apps.presentation':
+        return 'slide'
+    else:
+        return 'unknown'

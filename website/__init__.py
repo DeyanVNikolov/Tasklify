@@ -4,7 +4,7 @@ import os.path as op
 from os import path
 
 import requests
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
@@ -77,6 +77,15 @@ def getofficialmessageru():
         return None
 
 
+def getdocumentname(id):
+    url = f'https://docs.googleapis.com/v1/documents/{id}?fields=title'
+    headers = {'Authorization': f'Bearer {current_user.google_access_token}'}
+    response = requests.get(url, headers=headers)
+    document_name = response.json()['title']
+
+    return document_name
+
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '234e34f6-cca4-40d9-8387-304149e6e8e5'
@@ -141,6 +150,7 @@ def create_app():
     app.jinja_env.globals.update(getofficialmessageru=getofficialmessageru)
     app.jinja_env.globals.update(getofficialmessagefr=getofficialmessagefr)
     app.jinja_env.globals.update(getofficialmessagede=getofficialmessagede)
+    app.jinja_env.globals.update(getdocumentname=getdocumentname)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 
@@ -261,6 +271,10 @@ app = create_app()
 
 @app.before_request
 def before_request():
+    # if user is trying to access /uplaoded_file/* or /static/* ignore the rest of the code.
+    if request.path.startswith("/static") or request.path.startswith("/uploaded_file"):
+        return
+
     if request.path == "/banned":
         if current_user.is_authenticated:
             if current_user.banned == "0":
@@ -270,6 +284,31 @@ def before_request():
     if current_user.is_authenticated:
         if current_user.banned == "1":
             return redirect(url_for('views.banned'))
+
+        if current_user.googleauthed == "1" and current_user.google_access_token is not None and current_user.google_refresh_token is not None:
+            url = 'https://www.googleapis.com/oauth2/v1/tokeninfo'
+            params = {'access_token': current_user.google_access_token}
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                print("Valid Google Access Token")
+            else:
+                print("Invalid Google Access Token")
+                # The access token is invalid, refresh it with the refresh token
+                url = 'https://oauth2.googleapis.com/token'
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                data = {'client_id': '305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com',
+                        'client_secret': os.getenv("GOOGLE_SECRET"), 'refresh_token': current_user.google_refresh_token,
+                        'grant_type': 'refresh_token'}
+                response = requests.post(url, headers=headers, data=data)
+                if response.status_code == 200:
+                    response_data = response.json()
+                    access_token = response_data['access_token']
+                    current_user.google_access_token = access_token
+                    db.session.commit()
+                else:
+                    flash("Please re-authenticate with Google", category="error")
+                    logout_user()
+                    return redirect(url_for('auth.login'))
 
     if session.get('email') is not None:
         from .models import Worker, Boss
@@ -288,3 +327,8 @@ def before_request():
                 if request.path != "/auth/2fa" and not request.path.startswith("/static/"):
                     if request.path != "/auth/2fa/logout":
                         return redirect(url_for('auth.two_factor'))
+
+
+@app.template_filter('split')
+def split_filter(s, delimiter):
+    return s.split(delimiter)

@@ -23,7 +23,12 @@
                     <div class="card-box">
                         <div class="row">
                             <div class="col-lg-6 col-xl-6">
-                                <h1 class="header-title m-b-30">Моите файлове</h1>
+                                <h1 class="header-title m-b-30">Моите файлове{% if current_user.googleauthed == "1" %}
+                                    <form method="post"><input type="hidden" value="googledocscreate"
+                                                               name="typeform"><input type="hidden" name="csrf_token"
+                                                                                      value="{{ csrf_token() }}">
+                                        <button class="btn btn-success" type="submit">Create Google Docs</button>
+                                    </form> {% endif %}</h1>
                                 <br/>
                             </div>
                         </div>
@@ -68,19 +73,39 @@
                                         });
                                     }
                                 </script>
-                                <a onclick="deleteItem('{{ file }}')" href="#" class="file-close"
-                                ><i class="fa fa-times-circle"></i
-                                ></a>
+                                {% set parts = file|split("||") %}
+                                {% set firstpart = parts[0] %}
+                                {% if not "GOOGLEDOC" == parts[0] %}
+                                    <a onclick="deleteItem('{{ file }}')" href="#" class="file-close"
+                                    ><i class="fa fa-times-circle"></i
+                                    ></a>
+                                {% endif %}
+
+                            {% if "GOOGLEDOC" == parts[0] %}
+                            <a target="_blank" href="https://docs.google.com/document/d/{{ parts[1] }}">
+                            {% endif %}
                                 <div class="file-img-box">
-                                    <img style="width: 100% !important; height: auto !important;" onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
+                                    <img style="width: 100% !important; height: auto !important;"
+                                         onerror="this.onerror=null; this.src='/static/image/nopreview.jpg'"
                                          src="{{ url_for('fileshandler.uploaded_file', filename=file) }}"
                                          alt="uploaded file"/>
                                 </div>
-                                <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}" class="file-download"
+                            {% if "GOOGLEDOC" == parts[1] %}
+                            </a>
+                            {% endif %}
+                            {% if not "GOOGLEDOC" == parts[0] %}
+                                <a href="{{ url_for('fileshandler.uploaded_file', filename=file) }}"
+                                   class="file-download"
                                 ><i class="fa fa-download"></i
                                 ></a>
+                            {% endif %}
                                 <div class="file-man-title">
+                                    {% if not "GOOGLEDOC" == parts[0] %}
                                     <h5 class="mb-0 text-overflow">{{ split }}</h5>
+                                    {% else %}
+                                        {% set docid = parts[1] %}
+                                    <h5 class="mb-0 text-overflow">{{ getdocumentname(docid) }}</h5>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -92,6 +117,7 @@
                             </div>
                         {% endif %}
                         {% endfor %}
+
 
 
 

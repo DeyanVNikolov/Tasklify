@@ -29,14 +29,17 @@ def googlelogin():
         if not credentials:
             abort(403)
 
+        secrett =os.getenv("GOOGLE_SECRET")
+
         token_endpoint = 'https://oauth2.googleapis.com/token'
         params = {'code': credentials,
                   'client_id': "305802211949-0ca15pjp0ei2ktpsqlphhgge4vfdgh82.apps.googleusercontent.com",
-                  'client_secret': os.getenv("GOOGLE_SECRET"), 'redirect_uri': "https://tasklify.me/googlecallback",
+                  'client_secret': secrett, 'redirect_uri': "https://127.0.0.1:5000/googlecallback",
                   'grant_type': 'authorization_code', }
         response = requests.post(token_endpoint, data=params)
         print("AUTH: " + str(response.status_code))
         response_data = response.json()
+        print("RESPONSE: " + str(response_data))
         access_token = response_data.get('access_token')
         if not access_token:
             return 'Error: Failed to retrieve access token'
@@ -61,10 +64,19 @@ def googlelogin():
                 return redirect(url_for('auth.sign_up'))
             else:
                 login_user(user)
+                user.googleauthed = "1"
+                user.google_access_token = access_token
+                user.google_refresh_token = response_data.get('refresh_token')
+                db.session.commit()
                 session.pop('access_token', None)
                 return redirect(url_for('views.home'))
         else:
             login_user(user)
+            login_user(user)
+            user.googleauthed = "1"
+            user.google_access_token = access_token
+            user.google_refresh_token = response_data.get('refresh_token')
+            db.session.commit()
             session.pop('access_token', None)
             return redirect(url_for('views.home'))
 

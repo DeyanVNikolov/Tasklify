@@ -1,3 +1,4 @@
+import json
 import os
 from os.path import join, dirname, realpath
 
@@ -5,8 +6,10 @@ import requests
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask import current_app as app
 from flask_login import login_required, current_user
+from markupsafe import Markup
 from werkzeug.utils import secure_filename, send_from_directory
 
+from . import db
 from .models import Worker, Boss
 from .translator import getword, gettheme
 
@@ -17,9 +20,6 @@ workerspage = "views.workers"
 oneworkerpage = "views.worker"
 
 global csrfg
-
-
-
 
 # no potential security issue
 allowed_extensions = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt',
@@ -70,11 +70,9 @@ def fileupd():
             filenametranslit = file.filename
             if not all(ord(c) < 128 for c in file.filename):
                 filenametranslit = translit(file.filename, reversed=True)
-            
+
             # change all _ to -
             filenametranslit = filenametranslit.replace("_", "-")
-
-
 
             filename = secure_filename(filenametranslit)
             filename = filename.replace("_", "-")
@@ -88,7 +86,6 @@ def fileupd():
 
 @fileshandler.route('/uploaded_file/<filename>')
 def uploaded_file(filename):
-
 
     if 'locale' in request.cookies:
         cookie = request.cookies.get('locale')
@@ -154,10 +151,9 @@ def uploaded_file(filename):
 
     index = len(filename.rsplit('.', 1))
 
-
     if filename.rsplit('.', 1)[index].lower() in ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'wav', 'avi', 'mov', 'mkv',
-                                              'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm', 'vob', 'ogg', 'ogv', '3gp',
-                                              '3g2', 'm4a', 'flac', 'aac', 'wma', 'pdf', 'txt']:
+                                                  'flv', 'wmv', 'mpg', 'mpeg', 'm4v', 'webm', 'vob', 'ogg', 'ogv',
+                                                  '3gp', '3g2', 'm4a', 'flac', 'aac', 'wma', 'pdf', 'txt']:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, environ=request.environ)
     else:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True, environ=request.environ)
@@ -166,6 +162,7 @@ def uploaded_file(filename):
 @fileshandler.route("/ugc/uploads/<filename>", methods=["GET"])
 def get_file(filename):
     return redirect(url_for('fileshandler.uploaded_file', filename=filename))
+
 
 def hastebin(text):
     r = requests.post("https://hastebin.com/documents", data=text)
@@ -197,6 +194,21 @@ def files(id):
         file1 = file.split("_")
         if str(file1[0]) == str(id):
             files[file] = file1[1]
+
+    for file in str(current_user.googlefiles).split("|GOOGLEDOCSFILESEPARATOR|"):
+        print(file)
+        if file.rstrip() != "" and file is not None and file != "None":
+            newfile = "GOOGLEDOC||" + file
+            files[newfile] = file
+
+    print(files)
+
+
+
+
+
+
+
     if request.method == "POST":
         if request.form.get("typeform") == "delete":
             file = request.form.get("file")
@@ -207,11 +219,41 @@ def files(id):
                 flash(getword("error", cookie), category="error")
                 return redirect(url_for("fileshandler.files", id=id))
             return redirect(url_for("fileshandler.files", id=id))
+        elif request.form.get("typeform") == "googledocscreate":
+            if current_user.googleauthed == "1" and current_user.google_access_token is not None and current_user.google_refresh_token is not None:
 
-    return render_template("files.html",calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie), loginnav=getword("loginnav", cookie),
-                           signupnav=getword("signupnav", cookie), tasksnav=getword("tasksnav", cookie),
-                           workersnav=getword("workersnav", cookie), adminnav=getword("adminnav", cookie),
-                           logoutnav=getword("logoutnav", cookie), homenav=getword("homenav", cookie),
-                           user=current_user, files=files, splitnames=splitnames, delete=getword("delete", cookie),
-                           chatnav=getword("chatnav", cookie), uploadtext=getword("uploadtext", cookie),
-                           myfiles=getword("myfiles", cookie), fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request))
+                url = 'https://docs.googleapis.com/v1/documents'
+                document_content = {'title': 'My new document'}
+
+                headers = {'Authorization': f'Bearer {current_user.google_access_token}',
+                           'Content-Type': 'application/json'}
+
+                response = requests.post(url, headers=headers, data=json.dumps(document_content))
+
+                if response.status_code == 200:
+                    document_id = response.json()['documentId']
+                    print(f'Successfully created new document with ID: {document_id}')
+                    message = Markup(
+                        "Google Docs document created. <a href='https://docs.google.com/document/d/" + document_id + "/edit' target='_blank'>Click here to edit</a>")
+                    flash(message, category="success")
+                    googlefiles = current_user.googlefiles
+                    if googlefiles is None:
+                        googlefiles = ""
+
+                    googlefilesnew = googlefiles + document_id + "|GOOGLEDOCSFILESEPARATOR|"
+                    current_user.googlefiles = googlefilesnew
+                    db.session.commit()
+                    return redirect(url_for("fileshandler.files", id=id))
+                else:
+                    print('Failed to create new document')
+                    flash("Failed to create new document", category="error")
+                    return redirect(url_for("fileshandler.files", id=id))
+
+    return render_template("files.html", calendar=getword("calendar", cookie), profilenav=getword("profilenav", cookie),
+                           loginnav=getword("loginnav", cookie), signupnav=getword("signupnav", cookie),
+                           tasksnav=getword("tasksnav", cookie), workersnav=getword("workersnav", cookie),
+                           adminnav=getword("adminnav", cookie), logoutnav=getword("logoutnav", cookie),
+                           homenav=getword("homenav", cookie), user=current_user, files=files, splitnames=splitnames,
+                           delete=getword("delete", cookie), chatnav=getword("chatnav", cookie),
+                           uploadtext=getword("uploadtext", cookie), myfiles=getword("myfiles", cookie),
+                           fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request))
