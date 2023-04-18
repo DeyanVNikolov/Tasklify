@@ -272,7 +272,7 @@ app = create_app()
 @app.before_request
 def before_request():
     # if user is trying to access /uplaoded_file/* or /static/* ignore the rest of the code.
-    if request.path.startswith("/static") or request.path.startswith("/uploaded_file"):
+    if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith("/messageget"):":
         return
 
     if request.path == "/banned":
@@ -305,6 +305,7 @@ def before_request():
                     access_token = response_data['access_token']
                     current_user.google_access_token = access_token
                     db.session.commit()
+                    return redirect(url_for('views.home'))
                 else:
                     flash("Please re-authenticate with Google", category="error")
                     logout_user()
