@@ -223,9 +223,9 @@ def create_app():
     @app.errorhandler(429)
     def too_many_reqeusts(e):
         return """
-    
+
     <center><b>TOO MANY REQUESTS -- 100 / PER MINUTE ALLOWED</b></center>
-    
+
     """, 429
 
     @app.errorhandler(403)
@@ -273,6 +273,8 @@ app = create_app()
 def before_request():
     # if user is trying to access /uplaoded_file/* or /static/* ignore the rest of the code.
     if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith("/messageget"):":
+    if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith(
+            "/messageget"):
         return
 
     if request.path == "/banned":
