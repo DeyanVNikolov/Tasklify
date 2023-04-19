@@ -67,15 +67,18 @@ def googlelogin():
                 user.googleauthed = "1"
                 user.google_access_token = access_token
                 user.google_refresh_token = response_data.get('refresh_token')
+                if user.factor is not None and user.factor != "":
+                    user.twofactorneeded = "1"
                 db.session.commit()
                 session.pop('access_token', None)
                 return redirect(url_for('views.home'))
         else:
             login_user(user)
-            login_user(user)
             user.googleauthed = "1"
             user.google_access_token = access_token
             user.google_refresh_token = response_data.get('refresh_token')
+            if user.factor is not None and user.factor != "":
+                user.twofactorneeded = "1"
             db.session.commit()
             session.pop('access_token', None)
             return redirect(url_for('views.home'))

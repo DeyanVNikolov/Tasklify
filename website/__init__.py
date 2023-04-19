@@ -272,9 +272,7 @@ app = create_app()
 @app.before_request
 def before_request():
     # if user is trying to access /uplaoded_file/* or /static/* ignore the rest of the code.
-    if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith("/messageget"):":
-    if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith(
-            "/messageget"):
+    if request.path.startswith("/static") or request.path.startswith("/uploaded_file") or request.path.startswith("/messageget"):
         return
 
     if request.path == "/banned":

@@ -66,6 +66,7 @@ def login():
                                 session['email'] = email
                                 session['password'] = password
                                 user.twofactorneeded = "1"
+                                db.session.commit()
                                 return redirect(url_for('auth.two_factor'))
                         else:
                             flash(getword("loggedinsuccess", cookie), category='success')
@@ -139,6 +140,7 @@ def two_factor():
                             session.pop("email")
                             session.pop("password")
                             newuser.twofactorneeded = "1"
+                            db.session.commit()
                             login_user(newuser, remember=False)
                             if newuser.accounttype == 'worker':
                                 return redirect(url_for('views.boss'))
