@@ -311,7 +311,7 @@ def before_request():
                     logout_user()
                     return redirect(url_for('auth.login'))
 
-    if session.get('email') is not None:
+    if session.get('emailfor2fa') is not None:
         from .models import Worker, Boss
         user = Worker.query.filter_by(email=session['email']).first()
         if user is None:

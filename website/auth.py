@@ -63,9 +63,9 @@ def login():
                         # use rstrip
                         if user.factor is not None:
                             if user.factor.rstrip() != "":
-                                session['email'] = email
+                                session['emailfor2fa'] = email
                                 session['password'] = password
-                                user.twofactorneeded = "1"
+                                user.twofactorneeded = "0"
                                 db.session.commit()
                                 return redirect(url_for('auth.two_factor'))
                         else:
@@ -135,17 +135,15 @@ def two_factor():
                             if newuser is None:
                                 flash("Token mismatch, make sure your cookies are not tampered with", category="error")
                                 return redirect(url_for('auth.logout'))
-                        if check_password_hash(newuser.password, session.get("password")):
-                            flash(getword("loggedinsuccess", cookie), category='success')
-                            session.pop("email")
-                            session.pop("password")
-                            newuser.twofactorneeded = "1"
-                            db.session.commit()
-                            login_user(newuser, remember=False)
-                            if newuser.accounttype == 'worker':
-                                return redirect(url_for('views.boss'))
-                            else:
-                                return redirect(url_for('views.home'))
+                        flash(getword("loggedinsuccess", cookie), category='success')
+                        session.pop("email")
+                        newuser.twofactorneeded = "1"
+                        db.session.commit()
+                        login_user(newuser, remember=False)
+                        if newuser.accounttype == 'worker':
+                            return redirect(url_for('views.boss'))
+                        else:
+                            return redirect(url_for('views.home'))
                     else:
                         flash("Invalid code", category="error")
                         print("invalid code")

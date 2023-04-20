@@ -68,7 +68,9 @@ def googlelogin():
                 user.google_access_token = access_token
                 user.google_refresh_token = response_data.get('refresh_token')
                 if user.factor is not None and user.factor != "":
-                    user.twofactorneeded = "1"
+                    session['emailfor2fa'] = email
+                    session['password'] = "google"
+                    user.twofactorneeded = "0"
                 db.session.commit()
                 session.pop('access_token', None)
                 return redirect(url_for('views.home'))
