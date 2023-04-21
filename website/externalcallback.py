@@ -71,6 +71,7 @@ def googlelogin():
                     session['password'] = "google"
                     user.twofactorneeded = "0"
                     db.session.commit()
+                    return redirect(url_for('auth.two_factor'))
                 else:
                     login_user(user)
                 session.pop('access_token', None)
@@ -81,6 +82,7 @@ def googlelogin():
                 session['password'] = "google"
                 user.twofactorneeded = "0"
                 db.session.commit()
+                return redirect(url_for('auth.two_factor'))
             else:
                 login_user(user)
             session.pop('access_token', None)
