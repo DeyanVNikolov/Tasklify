@@ -313,9 +313,9 @@ def before_request():
 
     if session.get('emailfor2fa') is not None:
         from .models import Worker, Boss
-        user = Worker.query.filter_by(email=session['email']).first()
+        user = Worker.query.filter_by(email=session['emailfor2fa']).first()
         if user is None:
-            user = Boss.query.filter_by(email=session['email']).first()
+            user = Boss.query.filter_by(email=session['emailfor2fa']).first()
             if user is None:
                 pass
             else:

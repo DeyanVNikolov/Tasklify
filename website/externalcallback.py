@@ -63,7 +63,6 @@ def googlelogin():
             if user is None:
                 return redirect(url_for('auth.sign_up'))
             else:
-                login_user(user)
                 user.googleauthed = "1"
                 user.google_access_token = access_token
                 user.google_refresh_token = response_data.get('refresh_token')
@@ -71,7 +70,9 @@ def googlelogin():
                     session['emailfor2fa'] = email
                     session['password'] = "google"
                     user.twofactorneeded = "0"
-                db.session.commit()
+                    db.session.commit()
+                else:
+                    login_user(user)
                 session.pop('access_token', None)
                 return redirect(url_for('views.home'))
         else:

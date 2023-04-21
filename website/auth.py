@@ -108,9 +108,16 @@ def two_factor():
     else:
         cookie = 'en'
 
-    if session.get("email") is None or session.get("password") is None:
+    if session.get("emailfor2fa") is None or session.get("password") is None:
+        print("NONE 1")
+        print(session.get("emailfor2fa"))
+        print(session.get("password"))
+        if session.get("emailfor2fa") is not None:
+            session.pop("emailfor2fa")
+        if session.get("password") is not None:
+            session.pop("password")
         flash("Token mismatch, make sure your cookies are enabled", category="error")
-        return redirect(url_for('auth.logout'))
+        return redirect(url_for('auth.logout_two_factor'))
 
     if request.method == 'POST':
         if request.form.get("typeform") == "submit2fa":
@@ -120,23 +127,23 @@ def two_factor():
                         "code").rstrip().isdigit() or len(request.form.get("code").rstrip()) <= 1:
                     flash("Invalid code", category="error")
                     return redirect(url_for('auth.two_factor'))
-                user = Worker.query.filter_by(email=session.get("email")).first()
+                user = Worker.query.filter_by(email=session.get("emailfor2fa")).first()
                 if user is None:
-                    user = Boss.query.filter_by(email=session.get("email")).first()
+                    user = Boss.query.filter_by(email=session.get("emailfor2fa")).first()
                     if user is None:
                         flash("Token mismatch, make sure your cookies are not tampered with", category="error")
-                        return redirect(url_for('auth.logout'))
+                        return redirect(url_for('auth.logout_two_factor'))
                 verification = verifyuser(user.id, user.id.replace("-", ""), request.form.get("code").rstrip())
                 if verification != "403":
                     if verification.status == "approved":
-                        newuser = Worker.query.filter_by(email=session.get("email")).first()
+                        newuser = Worker.query.filter_by(email=session.get("emailfor2fa")).first()
                         if newuser is None:
-                            newuser = Boss.query.filter_by(email=session.get("email")).first()
+                            newuser = Boss.query.filter_by(email=session.get("emailfor2fa")).first()
                             if newuser is None:
                                 flash("Token mismatch, make sure your cookies are not tampered with", category="error")
                                 return redirect(url_for('auth.logout'))
                         flash(getword("loggedinsuccess", cookie), category='success')
-                        session.pop("email")
+                        session.pop("emailfor2fa")
                         newuser.twofactorneeded = "1"
                         db.session.commit()
                         login_user(newuser, remember=False)
@@ -171,9 +178,9 @@ def two_factor():
 @auth.route("/2fa/logout", methods=['GET', 'POST'])
 def logout_two_factor():
     print("logout")
-    if session.get("email") is not None:
+    if session.get("emailfor2fa") is not None:
         print("email")
-        session.pop("email")
+        session.pop("emailfor2fa")
     if session.get("password") is not None:
         print("password")
         session.pop("password")
