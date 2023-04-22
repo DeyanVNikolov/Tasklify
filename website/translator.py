@@ -1821,6 +1821,30 @@ words = {
         "fr": "Calendrier",
         "ru": "Календарь"
     },
+    "creategoogledoc": {
+        "en": "Create Google Docs",
+        "bg": "Създайте Google Docs",
+        "es": "Crear documentos de Google",
+        "de": "Google Docs erstellen",
+        "fr": "Créer des documents Google",
+        "ru": "Создать документы Google"
+    },
+    "creategoogleslides": {
+        "en": "Create Google Slides",
+        "bg": "Създайте Google Slides",
+        "es": "Crear diapositivas de Google",
+        "de": "Google-Slides erstellen",
+        "fr": "Créer des diapositives Google",
+        "ru": "Создать слайды Google"
+    },
+    "creategooglespreadsheets": {
+        "en": "Create Google Spreadsheets",
+        "bg": "Създайте Google Spreadsheets",
+        "es": "Crear hojas de cálculo de Google",
+        "de": "Google Tabellenkalkulationen erstellen",
+        "fr": "Créer des feuilles de calcul Google",
+        "ru": "Создать таблицы Google"
+    }
 }
 
 
@@ -1891,3 +1915,40 @@ def getgdoctype(id):
         return 'slide'
     else:
         return 'unknown'
+
+def addtogooglecalendar(task):
+    from website.models import Task
+    taskdata = Task.query.filter_by(id=task).first()
+    tasktitle = taskdata.title
+    taskdescription = taskdata.task
+    taskstart = taskdata.datecreated
+    taskend = taskdata.datedue
+
+    taskstartiso = taskstart.isoformat()
+    taskendiso = taskend.isoformat()
+
+    import requests
+    import json
+    from datetime import datetime, timedelta
+
+    # Replace with your access token
+    access_token = current_user.google_access_token
+
+    # Set the API endpoint and headers
+    url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
+    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json", }
+
+    # Set the event data
+    event = {"summary": tasktitle, "description": taskdescription,
+        "start": {"dateTime": taskstartiso, "timeZone": "Europe/Sofia", },
+        "end": {"dateTime": taskendiso, "timeZone": "Europe/Sofia", }, }
+
+    # Send the HTTP POST request to create the event
+    response = requests.post(url, headers=headers, data=json.dumps(event))
+
+    # Check the status code of the response to make sure the event was created successfully
+    if response.status_code == 200:
+        print("Event created successfully!")
+        return "OK"
+    else:
+        print("Error creating event:", response.json())

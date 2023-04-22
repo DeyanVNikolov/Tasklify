@@ -738,6 +738,15 @@ def task(id):
             taskpost.complete = "1"
             db.session.commit()
             return redirect(url_for('views.task', id=id))
+        elif typeform == "addtocalendar":
+            taskid = request.form.get('task_id')
+            from .translator import addtogooglecalendar
+            response = addtogooglecalendar(taskid)
+            if response == "OK":
+                flash("Added to Google Calendar", category="success")
+            else:
+                flash("Failed to add to Google Calendar", category="error")
+            return redirect(url_for('views.task', id=id))
         elif typeform == "attach":
             taskid = request.form.get('task_id')
             taskpost = Task.query.get(taskid)

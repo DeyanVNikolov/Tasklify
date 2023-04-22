@@ -27,8 +27,11 @@
                                     <form method="post"><input type="hidden" value="googledocscreate"
                                                                name="typeform"><input type="hidden" name="csrf_token"
                                                                                       value="{{ csrf_token() }}">
-                                        <button class="btn btn-success" type="submit">Create Google Docs</button>
-                                    </form> {% endif %}</h1>
+                                        <button class="btn btn-success" type="submit">{{ creategoogledoc }}</button>
+
+                                    </form>
+                                                                        <button class="btn btn-success" onclick="alert('Очаквайте скоро!')">{{ creategoogleslides }}</button>
+                                        <button class="btn btn-success" onclick="alert('Очаквайте скоро!')">{{ creategooglespreadsheets }}</button>{% endif %}</h1>
                                 <br/>
                             </div>
                         </div>

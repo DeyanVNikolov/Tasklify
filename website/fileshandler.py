@@ -256,4 +256,6 @@ def files(id):
                            homenav=getword("homenav", cookie), user=current_user, files=files, splitnames=splitnames,
                            delete=getword("delete", cookie), chatnav=getword("chatnav", cookie),
                            uploadtext=getword("uploadtext", cookie), myfiles=getword("myfiles", cookie),
-                           fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request))
+                           fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request),
+                           creategoogledoc=getword("creategoogledoc ", cookie), creategoogleslides=getword("creategoogleslides", cookie),
+                           creategooglespreadsheets=getword("creategooglespreadsheets", cookie))

@@ -86,6 +86,43 @@ def getdocumentname(id):
     return document_name
 
 
+def addtogooglecalendar(task):
+    from .models import Task
+    taskdata = Task.query.filter_by(id=task).first()
+    tasktitle = taskdata.title
+    taskdescription = taskdata.task
+    taskstart = taskdata.datecreated
+    taskend = taskdata.datedue
+
+    taskstartiso = taskstart.isoformat()
+    taskendiso = taskend.isoformat()
+
+    import requests
+    import json
+    from datetime import datetime, timedelta
+
+    # Replace with your access token
+    access_token = current_user.google_access_token
+
+    # Set the API endpoint and headers
+    url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
+    headers = {"Authorization": "Bearer " + access_token, "Content-Type": "application/json", }
+
+    # Set the event data
+    event = {"summary": tasktitle, "description": taskdescription,
+        "start": {"dateTime": taskstartiso, "timeZone": "EEST", },
+        "end": {"dateTime": taskendiso, "timeZone": "EEST", }, }
+
+    # Send the HTTP POST request to create the event
+    response = requests.post(url, headers=headers, data=json.dumps(event))
+
+    # Check the status code of the response to make sure the event was created successfully
+    if response.status_code == 200:
+        print("Event created successfully!")
+    else:
+        print("Error creating event:", response.json())
+
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '234e34f6-cca4-40d9-8387-304149e6e8e5'
@@ -151,6 +188,7 @@ def create_app():
     app.jinja_env.globals.update(getofficialmessagefr=getofficialmessagefr)
     app.jinja_env.globals.update(getofficialmessagede=getofficialmessagede)
     app.jinja_env.globals.update(getdocumentname=getdocumentname)
+    app.jinja_env.globals.update(addtogooglecalendar=addtogooglecalendar)
 
     from .models import Worker as WorkerModel, Boss as BossModel, Task as TaskModel
 

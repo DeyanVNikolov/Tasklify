@@ -214,6 +214,15 @@
     <div class="container text-center">
 
         <h1>{{ tasktext }} {{ taskid }}</h1>
+    {% if current_user.googleauthed != "0" %}
+        <form method="post">
+        <input type="hidden" name="task_id" value="{{ taskid }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="typeform" value="addtocalendar">
+            <button class="btn btn-success" onclick="">Add to calendar</button>
+
+         </form>
+    {% endif %}
         <br><br>
         <br>
         {% set status = task1.complete %}
