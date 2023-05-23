@@ -257,5 +257,5 @@ def files(id):
                            delete=getword("delete", cookie), chatnav=getword("chatnav", cookie),
                            uploadtext=getword("uploadtext", cookie), myfiles=getword("myfiles", cookie),
                            fileuploadtext=getword("fileuploadtext", cookie), theme=gettheme(request),
-                           creategoogledoc=getword("creategoogledoc ", cookie), creategoogleslides=getword("creategoogleslides", cookie),
+                           creategoogledoc=getword("creategoogledoc", cookie), creategoogleslides=getword("creategoogleslides", cookie),
                            creategooglespreadsheets=getword("creategooglespreadsheets", cookie))
